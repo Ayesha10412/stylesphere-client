@@ -3,9 +3,9 @@ import { createRoot } from "react-dom/client";
 import "./index.css";
 import { RouterProvider } from "react-router-dom";
 import router from "./routes/router";
-import AuthProviders from "./Providers/Authproviders";
+import AuthProviders from "./Providers/AuthProviders";
 
-createRoot(document.getElementById("root")!).render(
+createRoot(document.getElementById("root")).render(
   <StrictMode>
     <AuthProviders>
       <div className="max-w-screen-2xl mx-auto">

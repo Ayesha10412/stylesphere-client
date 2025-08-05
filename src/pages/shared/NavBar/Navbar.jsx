@@ -1,6 +1,10 @@
 import logo from "@/assets/logo.png";
+import { Link } from "react-router-dom";
 
 export default function Navbar() {
+  <Link to="/signUp" className="text-xl text-gray-500">
+    Login/Register
+  </Link>;
   return (
     <div>
       <nav className="bg-[#2E8B57] fixed top-0 left-0 w-full z-10 shadow-lg mb-14">
@@ -19,7 +23,7 @@ export default function Navbar() {
             <a href="#">Categories</a>
             <a href="#">Contact</a>
             <a href="#">Dashboard</a>
-
+            <a href="/signUp">Register</a>
             <div className="relative">
               <img
                 src="user-photo.jpg"
