@@ -1,7 +1,45 @@
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import signup from "../../assets/signup.jpg";
+import { useForm } from "react-hook-form";
+import useAxiosPublic from "../../Hooks/Users/useAxiosPublic";
+import { useContext } from "react";
+import { AuthContext } from "../../Providers/AuthProviders";
+import toast from "react-hot-toast";
 
 export default function SignUp() {
+  const navigate = useNavigate();
+  const axiosPublic = useAxiosPublic();
+  const {
+    register,
+    reset,
+    handleSubmit,
+    formState: { errors },
+  } = useForm();
+  const { createUser, updateUserProfile } = useContext(AuthContext);
+  const onSubmit = (data) => {
+    createUser(data.email, data.password).then((result) => {
+      const loggedUser = result.user;
+      updateUserProfile(data.displayName, data.photoURL)
+        .then(() => {
+          const userInfo = {
+            name: data.displayName,
+            email: data.email,
+            photo: data.photoURL,
+          };
+          console.log(userInfo);
+          axiosPublic.post("/users", userInfo).then((result) => {
+            if (result.data.insertedId) {
+              reset();
+              toast.success("User created successfully!");
+              navigate("/");
+            }
+          });
+        })
+        .catch((error) => {
+          toast.error(error.message);
+        });
+    });
+  };
   return (
     <div className="min-h-screen bg-base-200 flex items-center justify-center px-4 py-12 mt-20">
       <div className="w-full max-w-6xl bg-white shadow-lg rounded-xl overflow-hidden grid md:grid-cols-2 gap-8 p-8">
@@ -18,16 +56,23 @@ export default function SignUp() {
           <h2 className="text-4xl font-bold text-gray-800 mb-6 text-center md:text-left">
             Create Your Account
           </h2>
-          <form className="space-y-4">
+          <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
             <div className="form-control">
               <label className="label">
                 <span className="label-text font-medium">Name</span>
               </label>
               <input
                 type="text"
+                {...register("name", { required: true })}
+                name="name"
                 className="input input-bordered w-full p-2"
                 placeholder="Enter your name"
               />
+              {errors.name && (
+                <span className="text-red-500 font-bold">
+                  Name is required.
+                </span>
+              )}
             </div>
 
             <div className="form-control">
@@ -36,9 +81,16 @@ export default function SignUp() {
               </label>
               <input
                 type="email"
+                {...register("email", { required: true })}
+                name="email"
                 className="input input-bordered w-full p-2"
                 placeholder="Enter your email"
               />
+              {errors.email && (
+                <span className="text-red-500 font-bold">
+                  Email is required.
+                </span>
+              )}
             </div>
 
             <div className="form-control">
@@ -47,9 +99,16 @@ export default function SignUp() {
               </label>
               <input
                 type="text"
+                {...register("photoURL", { required: true })}
+                name="photoURL"
                 className="input input-bordered w-full p-2"
                 placeholder="Enter your photo URL"
               />
+              {errors.photoURL && (
+                <span className="text-red-500 font-bold">
+                  Photo url is required.
+                </span>
+              )}
             </div>
 
             <div className="form-control">
@@ -58,9 +117,36 @@ export default function SignUp() {
               </label>
               <input
                 type="password"
+                {...register("password", {
+                  required: true,
+                  minLength: 6,
+                  maxLength: 20,
+                  pattern:
+                    /(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]/,
+                })}
+                name="password"
                 className="input input-bordered w-full p-2"
                 placeholder="Enter your password"
               />
+              {errors.password?.type === "required" && (
+                <p className="text-red-500 font-bold">Password is required.</p>
+              )}
+              {errors.password?.type === "minLength" && (
+                <p className="text-red-500 font-bold">
+                  Password length must be 6 characters!
+                </p>
+              )}
+              {errors.password?.type === "maxLength" && (
+                <p className="text-red-500 font-bold">
+                  Password length less than 20 characters!
+                </p>
+              )}
+              {errors.password?.type === "pattern" && (
+                <p className="text-red-500 font-bold">
+                  Password must have at least one uppercase, one lowercase, one
+                  number, and one special character.
+                </p>
+              )}
             </div>
 
             <p className=" text-sm font-semibold px-6 text-gray-500">
@@ -74,7 +160,7 @@ export default function SignUp() {
               <input
                 type="submit"
                 value="SignUp"
-                className="btn btn-primary px-4 py-2 bg-green-500 text-white rounded-lg"
+                className="btn btn-primary px-4 py-3 text-sm font-semibold bg-green-500 text-white rounded-lg"
               />
             </div>
           </form>
