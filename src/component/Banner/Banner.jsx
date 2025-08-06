@@ -1,15 +1,15 @@
 import { Carousel } from "react-responsive-carousel";
 import "react-responsive-carousel/lib/styles/carousel.min.css";
-import img1 from "../../assets/banner-image/img1.jpeg";
-import img2 from "../../assets/banner-image/img2.jpeg";
-import img3 from "../../assets/banner-image/img3.jpeg";
-import img4 from "../../assets/banner-image/img4.jpeg";
-import img5 from "../../assets/banner-image/img5.jpeg";
-import img6 from "../../assets/banner-image/img6.jpeg";
+import img1 from "../../assets/banner-image/img1.jpg";
+import img2 from "../../assets/banner-image/img2.jpg";
+import img3 from "../../assets/banner-image/img3.jpg";
+import img4 from "../../assets/banner-image/img4.jpg";
+import img5 from "../../assets/banner-image/img5.jpg";
+import img6 from "../../assets/banner-image/img6.jpg";
 
 const Banner = () => {
   return (
-    <Carousel className="w-[90%] mx-auto mt-20 min-h-7">
+    <Carousel className="w-[90%] mx-auto mt-20 min-h-6">
       <div>
         <img className="w-full " src={img1} alt="" />
       </div>
