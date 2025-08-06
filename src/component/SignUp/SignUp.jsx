@@ -16,30 +16,37 @@ export default function SignUp() {
     formState: { errors },
   } = useForm();
   const { createUser, updateUserProfile } = useContext(AuthContext);
-  const onSubmit = (data) => {
-    createUser(data.email, data.password).then((result) => {
-      const loggedUser = result.user;
-      updateUserProfile(data.displayName, data.photoURL)
-        .then(() => {
-          const userInfo = {
-            name: data.displayName,
-            email: data.email,
-            photo: data.photoURL,
-          };
-          console.log(userInfo);
-          axiosPublic.post("/users", userInfo).then((result) => {
-            if (result.data.insertedId) {
-              reset();
-              toast.success("User created successfully!");
-              navigate("/");
-            }
-          });
-        })
-        .catch((error) => {
-          toast.error(error.message);
-        });
-    });
+  const onSubmit = async (data) => {
+    try {
+      const result = await createUser(data.email, data.password);
+      await updateUserProfile(data.name, data.photoURL);
+
+      const userInfo = {
+        name: data.name,
+        email: data.email,
+        photo: data.photoURL,
+      };
+
+      // Wait briefly to ensure Firebase updates context state
+      setTimeout(async () => {
+        try {
+          const res = await axiosPublic.post("/users", userInfo); // verifyToken removed, so no headers
+          if (res.data.insertedId) {
+            reset();
+            toast.success("User created successfully!");
+
+            // Navigate only after everything is confirmed
+            navigate("/");
+          }
+        } catch (err) {
+          console.error("User saving failed:", err);
+        }
+      }, 500); // 500ms delay (adjustable)
+    } catch (error) {
+      toast.error(error.message);
+    }
   };
+
   return (
     <div className="min-h-screen bg-base-200 flex items-center justify-center px-4 py-12 mt-20">
       <div className="w-full max-w-6xl bg-white shadow-lg rounded-xl overflow-hidden grid md:grid-cols-2 gap-8 p-8">
