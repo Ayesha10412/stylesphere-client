@@ -4,6 +4,7 @@ import ErrorPage from "@/component/ErrorPage/ErrorPage";
 import SignUp from "../component/SignUp/SignUp";
 import Home from "../component/Home/Home";
 import Login from "../component/Login/Login";
+import ManageUsers from "../pages/AdminDashboard/ManageUsers";
 
 const router = createBrowserRouter([
   {
@@ -21,6 +22,10 @@ const router = createBrowserRouter([
       {
         path: "/login",
         element: <Login></Login>,
+      },
+      {
+        path: "/users",
+        element: <ManageUsers></ManageUsers>,
       },
       {
         path: "*",

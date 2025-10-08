@@ -21,6 +21,9 @@ export default function Navbar() {
       <Link to="/" className="text-white text-sm font-bold">
         Home
       </Link>
+      <Link to="/users" className="text-white text-sm font-bold">
+        AllUsers
+      </Link>
       {!user && (
         <Link to="/signup" className="text-white text-sm font-bold">
           Login/Register
@@ -50,6 +53,7 @@ export default function Navbar() {
                   className="w-10 h-10 rounded-full cursor-pointer border-2 border-yellow-400"
                   onClick={() => setDropDown(!dropDown)}
                 />
+
                 {dropDown && (
                   <div className="absolute right-0 mt-2 w-48 bg-white text-black rounded-lg shadow-lg z-20">
                     <div className="px-4 py-2 border-b">

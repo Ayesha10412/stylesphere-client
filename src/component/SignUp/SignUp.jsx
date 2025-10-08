@@ -1,10 +1,11 @@
 import { Link, useNavigate } from "react-router-dom";
 import signup from "../../assets/signup.jpg";
 import { useForm } from "react-hook-form";
-import useAxiosPublic from "../../Hooks/Users/useAxiosPublic";
+import useAxiosPublic from "../../Hooks/useAxiosPublic";
 import { useContext } from "react";
 import { AuthContext } from "../../Providers/AuthProviders";
 import toast from "react-hot-toast";
+import SocialLogin from "../SocialLogin/SocialLogin";
 
 export default function SignUp() {
   const navigate = useNavigate();
@@ -28,22 +29,16 @@ export default function SignUp() {
       };
 
       // Wait briefly to ensure Firebase updates context state
-      setTimeout(async () => {
-        try {
-          const res = await axiosPublic.post("/users", userInfo); // verifyToken removed, so no headers
-          if (res.data.insertedId) {
-            reset();
-            toast.success("User created successfully!");
 
-            // Navigate only after everything is confirmed
-            navigate("/");
-          }
-        } catch (err) {
-          console.error("User saving failed:", err);
-        }
-      }, 500); // 500ms delay (adjustable)
-    } catch (error) {
-      toast.error(error.message);
+      const res = await axiosPublic.post("/users", userInfo); // verifyToken removed, so no headers
+      if (res.data.insertedId) {
+        toast.success("User created successfully!");
+        reset();
+        // Navigate only after everything is confirmed
+        navigate("/");
+      }
+    } catch (err) {
+      console.error("User saving failed:", err);
     }
   };
 
@@ -169,6 +164,9 @@ export default function SignUp() {
                 value="SignUp"
                 className="btn btn-primary px-4 py-3 text-sm font-semibold bg-green-500 text-white rounded-lg"
               />
+            </div>
+            <div className="">
+              <SocialLogin></SocialLogin>
             </div>
           </form>
         </div>

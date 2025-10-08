@@ -3,6 +3,7 @@ import { Link, useLocation, useNavigate } from "react-router-dom";
 import login from "../../assets/login.jpg";
 import { AuthContext } from "../../Providers/AuthProviders";
 import toast from "react-hot-toast";
+import SocialLogin from "../SocialLogin/SocialLogin";
 
 export default function Login() {
   const { signIn } = useContext(AuthContext);
@@ -54,7 +55,7 @@ export default function Login() {
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 placeholder="Enter your email"
-                className="w-full input input-bordered"
+                className="w-full py-1.5 input input-bordered"
                 required
               />
             </div>
@@ -66,7 +67,7 @@ export default function Login() {
                 type="password"
                 name="password"
                 placeholder="Enter your password"
-                className="w-full input input-bordered"
+                className="w-full py-1.5 input input-bordered"
                 required
               />
               {/* Uncomment this to add forgot password */}
@@ -94,6 +95,9 @@ export default function Login() {
                 Create an account
               </Link>
             </p>
+            <div className="flex justify-center">
+              <SocialLogin></SocialLogin>
+            </div>
           </form>
         </div>
       </div>
