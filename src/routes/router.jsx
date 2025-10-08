@@ -5,6 +5,9 @@ import SignUp from "../component/SignUp/SignUp";
 import Home from "../component/Home/Home";
 import Login from "../component/Login/Login";
 import ManageUsers from "../pages/AdminDashboard/ManageUsers";
+import Dashboard from "../layouts/Dashboard";
+import SellerSignUp from "../pages/SellerSignUp";
+import ManageSellers from "../pages/AdminDashboard/ManageSellers";
 
 const router = createBrowserRouter([
   {
@@ -22,6 +25,18 @@ const router = createBrowserRouter([
       {
         path: "/login",
         element: <Login></Login>,
+      },
+      {
+        path: "/dashboard",
+        element: <Dashboard></Dashboard>,
+      },
+      {
+        path: "/joinAsSeller",
+        element: <SellerSignUp></SellerSignUp>,
+      },
+      {
+        path: "/manageSeller",
+        element: <ManageSellers></ManageSellers>,
       },
       {
         path: "/users",

@@ -24,6 +24,15 @@ export default function Navbar() {
       <Link to="/users" className="text-white text-sm font-bold">
         AllUsers
       </Link>
+      <Link to="/joinAsSeller" className="text-white text-sm font-bold">
+        Join As Seller
+      </Link>
+      <Link to="/manageSeller" className="text-white text-sm font-bold">
+        manageSeller
+      </Link>
+      <Link to="/dashboard" className="text-white text-sm font-bold">
+        Dashboard
+      </Link>
       {!user && (
         <Link to="/signup" className="text-white text-sm font-bold">
           Login/Register

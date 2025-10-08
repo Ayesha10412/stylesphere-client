@@ -1,30 +1,36 @@
 import React from "react";
-import useAllUsers from "../../Hooks/Users/useAllUsers";
-import { FaUserShield, FaTrashAlt, FaUser } from "react-icons/fa";
-import useAxiosSecure from "../../Hooks/useAxiosSecure";
+import useAllSeller from "../../Hooks/Seller/useAllSeller";
 import Swal from "sweetalert2";
+import useAxiosSecure from "../../Hooks/useAxiosSecure";
+import { FaTrashAlt, FaUserShield } from "react-icons/fa";
 
-const ManageUsers = () => {
+const ManageSellers = () => {
+  const [sellers, refetch] = useAllSeller();
   const axiosSecure = useAxiosSecure();
-  const [users, refetch] = useAllUsers();
-  //console.log(users);
-
-  const handleMakeAdmin = (user) => {
-    axiosSecure.patch(`/users/admin/${user?._id}`).then((res) => {
-      if (res.data.modifiedCount > 0) {
-        refetch();
-        Swal.fire({
-          position: "top-end",
-          icon: "success",
-          title: `${user?.name} is admin now!!`,
-          showConfirmButton: false,
-          timer: 1500,
+  console.log(sellers);
+  const handleMakeSeller = async (seller) => {
+    Swal.fire({
+      title: "Do you want to accept as a seller!?",
+      showDenyButton: true,
+      showCancelButton: true,
+      confirmButtonText: "Save",
+      denyButtonText: `Don't save`,
+    }).then((result) => {
+      if (result.isConfirmed) {
+        axiosSecure.patch(`/seller/${seller?._id}`).then((res) => {
+          if (res.data.modifiedCount > 0) {
+            {
+              refetch();
+              Swal.fire("Saved!", "", "success");
+            }
+          }
         });
+      } else if (result.isDenied) {
+        Swal.fire("Changes are not saved", "", "info");
       }
     });
   };
-
-  const handleDeleteUser = (user) => {
+  const handleDeleteSeller = async (seller) => {
     Swal.fire({
       title: "Are you sure?",
       text: "You won't be able to revert this!",
@@ -35,12 +41,12 @@ const ManageUsers = () => {
       confirmButtonText: "Yes, delete it!",
     }).then((result) => {
       if (result.isConfirmed) {
-        axiosSecure.delete(`/user/${user._id}`).then((res) => {
-          if (res.data.deletedCount > 0) {
+        axiosSecure.delete(`/seller/${seller._id}`).then((res) => {
+          if (res.data.deletedCount) {
             refetch();
             Swal.fire({
               title: "Deleted!",
-              text: "User has been deleted.",
+              text: "Application has been deleted.",
               icon: "success",
             });
           }
@@ -48,16 +54,14 @@ const ManageUsers = () => {
       }
     });
   };
-
   return (
-    <div className="mt-20 w-full mx-auto min-h-screen bg-gray-50">
-      <h1 className="text-center font-bold text-4xl text-green-600 mb-10">
-        All Users
+    <div className="mt-20">
+      <h1 className="text-3xl font-bold text-sky-600 text-center mb-5">
+        Manage Sellers
       </h1>
-
       <div className="w-[90%] lg:w-[80%] mx-auto bg-white shadow-lg rounded-2xl overflow-hidden border border-gray-200">
         <h2 className="text-xl text-red-500 font-semibold text-right mt-1 mb-3">
-          Total User: {users?.length}
+          Total Applicants: {sellers?.length}
         </h2>
         <div className="overflow-x-auto">
           <table className="table w-full">
@@ -68,17 +72,20 @@ const ManageUsers = () => {
                 <th className="py-3 px-4 text-left">Image</th>
                 <th className="py-3 px-4 text-left">Name</th>
                 <th className="py-3 px-4 text-left">Email</th>
+                <th className="py-3 px-4 text-left">Phone</th>
+                <th className="py-3 px-4 text-left">Address</th>
                 <th className="py-3 px-4 text-left">Role</th>
+
                 <th className="py-3 px-4 text-center">Action</th>
               </tr>
             </thead>
 
             {/* Body */}
             <tbody>
-              {users?.length > 0 ? (
-                users.map((user, index) => (
+              {sellers?.length > 0 ? (
+                sellers.map((seller, index) => (
                   <tr
-                    key={user._id}
+                    key={seller._id}
                     className="hover:bg-green-50 transition-all border-b"
                   >
                     <td className="py-3 px-4 font-semibold text-gray-700">
@@ -91,47 +98,53 @@ const ManageUsers = () => {
                         <div className="avatar">
                           <div className="mask mask-squircle h-12 w-12">
                             <img
-                              src={user?.photo}
-                              alt={user.name || "User Avatar"}
+                              src={seller?.photo}
+                              alt={seller.name || "User Avatar"}
                             />
                           </div>
                         </div>
                       </div>
                     </td>
                     {/* name */}
-                    <td className="py-3 px-4 text-gray-600">{user.name}</td>
+                    <td className="py-3 px-4 text-gray-600">{seller.name}</td>
 
                     {/* Email */}
-                    <td className="py-3 px-4 text-gray-600">{user.email}</td>
+                    <td className="py-3 px-4 text-gray-600">{seller.email}</td>
+                    {/* phone */}
+                    <td className="py-3 px-4 text-gray-600">{seller.phone}</td>
 
+                    {/* Address */}
+                    <td className="py-3 px-4 text-gray-600">
+                      {seller.address}
+                    </td>
                     {/* Role */}
                     <td className="py-3 px-4">
                       <span
                         className={`px-3 py-1 rounded-full text-sm font-medium ${
-                          user.role === "admin"
+                          seller.role === "seller"
                             ? "bg-green-200 text-green-800"
                             : "bg-gray-200 text-gray-700"
                         }`}
                       >
-                        {user.role || "user"}
+                        {seller.role || "user"}
                       </span>
                     </td>
 
                     {/* Action buttons */}
                     <td className="py-3 px-4 flex justify-center items-end   text-lg gap-3">
-                      {user.role !== "admin" && (
+                      {seller.role !== "seller" && (
                         <button
-                          onClick={() => handleMakeAdmin(user)}
+                          onClick={() => handleMakeSeller(seller)}
                           className="btn btn-sm bg-green-600 border-2 border-gray-400 rounded-lg hover:bg-green-700 text-white"
-                          title="Make Admin"
+                          title="Make Seller"
                         >
                           <FaUserShield />
                         </button>
                       )}
                       <button
-                        onClick={() => handleDeleteUser(user)}
+                        onClick={() => handleDeleteSeller(seller)}
                         className="btn btn-sm bg-red-500 hover:bg-red-600 text-white"
-                        title="Delete User"
+                        title="Delete Applicant"
                       >
                         <FaTrashAlt />
                       </button>
@@ -144,7 +157,7 @@ const ManageUsers = () => {
                     colSpan="5"
                     className="text-center py-10 text-gray-500 text-lg"
                   >
-                    No users found.
+                    No applicant found.
                   </td>
                 </tr>
               )}
@@ -156,4 +169,4 @@ const ManageUsers = () => {
   );
 };
 
-export default ManageUsers;
+export default ManageSellers;
