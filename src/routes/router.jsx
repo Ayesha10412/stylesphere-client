@@ -27,8 +27,18 @@ const router = createBrowserRouter([
         element: <Login></Login>,
       },
       {
-        path: "/dashboard",
+        path: "dashboard",
         element: <Dashboard></Dashboard>,
+        children: [
+          {
+            path: "users",
+            element: <ManageUsers></ManageUsers>,
+          },
+          {
+            path: "manageSeller",
+            element: <ManageSellers></ManageSellers>,
+          },
+        ],
       },
       {
         path: "/joinAsSeller",
@@ -38,10 +48,7 @@ const router = createBrowserRouter([
         path: "/manageSeller",
         element: <ManageSellers></ManageSellers>,
       },
-      {
-        path: "/users",
-        element: <ManageUsers></ManageUsers>,
-      },
+
       {
         path: "*",
         element: <ErrorPage></ErrorPage>,
