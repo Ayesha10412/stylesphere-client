@@ -8,6 +8,9 @@ import ManageUsers from "../pages/AdminDashboard/ManageUsers";
 import Dashboard from "../layouts/Dashboard";
 import SellerSignUp from "../pages/SellerSignUp";
 import ManageSellers from "../pages/AdminDashboard/ManageSellers";
+import PrivateRoutes from "./PrivateRoutes";
+import AdminRoutes from "./AdminRoutes";
+import AdminProfile from "../pages/AdminDashboard/AdminProfile";
 
 const router = createBrowserRouter([
   {
@@ -28,15 +31,35 @@ const router = createBrowserRouter([
       },
       {
         path: "dashboard",
-        element: <Dashboard></Dashboard>,
+        element: (
+          <PrivateRoutes>
+            <Dashboard></Dashboard>
+          </PrivateRoutes>
+        ),
         children: [
           {
+            path: "adminProfile",
+            element: (
+              <AdminRoutes>
+                <AdminProfile></AdminProfile>
+              </AdminRoutes>
+            ),
+          },
+          {
             path: "users",
-            element: <ManageUsers></ManageUsers>,
+            element: (
+              <AdminRoutes>
+                <ManageUsers></ManageUsers>
+              </AdminRoutes>
+            ),
           },
           {
             path: "manageSeller",
-            element: <ManageSellers></ManageSellers>,
+            element: (
+              <AdminRoutes>
+                <ManageSellers></ManageSellers>
+              </AdminRoutes>
+            ),
           },
         ],
       },
@@ -44,11 +67,6 @@ const router = createBrowserRouter([
         path: "/joinAsSeller",
         element: <SellerSignUp></SellerSignUp>,
       },
-      {
-        path: "/manageSeller",
-        element: <ManageSellers></ManageSellers>,
-      },
-
       {
         path: "*",
         element: <ErrorPage></ErrorPage>,

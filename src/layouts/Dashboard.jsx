@@ -25,9 +25,15 @@ const Dashboard = () => {
             <>
               <li className="mb-2 mt-2.5">
                 <NavLink
-                  to="/dashboard/users"
+                  to="/dashboard/adminProfile"
                   className="flex items-center gap-2"
                 >
+                  <FaUsersCog className="text-lg" />
+                  Manage Profile
+                </NavLink>
+              </li>
+              <li className="mb-2 mt-2.5">
+                <NavLink to="users" className="flex items-center gap-2">
                   <FaUsersCog className="text-lg" />
                   Manage Users
                 </NavLink>
