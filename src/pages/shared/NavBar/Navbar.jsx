@@ -4,13 +4,13 @@ import { Link } from "react-router-dom";
 import { AuthContext } from "../../../Providers/AuthProviders";
 import toast from "react-hot-toast";
 import useAdmin from "../../../Hooks/Admin/useAdmin";
-import useAllSeller from "../../../Hooks/Seller/useAllSeller";
+import useSellerRole from "../../../Hooks/Seller/useSellerRole";
 
 export default function Navbar() {
   const { user, logout } = useContext(AuthContext);
   const [dropDown, setDropDown] = useState(false);
   const [isAdmin, isAdminLoading] = useAdmin();
-  const [seller] = useAllSeller();
+  const { isSeller, isLoading } = useSellerRole();
   const handleLogOut = () => {
     logout()
       .then(() => {
@@ -33,7 +33,14 @@ export default function Navbar() {
           Dashboard
         </Link>
       )}
-
+      {user && !isAdmin && isSeller && (
+        <Link
+          to="/dashboard/sellerProfile"
+          className="text-white text-sm font-bold"
+        >
+          Dashboard
+        </Link>
+      )}
       {!user && (
         <Link to="/signup" className="text-white text-sm font-bold">
           Login/Register

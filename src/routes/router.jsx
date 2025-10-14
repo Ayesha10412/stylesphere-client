@@ -11,6 +11,8 @@ import ManageSellers from "../pages/AdminDashboard/ManageSellers";
 import PrivateRoutes from "./PrivateRoutes";
 import AdminRoutes from "./AdminRoutes";
 import AdminProfile from "../pages/AdminDashboard/AdminProfile";
+import ManageSellerProfile from "../pages/SellerDashboard/ManageSellerProfile";
+import SellerRoutes from "./SellerRoutes";
 
 const router = createBrowserRouter([
   {
@@ -59,6 +61,14 @@ const router = createBrowserRouter([
               <AdminRoutes>
                 <ManageSellers></ManageSellers>
               </AdminRoutes>
+            ),
+          },
+          {
+            path: "sellerProfile",
+            element: (
+              <SellerRoutes>
+                <ManageSellerProfile></ManageSellerProfile>
+              </SellerRoutes>
             ),
           },
         ],

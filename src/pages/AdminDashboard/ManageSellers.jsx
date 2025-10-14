@@ -7,7 +7,7 @@ import { FaTrashAlt, FaUserShield } from "react-icons/fa";
 const ManageSellers = () => {
   const [sellers, refetch] = useAllSeller();
   const axiosSecure = useAxiosSecure();
-  console.log(sellers);
+  //console.log(sellers);
   const handleMakeSeller = async (seller) => {
     Swal.fire({
       title: "Do you want to accept as a seller!?",
@@ -131,7 +131,7 @@ const ManageSellers = () => {
                     </td>
 
                     {/* Action buttons */}
-                    <td className="py-3 px-4 flex justify-center items-end   text-lg gap-3">
+                    <td className="py-3 px-4 flex justify-center text-lg gap-3">
                       {seller.role !== "seller" && (
                         <button
                           onClick={() => handleMakeSeller(seller)}

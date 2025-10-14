@@ -1,18 +1,20 @@
 import React from "react";
 import useAdmin from "../Hooks/Admin/useAdmin";
-import useAllSeller from "../Hooks/Seller/useAllSeller";
 import { NavLink, Outlet } from "react-router-dom";
-import { FaHome, FaUserCheck, FaUserCog, FaUsersCog } from "react-icons/fa";
+import { FaHome, FaUsersCog } from "react-icons/fa";
 import useAuth from "../Hooks/useAuth";
 import Loading from "../component/Loading/Loading";
+import { UserCog } from "lucide-react";
+import useSellerRole from "../Hooks/Seller/useSellerRole";
 
 const Dashboard = () => {
   const [isAdmin, isAdminLoading] = useAdmin();
   console.log("isAdmin:", { isAdmin }, "loading:", isAdminLoading);
-  const [sellers] = useAllSeller();
-  console.log(sellers);
+
   const { user, loading } = useAuth();
-  if (isAdminLoading || loading) {
+  const { isSeller, isLoading } = useSellerRole();
+  console.log(isSeller);
+  if (isAdminLoading || isLoading || loading) {
     return <Loading></Loading>;
   }
   return (
@@ -28,7 +30,7 @@ const Dashboard = () => {
                   to="/dashboard/adminProfile"
                   className="flex items-center gap-2"
                 >
-                  <FaUsersCog className="text-lg" />
+                  <UserCog className="text-lg" />
                   Manage Profile
                 </NavLink>
               </li>
@@ -47,10 +49,22 @@ const Dashboard = () => {
           )}
 
           {/* Seller Dashboard (only if NOT Admin) */}
-          {sellers && !isAdmin && <></>}
+          {isSeller && !isAdmin && (
+            <>
+              <li className="mb-2 mt-2.5">
+                <NavLink
+                  to="/dashboard/sellerProfile"
+                  className="flex items-center gap-2"
+                >
+                  <UserCog className="text-lg" />
+                  Manage Profile
+                </NavLink>
+              </li>
+            </>
+          )}
 
           {/* Regular User Dashboard (if NOT Admin and NOT Seller) */}
-          {!isAdmin && !sellers && user && <></>}
+          {!isAdmin && !isSeller && user && <></>}
 
           {/* Shared Links for All Users */}
           <div className="divider"></div>
