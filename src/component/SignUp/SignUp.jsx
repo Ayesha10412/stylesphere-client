@@ -6,6 +6,8 @@ import { useContext } from "react";
 import { AuthContext } from "../../Providers/AuthProviders";
 import toast from "react-hot-toast";
 import SocialLogin from "../SocialLogin/SocialLogin";
+import Input from "../../components/ui/Input";
+import Button from "../../components/ui/button";
 
 export default function SignUp() {
   const navigate = useNavigate();
@@ -19,7 +21,7 @@ export default function SignUp() {
   const { createUser, updateUserProfile } = useContext(AuthContext);
   const onSubmit = async (data) => {
     try {
-      const result = await createUser(data.email, data.password);
+      await createUser(data.email, data.password);
       await updateUserProfile(data.name, data.photoURL);
 
       const userInfo = {
@@ -43,133 +45,130 @@ export default function SignUp() {
   };
 
   return (
-    <div className="min-h-screen bg-base-200 flex items-center justify-center px-4 py-12 mt-20">
-      <div className="w-full max-w-6xl bg-white shadow-lg rounded-xl overflow-hidden grid md:grid-cols-2 gap-8 p-8">
-        {/* Image Section */}
-        <div className="flex items-center justify-center">
-          <img
-            src={signup}
-            alt="Signup"
-            className="w-full max-w-md rounded-lg object-cover"
-          />
-        </div>
-        {/* Form Section */}
-        <div className="flex flex-col justify-center">
-          <h2 className="text-4xl font-bold text-gray-800 mb-6 text-center md:text-left">
-            Create Your Account
-          </h2>
-          <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
-            <div className="form-control">
-              <label className="label">
-                <span className="label-text font-medium">Name</span>
-              </label>
-              <input
-                type="text"
-                {...register("name", { required: true })}
-                name="name"
-                className="input input-bordered w-full p-2"
-                placeholder="Enter your name"
-              />
-              {errors.name && (
-                <span className="text-red-500 font-bold">
-                  Name is required.
-                </span>
-              )}
-            </div>
+    <div
+      className="min-h-screen w-full bg-cover bg-center flex items-center justify-center"
+      style={{ backgroundImage: `url(${signup})` }}
+    >
+      <div className="w-full max-w-md backdrop-blur-lg bg-white/25 border border-white/5 shadow-2xl rounded-2xl p-6 text-white">
+        <h2 className="text-3xl font-bold mb-4 text-center text-cyan-700">
+          Create Your Account
+        </h2>
 
-            <div className="form-control">
-              <label className="label">
-                <span className="label-text font-medium">Email</span>
-              </label>
-              <input
-                type="email"
-                {...register("email", { required: true })}
-                name="email"
-                className="input input-bordered w-full p-2"
-                placeholder="Enter your email"
-              />
-              {errors.email && (
-                <span className="text-red-500 font-bold">
-                  Email is required.
-                </span>
-              )}
-            </div>
+        <form onSubmit={handleSubmit(onSubmit)} className="space-y-1.5">
+          {/* Name */}
+          <div>
+            <Input
+              label="Name"
+              type="text"
+              placeholder="Enter your name"
+              name="name"
+              register={register}
+              validation={{ required: true }}
+              error={errors.name}
+            />
+            {errors.name && (
+              <p className="text-red-300 text-sm mt-1">Name is required.</p>
+            )}
+          </div>
 
-            <div className="form-control">
-              <label className="label">
-                <span className="label-text font-medium">Photo URL</span>
-              </label>
-              <input
-                type="text"
-                {...register("photoURL", { required: true })}
-                name="photoURL"
-                className="input input-bordered w-full p-2"
-                placeholder="Enter your photo URL"
-              />
-              {errors.photoURL && (
-                <span className="text-red-500 font-bold">
-                  Photo url is required.
-                </span>
-              )}
-            </div>
+          {/* Email */}
+          <div>
+            <Input
+              label="Email"
+              type="text"
+              placeholder="Enter your email"
+              name="email"
+              register={register}
+              validation={{ required: true }}
+              error={errors.email}
+            />
+            {errors.email && (
+              <p className="text-red-300 text-sm mt-1">Email is required.</p>
+            )}
+          </div>
 
-            <div className="form-control">
-              <label className="label">
-                <span className="label-text font-medium ">Password</span>
-              </label>
-              <input
-                type="password"
-                {...register("password", {
-                  required: true,
-                  minLength: 6,
-                  maxLength: 20,
-                  pattern:
-                    /(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]/,
-                })}
-                name="password"
-                className="input input-bordered w-full p-2"
-                placeholder="Enter your password"
-              />
-              {errors.password?.type === "required" && (
-                <p className="text-red-500 font-bold">Password is required.</p>
-              )}
-              {errors.password?.type === "minLength" && (
-                <p className="text-red-500 font-bold">
-                  Password length must be 6 characters!
-                </p>
-              )}
-              {errors.password?.type === "maxLength" && (
-                <p className="text-red-500 font-bold">
-                  Password length less than 20 characters!
-                </p>
-              )}
-              {errors.password?.type === "pattern" && (
-                <p className="text-red-500 font-bold">
-                  Password must have at least one uppercase, one lowercase, one
-                  number, and one special character.
-                </p>
-              )}
-            </div>
+          {/* Photo URL */}
+          <div>
+            <Input
+              label="Photo URL"
+              type="text"
+              placeholder="Enter your photo URL"
+              name="photoURL"
+              register={register}
+              validation={{ required: true }}
+              error={errors.photoURL}
+            />
+            {errors.photoURL && (
+              <p className="text-red-300 text-sm mt-1">
+                Photo URL is required.
+              </p>
+            )}
+          </div>
 
-            <p className=" text-sm font-semibold px-6 text-gray-500">
-              Already have an account?{" "}
-              <Link className="underline hover:text-green-600" to="/login">
-                Login
-              </Link>{" "}
-            </p>
+          {/* Password */}
+          <div>
+            {/* <label className="block mb-1 font-medium">Password</label>
+            <input
+              type="password"
+              {...register("password", {
+                required: true,
+                minLength: 6,
+                maxLength: 20,
+                pattern:
+                  /(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]/,
+              })}
+              className="w-full px-4 py-2 rounded-lg bg-white/30 border border-white/40 focus:outline-none focus:ring-2 focus:ring-green-400 text-white placeholder-gray-200"
+              placeholder="Enter your password"
+            /> */}
+            <Input
+              label="Password"
+              name="password"
+              type="password"
+              placeholder="Enter your password"
+              register={register}
+              validation={{
+                required: true,
+                minLength: 6,
+                maxLength: 20,
+                pattern:
+                  /(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]/,
+              }}
+              error={errors.password}
+            />
+            {errors.password?.type === "required" && (
+              <p className="text-red-300 text-sm mt-1">Password is required.</p>
+            )}
+            {errors.password?.type === "minLength" && (
+              <p className="text-red-300 text-sm mt-1">
+                Password must be at least 6 characters.
+              </p>
+            )}
+            {errors.password?.type === "pattern" && (
+              <p className="text-red-300 text-sm mt-1">
+                Must include uppercase, lowercase, number & special character.
+              </p>
+            )}
+          </div>
 
-            <div className="form-control mt-6 flex justify-center">
-              <input
-                type="submit"
-                value="SignUp"
-                className="btn btn-primary px-4 py-3 text-sm font-semibold bg-green-500 text-white rounded-lg"
-              />
-            </div>
-            <div className="">
-              <SocialLogin></SocialLogin>
-            </div>
-          </form>
-        </div>
+          <p className="text-sm text-gray-200 text-start">
+            Already have an account?{" "}
+            <Link className="underline hover:text-green-300" to="/login">
+              Login
+            </Link>
+          </p>
+
+          
+
+          <div className="mt-4 flex flex-col md:flex-row gap-3  justify-center">
+            {/* Sign Up Button */}
+            <Button type="submit" variant="primary" size="xl" className="px-8 text-sm ">
+              Sign Up
+            </Button>
+
+            {/* Social Login */}
+            <SocialLogin />
+          </div>
+        </form>
       </div>
     </div>
   );

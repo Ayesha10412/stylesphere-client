@@ -3,6 +3,7 @@ import useAuth from "../../Hooks/useAuth";
 import useAxiosPublic from "../../Hooks/useAxiosPublic";
 import { useNavigate } from "react-router-dom";
 import { FaGoogle } from "react-icons/fa";
+import Button from "../../components/ui/button";
 
 const SocialLogin = () => {
   const { googleSignIn } = useAuth();
@@ -21,20 +22,17 @@ const SocialLogin = () => {
     });
   };
   return (
-    <div>
-      <div className="divider"></div>
       <div>
-        <button
+        <Button
+          variant="outline"
           onClick={handleGoogleLogin}
-          className="btn bg-[#d18454] flex items-center gap-1 py-2 px-2 rounded-lg text-black text-lg "
         >
           <FaGoogle className="text-black"></FaGoogle>{" "}
-          <span className="text-white text-xs font-bold">
+          <span className="text-white  text-sm font-bold">
             Login With Google
-          </span>
-        </button>
+          </span>{" "}
+        </Button>
       </div>
-    </div>
   );
 };
 

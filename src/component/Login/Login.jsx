@@ -4,10 +4,13 @@ import login from "../../assets/login.jpg";
 import { AuthContext } from "../../Providers/AuthProviders";
 import toast from "react-hot-toast";
 import SocialLogin from "../SocialLogin/SocialLogin";
+import Input from "../../components/ui/Input";
+import Button from "../../components/ui/button";
 
 export default function Login() {
   const { signIn } = useContext(AuthContext);
   const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
   const location = useLocation();
   const navigate = useNavigate();
 
@@ -15,12 +18,9 @@ export default function Login() {
 
   const handleLogin = (e) => {
     e.preventDefault();
-    const form = e.target;
-    const email = form.email.value;
-    const password = form.password.value;
 
     signIn(email, password)
-      .then((result) => {
+      .then(() => {
         toast.success("Login Successful!!");
         navigate(from, { replace: true });
       })
@@ -30,77 +30,62 @@ export default function Login() {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-base-200 px-4">
-      <div className="w-full max-w-5xl bg-white rounded-2xl shadow-lg overflow-hidden grid grid-cols-1 md:grid-cols-2 gap-0">
-        {/* Left Side Image & Title */}
-        <div className="flex flex-col items-center justify-center bg-gray-100 p-8">
-          <h2 className="text-4xl font-bold text-gray-800 mb-4">Login Now!</h2>
-          <img
-            src={login}
-            alt="Login illustration"
-            className="w-full max-w-xs rounded-md"
-          />
-        </div>
+<div
+  className="relative min-h-screen w-full bg-cover bg-center flex justify-center items-center"
+  style={{ backgroundImage: `url(${login})` }}
+>
+  {/* Black overlay for readability */}
+  <div className="absolute inset-0 bg-black/50 z-10"></div>
 
-        {/* Right Side Form */}
-        <div className="p-8">
-          <form onSubmit={handleLogin} className="space-y-5">
-            <div>
-              <label className="block mb-1 font-medium text-gray-700">
-                Email
-              </label>
-              <input
-                type="email"
-                name="email"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                placeholder="Enter your email"
-                className="w-full py-1.5 input input-bordered"
-                required
-              />
-            </div>
-            <div>
-              <label className="block mb-1 font-medium text-gray-700">
-                Password
-              </label>
-              <input
-                type="password"
-                name="password"
-                placeholder="Enter your password"
-                className="w-full py-1.5 input input-bordered"
-                required
-              />
-              {/* Uncomment this to add forgot password */}
-              {/* <Link
-                to="/forgot"
-                state={{ email }}
-                className="text-xs text-gray-500 hover:underline mt-1 inline-block"
-              >
-                Forgot Password?
-              </Link> */}
-            </div>
-            <div className="flex items-center justify-center mt-6">
-              <input
-                type="submit"
-                value="Login"
-                className="btn btn-primary bg-teal-400 font-semibold rounded-lg text-white text-sm px-3 py-2"
-              />
-            </div>
-            <p className="text-center text-sm font-semibold text-gray-500">
-              New here?{" "}
-              <Link
-                to="/signUp"
-                className="text-primary underline hover:text-green-600"
-              >
-                Create an account
-              </Link>
-            </p>
-            <div className="flex justify-center">
-              <SocialLogin></SocialLogin>
-            </div>
-          </form>
-        </div>
+  {/* Glass form panel */}
+  <div className="relative z-20 w-full max-w-md backdrop-blur-lg bg-white/10 border border-white/20 shadow-2xl rounded-2xl p-8 text-white">
+    <h2 className="text-3xl font-bold mb-6 text-center text-cyan-500">
+      Login Now!
+    </h2>
+
+    <form onSubmit={handleLogin} className="space-y-4">
+      {/* Email */}
+      <Input
+        label="Email"
+        type="email"
+        placeholder="Enter your email"
+        name="email"
+        value={email}
+        onChange={(e) => setEmail(e.target.value)}
+        className="bg-white/20 text-white placeholder-gray-300"
+      />
+
+      {/* Password */}
+      <Input
+        label="Password"
+        type="password"
+        placeholder="Enter your password"
+        name="password"
+        value={password}
+        onChange={(e) => setPassword(e.target.value)}
+        className="bg-white/20 text-white placeholder-gray-300"
+      />
+
+      {/* Signup link */}
+      <p className="text-sm text-gray-200 text-start">
+        New here?{" "}
+        <Link className="underline hover:text-green-300" to="/signUp">
+          Create an account
+        </Link>
+      </p>
+
+      {/* Buttons */}
+      <div className="mt-4 flex flex-col md:flex-row gap-3 justify-center">
+        <Button type="submit" variant="primary" size="xl" className="px-8 text-sm">
+          Login
+        </Button>
+        <SocialLogin />
       </div>
-    </div>
+    </form>
+  </div>
+</div>
+
+
+
   );
 }

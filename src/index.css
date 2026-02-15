@@ -1,5 +1,6 @@
 @import "tailwindcss";
 @import "tw-animate-css";
+@import "@fontsource/inter/400.css"; /* or regular weight */
 
 @custom-variant dark (&:is(.dark *));
 

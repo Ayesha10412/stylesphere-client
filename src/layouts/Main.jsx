@@ -4,8 +4,9 @@ import Footer from "../pages/shared/Footer/Footer";
 
 function Main() {
   const location = useLocation();
+  console.log("Current path:", location.pathname);
   const noHeaderFooter =
-    location.pathname.includes("login") || location.pathname.includes("signup");
+    location.pathname.includes("login") || location.pathname.includes("signUp");
   return (
     <div>
       {noHeaderFooter || <Navbar></Navbar>}
