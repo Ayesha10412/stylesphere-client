@@ -55,12 +55,9 @@ const ManageSellers = () => {
     });
   };
   return (
-    <div className="mt-20">
-      <h1 className="text-3xl font-bold text-sky-600 text-center mb-5">
-        Manage Sellers
-      </h1>
-      <div className="w-[90%] lg:w-[80%] mx-auto bg-white shadow-lg rounded-2xl overflow-hidden border border-gray-200">
-        <h2 className="text-xl text-red-500 font-semibold text-right mt-1 mb-3">
+    <div className="">
+      <div className="w-full mx-auto bg-white shadow-lg rounded-2xl overflow-hidden border border-gray-200">
+        <h2 className="text-xl text-red-500 font-semibold text-right p-2">
           Total Applicants: {sellers?.length}
         </h2>
         <div className="overflow-x-auto">
@@ -68,7 +65,7 @@ const ManageSellers = () => {
             {/* Head */}
             <thead className="bg-green-500 text-white text-lg">
               <tr>
-                <th className="py-3 px-4 text-left">#</th>
+                <th className="py-3 px-4 text-left">SL</th>
                 <th className="py-3 px-4 text-left">Image</th>
                 <th className="py-3 px-4 text-left">Name</th>
                 <th className="py-3 px-4 text-left">Email</th>
@@ -131,7 +128,7 @@ const ManageSellers = () => {
                     </td>
 
                     {/* Action buttons */}
-                    <td className="py-3 px-4 flex justify-center text-lg gap-3">
+                    <td className="py-4  px-4 flex justify-center mt-2 items-center text-lg gap-3">
                       {seller.role !== "seller" && (
                         <button
                           onClick={() => handleMakeSeller(seller)}

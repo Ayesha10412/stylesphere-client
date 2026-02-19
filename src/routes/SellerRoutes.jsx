@@ -2,7 +2,6 @@ import React, { useContext } from "react";
 import { AuthContext } from "../Providers/AuthProviders";
 import { Navigate, useLocation } from "react-router-dom";
 import Loading from "../component/Loading/Loading";
-import useAllSeller from "../Hooks/Seller/useAllSeller";
 import useSellerRole from "../Hooks/Seller/useSellerRole";
 
 const SellerRoutes = ({ children }) => {

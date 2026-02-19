@@ -20,6 +20,7 @@ export default function Navbar() {
         toast.error(e.message);
       });
   };
+  console.log(user,isAdmin,isSeller);
   const navLinks = (
     <>
       <Link to="/" className="text-white text-sm font-bold">
@@ -37,7 +38,7 @@ export default function Navbar() {
         <Link
           to="/dashboard/sellerProfile"
           className="text-white text-sm font-bold"
-        >
+        > 
           Dashboard
         </Link>
       )}

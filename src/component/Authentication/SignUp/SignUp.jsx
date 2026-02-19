@@ -1,14 +1,13 @@
 import { Link, useNavigate } from "react-router-dom";
-import signup from "../../assets/signup.jpg";
 import { useForm } from "react-hook-form";
-import useAxiosPublic from "../../Hooks/useAxiosPublic";
+import useAxiosPublic from "../../../Hooks/useAxiosPublic";
 import { useContext } from "react";
-import { AuthContext } from "../../Providers/AuthProviders";
+import { AuthContext } from "../../../Providers/AuthProviders";
 import toast from "react-hot-toast";
+import Input from "../../../components/ui/Input";
+import Button from "../../../components/ui/button";
 import SocialLogin from "../SocialLogin/SocialLogin";
-import Input from "../../components/ui/Input";
-import Button from "../../components/ui/button";
-
+import signup from "../../../assets/signup.jpg";
 export default function SignUp() {
   const navigate = useNavigate();
   const axiosPublic = useAxiosPublic();

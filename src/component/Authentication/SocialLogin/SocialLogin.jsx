@@ -1,9 +1,9 @@
-import React from "react";
-import useAuth from "../../Hooks/useAuth";
-import useAxiosPublic from "../../Hooks/useAxiosPublic";
+
 import { useNavigate } from "react-router-dom";
+import useAuth from "../../../Hooks/useAuth";
+import useAxiosPublic from "../../../Hooks/useAxiosPublic";
 import { FaGoogle } from "react-icons/fa";
-import Button from "../../components/ui/button";
+import Button from "../../../components/ui/button";
 
 const SocialLogin = () => {
   const { googleSignIn } = useAuth();

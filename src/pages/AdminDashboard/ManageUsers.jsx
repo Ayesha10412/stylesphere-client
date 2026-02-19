@@ -50,13 +50,10 @@ const ManageUsers = () => {
   };
 
   return (
-    <div className="mt-20 w-full mx-auto min-h-screen bg-gray-50">
-      <h1 className="text-center font-bold text-4xl text-green-600 mb-10">
-        All Users
-      </h1>
-
-      <div className="w-[90%] lg:w-[80%] mx-auto bg-white shadow-lg rounded-2xl overflow-hidden border border-gray-200">
-        <h2 className="text-xl text-red-500 font-semibold text-right mt-1 mb-3">
+    <div className="w-full mx-auto min-h-screen bg-gray-50">
+ 
+      <div className="w-full mx-auto bg-white shadow-lg rounded-2xl overflow-hidden border border-gray-200">
+        <h2 className="text-xl text-red-500 font-semibold text-right p-3">
           Total User: {users?.length}
         </h2>
         <div className="overflow-x-auto">
@@ -64,7 +61,7 @@ const ManageUsers = () => {
             {/* Head */}
             <thead className="bg-green-500 text-white text-lg">
               <tr>
-                <th className="py-3 px-4 text-left">#</th>
+                <th className="py-3 px-4 text-left">SL</th>
                 <th className="py-3 px-4 text-left">Image</th>
                 <th className="py-3 px-4 text-left">Name</th>
                 <th className="py-3 px-4 text-left">Email</th>
@@ -118,7 +115,7 @@ const ManageUsers = () => {
                     </td>
 
                     {/* Action buttons */}
-                    <td className="py-3 px-4 flex justify-center items-end   text-lg gap-3">
+                    <td className="py-3 mt-4 px-4 flex justify-center items-end   text-lg gap-3">
                       {user.role !== "admin" && (
                         <button
                           onClick={() => handleMakeAdmin(user)}
