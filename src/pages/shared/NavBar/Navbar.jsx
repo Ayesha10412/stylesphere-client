@@ -20,7 +20,7 @@ export default function Navbar() {
         toast.error(e.message);
       });
   };
-  console.log(user,isAdmin,isSeller);
+  console.log(user, isAdmin, isSeller);
   const navLinks = (
     <>
       <Link to="/" className="text-white text-sm font-bold">
@@ -38,7 +38,7 @@ export default function Navbar() {
         <Link
           to="/dashboard/sellerProfile"
           className="text-white text-sm font-bold"
-        > 
+        >
           Dashboard
         </Link>
       )}
@@ -51,44 +51,45 @@ export default function Navbar() {
   );
   return (
     <div>
-      <nav className="bg-violet-500 fixed top-0 left-0 w-full z-10 shadow-lg mb-14">
+      <nav className="bg-[#6D28D9] fixed top-0 left-0 w-full z-10 shadow-lg mb-14">
         <div className="container mx-auto px-4 py-3 flex justify-between items-center">
           <Link
             href="/"
             className="flex items-center text-white text-sm font-bold space-x-2"
           >
             <img src={logo} alt="Logo" className="w-14 h-14 rounded-full" />
-            <span className="text-[#F5F5DC] text-xl">StyleSphere</span>
+            <span className="text-white text-xl">StyleSphere</span>
           </Link>
 
-          <div className="hidden lg:flex items-center space-x-8 text-[#F5F5DC] text-sm">
+          <div className="hidden lg:flex items-center space-x-8 text-white text-sm">
+            {" "}
             {navLinks}
             {user && (
               <div className="relative">
                 <img
                   src={user?.photoURL}
                   alt="Profile"
-                  className="w-10 h-10 rounded-full cursor-pointer border-2 border-yellow-400"
+                  className="w-10 h-10 rounded-full cursor-pointer border-2 border-[#C084FC]"
                   onClick={() => setDropDown(!dropDown)}
                 />
 
                 {dropDown && (
                   <div className="absolute right-0 mt-2 w-48 bg-white text-black rounded-lg shadow-lg z-20">
                     <div className="px-4 py-2 border-b">
-                      <p className="font-bold text-[#2E8B57]">
+                      <p className="font-bold text-[#7C3AED]">
                         {user?.displayName}
                       </p>
                       <p className="text-sm text-gray-500">{user?.email}</p>
                     </div>
                     <a
                       href="#"
-                      className="block px-4 py-2 hover:bg-yellow-400 transition"
+                      className="block px-4 py-2 hover:bg-[#C084FC]/20 transition"
                     >
                       Dashboard
                     </a>
                     <button
                       onClick={handleLogOut}
-                      className="block w-full text-left px-4 py-2 hover:bg-red-500 transition"
+                      className="block w-full text-left px-4 py-2 hover:bg-red-100 text-red-600 transition"
                     >
                       Logout
                     </button>
@@ -101,7 +102,7 @@ export default function Navbar() {
           <div className="lg:hidden flex items-center">
             <button
               onClick={() => setDropDown(dropDown)}
-              className="flex items-center focus:outline-none text-[#F5F5DC]"
+              className="flex items-center focus:outline-none text-white"
             >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -124,17 +125,17 @@ export default function Navbar() {
                   <img
                     src={user?.photoURL}
                     alt="Profile"
-                    className="w-10 h-10 rounded-full cursor-pointer border-2 border-yellow-400"
+                    className="w-10 h-10 rounded-full cursor-pointer border-2 border-[#C084FC]"
                   />
                 </li>
-                <li className="border-t px-4 py-2 text-[#2E8B57]">
+                <li className="border-t px-4 py-2 text-[#7C3AED]">
                   <p className="font-bold">{user?.displayName}</p>
                   <p className="text-sm text-gray-500">{user?.email}</p>
                 </li>
                 <li>
                   <a
                     href="/"
-                    className="block text-white text-sm font-bold px-4 py-2 hover:bg-yellow-400 transition"
+                    className="block text-black text-sm font-bold px-4 py-2 hover:bg-[#C084FC]/20 transition"
                   >
                     Home
                   </a>
@@ -142,7 +143,7 @@ export default function Navbar() {
                 <li>
                   <a
                     href="#"
-                    className="block px-4 py-2 hover:bg-yellow-400 transition"
+                    className="block px-4 py-2 hover:bg-[#C084FC]/20 transition"
                   >
                     Shop
                   </a>
@@ -150,7 +151,7 @@ export default function Navbar() {
                 <li>
                   <a
                     href="#"
-                    className="block px-4 py-2 hover:bg-yellow-400 transition"
+                    className="block px-4 py-2 hover:bg-[#C084FC]/20 transition"
                   >
                     Categories
                   </a>
@@ -158,7 +159,7 @@ export default function Navbar() {
                 <li>
                   <a
                     href="#"
-                    className="block px-4 py-2 hover:bg-yellow-400 transition"
+                    className="block px-4 py-2 hover:bg-[#C084FC]/20 transition"
                   >
                     Contact
                   </a>
@@ -166,7 +167,7 @@ export default function Navbar() {
                 <li>
                   <a
                     href="#"
-                    className="block px-4 py-2 hover:bg-yellow-400 transition"
+                    className="block px-4 py-2 hover:bg-[#C084FC]/20 transition"
                   >
                     Dashboard
                   </a>
@@ -174,7 +175,7 @@ export default function Navbar() {
                 <li>
                   <button
                     onClick={handleLogOut}
-                    className="block w-full text-left px-4 py-2 hover:bg-red-500 transition"
+                    className="block w-full text-left px-4 py-2 hover:bg-red-100 text-red-600 transition"
                   >
                     Logout
                   </button>
