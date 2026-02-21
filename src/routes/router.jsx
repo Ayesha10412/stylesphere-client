@@ -5,12 +5,24 @@ import DashboardLayout from "../layouts/dashboard/DashboardLayout";
 import { dashboardRoutes } from "./dashboardRoute";
 import RoleRoute from "./RoleRoute";
 import Home from "../component/Home/Home";
+import Login from "../component/Authentication/Login/Login";
+import SignUp from "../component/Authentication/SignUp/SignUp";
 
 const router = createBrowserRouter([
       {
     path: "/",
     element: <Home />,
+      },
+ {
+    path: "/login",
+    element: <Login />,
   },
+      {
+    path: "/signup",
+    element: <SignUp />,
+  },
+    
+     
   {
 
     path: "/dashboard",

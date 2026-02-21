@@ -79,7 +79,7 @@ export default function Login() {
               type="submit"
               variant="primary"
               size="xl"
-              className="px-8 text-sm"
+              className="px-8 text-sm bg-[#111827] hover:bg-[#1f2937]"
             >
               Login
             </Button>
