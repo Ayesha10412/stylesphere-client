@@ -35,7 +35,7 @@ const ProfileDropdown = () => {
           </div>
 
           <Link
-            to="/profile"
+            to="/dashboard/profile"
             className="block px-4 py-2 hover:bg-[#C084FC]/20"
           >
             Profile

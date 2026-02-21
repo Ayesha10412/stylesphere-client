@@ -5,7 +5,7 @@ const DashboardHeader = () => {
   const location = useLocation();
 
   const getTitle = () => {
-    if (location.pathname.includes("adminProfile")) return "Admin Profile";
+    if (location.pathname.includes("profile")) return "Profile";
     if (location.pathname.includes("users")) return "Manage Users";
     if (location.pathname.includes("manageSeller")) return "Manage Sellers";
     if (location.pathname.includes("sellerProfile")) return "Seller Profile";

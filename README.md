@@ -1,6 +1,3 @@
-Got it! Let me make it **super short and clear** for quick reference ✅
-
----
 
 # 🎨 StyleSphere Color Guide
 
@@ -20,9 +17,3 @@ Got it! Let me make it **super short and clear** for quick reference ✅
 * 60% Background (white)
 * 30% Dark / Text (#111827)
 * 10% Accent (#7C3AED)
-
-✅ Clean, professional, fashion-shop look.
-
----
-
-If you want, I can also **map this to Tailwind classes** for your project so you just use `bg-primary`, `text-accent`, etc.
