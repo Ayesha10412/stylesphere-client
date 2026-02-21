@@ -55,25 +55,21 @@ const ManageSellers = () => {
     });
   };
   return (
-    <div className="">
+    <div className="w-full mx-auto min-h-screen bg-[#F9FAFB]">
       <div className="w-full mx-auto bg-white shadow-lg rounded-2xl overflow-hidden border border-gray-200">
-        <h2 className="text-xl text-red-500 font-semibold text-right p-2">
-          Total Applicants: {sellers?.length}
-        </h2>
         <div className="overflow-x-auto">
           <table className="table w-full">
             {/* Head */}
-            <thead className="bg-green-500 text-white text-lg">
+            <thead className="bg-[#7C3AED] text-white text-lg">
               <tr>
-                <th className="py-3 px-4 text-left">SL</th>
-                <th className="py-3 px-4 text-left">Image</th>
-                <th className="py-3 px-4 text-left">Name</th>
-                <th className="py-3 px-4 text-left">Email</th>
-                <th className="py-3 px-4 text-left">Phone</th>
-                <th className="py-3 px-4 text-left">Address</th>
-                <th className="py-3 px-4 text-left">Role</th>
-
-                <th className="py-3 px-4 text-center">Action</th>
+                <th className="py-2 px-2 text-left">SL</th>
+                <th className=" text-left">Image</th>
+                <th className=" text-left">Name</th>
+                <th className=" text-left">Email</th>
+                <th className=" text-left">Phone</th>
+                <th className=" text-left">Address</th>
+                <th className=" text-left">Role</th>
+                <th className=" text-center">Action</th>
               </tr>
             </thead>
 
@@ -83,43 +79,45 @@ const ManageSellers = () => {
                 sellers.map((seller, index) => (
                   <tr
                     key={seller._id}
-                    className="hover:bg-green-50 transition-all border-b"
+                    className="hover:bg-[#F3F4F6] transition-all border-b"
                   >
-                    <td className="py-3 px-4 font-semibold text-gray-700">
+                    <td className=" px-2 font-semibold text-[#111827]">
                       {index + 1}
                     </td>
 
-                    {/* User Info */}
-                    <td className="py-3 px-4">
+                    {/* Avatar */}
+                    <td className="">
                       <div className="flex items-center gap-3">
-                        <div className="avatar">
-                          <div className="mask mask-squircle h-12 w-12">
-                            <img
-                              src={seller?.photo}
-                              alt={seller.name || "User Avatar"}
-                            />
-                          </div>
+                        <div className="mask mask-squircle h-12 w-12 overflow-hidden">
+                          <img
+                            src={seller?.photo}
+                            alt={seller.name || "User Avatar"}
+                            className="w-full h-full object-cover p-1"
+                          />
                         </div>
                       </div>
                     </td>
-                    {/* name */}
-                    <td className="py-3 px-4 text-gray-600">{seller.name}</td>
+
+                    {/* Name */}
+                    <td className=" text-[#111827] font-medium">
+                      {seller.name}
+                    </td>
 
                     {/* Email */}
-                    <td className="py-3 px-4 text-gray-600">{seller.email}</td>
-                    {/* phone */}
-                    <td className="py-3 px-4 text-gray-600">{seller.phone}</td>
+                    <td className=" text-gray-600">{seller.email}</td>
+
+                    {/* Phone */}
+                    <td className=" text-gray-600">{seller.phone}</td>
 
                     {/* Address */}
-                    <td className="py-3 px-4 text-gray-600">
-                      {seller.address}
-                    </td>
+                    <td className=" text-gray-600">{seller.address}</td>
+
                     {/* Role */}
-                    <td className="py-3 px-4">
+                    <td className="">
                       <span
-                        className={`px-3 py-1 rounded-full text-sm font-medium ${
+                        className={`px-2 py-1 rounded-full text-sm font-medium ${
                           seller.role === "seller"
-                            ? "bg-green-200 text-green-800"
+                            ? "bg-[#C084FC] text-white" // Accent for seller
                             : "bg-gray-200 text-gray-700"
                         }`}
                       >
@@ -127,12 +125,12 @@ const ManageSellers = () => {
                       </span>
                     </td>
 
-                    {/* Action buttons */}
-                    <td className="py-4  px-4 flex justify-center mt-2 items-center text-lg gap-3">
+                    {/* Action Buttons */}
+                    <td className="py-4 px-4 flex justify-center items-center gap-2">
                       {seller.role !== "seller" && (
                         <button
                           onClick={() => handleMakeSeller(seller)}
-                          className="btn btn-sm bg-green-600 border-2 border-gray-400 rounded-lg hover:bg-green-700 text-white"
+                          className="btn btn-sm bg-[#7C3AED] border-none hover:bg-[#6D28D9] text-white transition"
                           title="Make Seller"
                         >
                           <FaUserShield />
@@ -140,7 +138,7 @@ const ManageSellers = () => {
                       )}
                       <button
                         onClick={() => handleDeleteSeller(seller)}
-                        className="btn btn-sm bg-red-500 hover:bg-red-600 text-white"
+                        className="btn btn-sm bg-red-500 hover:bg-red-600 text-white transition"
                         title="Delete Applicant"
                       >
                         <FaTrashAlt />
@@ -151,10 +149,10 @@ const ManageSellers = () => {
               ) : (
                 <tr>
                   <td
-                    colSpan="5"
+                    colSpan="8"
                     className="text-center py-10 text-gray-500 text-lg"
                   >
-                    No applicant found.
+                    No applicants found.
                   </td>
                 </tr>
               )}

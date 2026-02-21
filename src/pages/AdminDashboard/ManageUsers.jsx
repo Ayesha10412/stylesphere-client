@@ -84,7 +84,7 @@ const ManageUsers = () => {
                             <img
                               src={user?.photo}
                               alt={user.name || "User Avatar"}
-                              className="w-full h-full object-cover"
+                              className="w-full h-full object-cover p-1"
                             />
                           </div>
                         </div>
