@@ -2,24 +2,15 @@ import logo from "@/assets/logo.png";
 import { useContext, useState } from "react";
 import { Link } from "react-router-dom";
 import { AuthContext } from "../../../Providers/AuthProviders";
-import toast from "react-hot-toast";
 import useAdmin from "../../../Hooks/Admin/useAdmin";
 import useSellerRole from "../../../Hooks/Seller/useSellerRole";
+import ProfileDropdown from "../../../components/ProfileDropdown";
 
 export default function Navbar() {
-  const { user, logout } = useContext(AuthContext);
-  const [dropDown, setDropDown] = useState(false);
+  const { user } = useContext(AuthContext);
   const [isAdmin, isAdminLoading] = useAdmin();
   const { isSeller, isLoading } = useSellerRole();
-  const handleLogOut = () => {
-    logout()
-      .then(() => {
-        toast.success("LogOut successfully!!");
-      })
-      .catch((e) => {
-        toast.error(e.message);
-      });
-  };
+  const [dropDown, setDropDown] = useState(false);
   console.log(user, isAdmin, isSeller);
   const navLinks = (
     <>
@@ -64,39 +55,7 @@ export default function Navbar() {
           <div className="hidden lg:flex items-center space-x-8 text-white text-sm">
             {" "}
             {navLinks}
-            {user && (
-              <div className="relative">
-                <img
-                  src={user?.photoURL}
-                  alt="Profile"
-                  className="w-10 h-10 rounded-full cursor-pointer border-2 border-[#C084FC]"
-                  onClick={() => setDropDown(!dropDown)}
-                />
-
-                {dropDown && (
-                  <div className="absolute right-0 mt-2 w-48 bg-white text-black rounded-lg shadow-lg z-20">
-                    <div className="px-4 py-2 border-b">
-                      <p className="font-bold text-[#7C3AED]">
-                        {user?.displayName}
-                      </p>
-                      <p className="text-sm text-gray-500">{user?.email}</p>
-                    </div>
-                    <a
-                      href="#"
-                      className="block px-4 py-2 hover:bg-[#C084FC]/20 transition"
-                    >
-                      Dashboard
-                    </a>
-                    <button
-                      onClick={handleLogOut}
-                      className="block w-full text-left px-4 py-2 hover:bg-red-100 text-red-600 transition"
-                    >
-                      Logout
-                    </button>
-                  </div>
-                )}
-              </div>
-            )}
+            {user && <ProfileDropdown />}
           </div>
 
           <div className="lg:hidden flex items-center">

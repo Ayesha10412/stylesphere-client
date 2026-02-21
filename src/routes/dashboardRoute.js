@@ -7,11 +7,11 @@ import ManageSellerProfile from "../pages/SellerDashboard/ManageSellerProfile";
 export const dashboardRoutes = [
   {
     icon: User,
-
     path: "adminProfile",
     component: AdminProfile,
     roles: ["admin"],
     label: "Admin Profile",
+    showInSidebar: false,   
   },
   {
     icon: User,
@@ -19,6 +19,7 @@ export const dashboardRoutes = [
     component: ManageUsers,
     roles: ["admin"],
     label: "Manage Users",
+    showInSidebar: true,
   },
   {
     icon: Users,
@@ -26,6 +27,7 @@ export const dashboardRoutes = [
     component: ManageSellers,
     roles: ["admin"],
     label: "Manage Seller",
+    showInSidebar: true,
   },
   {
     icon: User,
@@ -33,5 +35,6 @@ export const dashboardRoutes = [
     component: ManageSellerProfile,
     roles: ["seller"],
     label: "Seller Profile",
+    showInSidebar: false,   // 👈 ADD THIS
   },
 ];

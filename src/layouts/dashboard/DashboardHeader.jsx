@@ -1,4 +1,5 @@
 import { useLocation } from "react-router-dom";
+import ProfileDropdown from "../../components/ProfileDropdown";
 
 const DashboardHeader = () => {
   const location = useLocation();
@@ -14,6 +15,7 @@ const DashboardHeader = () => {
   return (
       <div className="bg-[#F9FAFB] shadow-md px-6 py-3 flex justify-between items-center">
       <h1 className="text-2xl font-semibold text-[#111827]">{getTitle()}</h1>
+      <ProfileDropdown />
     </div>
   );
 };

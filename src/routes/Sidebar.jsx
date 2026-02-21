@@ -13,7 +13,7 @@ const Sidebar = () => {
   if (isAdmin) role = "admin";
   else if (isSeller) role = "seller";
 
-  const filteredRoutes = dashboardRoutes.filter((route) =>
+  const filteredRoutes = dashboardRoutes.filter((route) => route.showInSidebar &&
     route.roles.includes(role),
   );
 

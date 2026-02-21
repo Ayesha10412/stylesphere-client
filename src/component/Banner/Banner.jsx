@@ -9,25 +9,26 @@ import img6 from "../../assets/banner-image/img6.jpg";
 
 const Banner = () => {
   return (
-    <Carousel className="w-full mx-auto mt-20 min-h-6">
-      <div>
-        <img className="w-full " src={img1} alt="" />
-      </div>
-      <div>
-        <img className="w-full " src={img2} alt="" />
-      </div>
-      <div>
-        <img className="w-full" src={img3} alt="" />
-      </div>
-      <div>
-        <img className="w-full " src={img4} alt="" />
-      </div>
-      <div>
-        <img className="w-full " src={img5} alt="" />
-      </div>
-      <div>
-        <img className="w-full " src={img6} alt="" />
-      </div>
+    <Carousel
+      className="w-full mx-auto mt-20"
+      autoPlay
+      infiniteLoop
+      interval={4000}
+      transitionTime={800}
+      showThumbs={false}
+      showStatus={false}
+      stopOnHover={false}
+      emulateTouch
+    >
+      {[img1, img2, img3, img4, img5, img6].map((img, index) => (
+        <div key={index}>
+          <img
+            src={img}
+            alt={`banner-${index}`}
+            className="w-full h-[500px] md:h-[600px] lg:h-[650px] object-cover"
+          />
+        </div>
+      ))}
     </Carousel>
   );
 };
