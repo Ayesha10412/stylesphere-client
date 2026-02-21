@@ -51,22 +51,18 @@ const ManageUsers = () => {
 
   return (
     <div className="w-full mx-auto min-h-screen bg-gray-50">
- 
-      <div className="w-full mx-auto bg-white shadow-lg rounded-2xl overflow-hidden border border-gray-200">
-        <h2 className="text-xl text-red-500 font-semibold text-right p-3">
-          Total User: {users?.length}
-        </h2>
+      <div className="w-full mx-auto bg-white shadow-lg rounded-lg overflow-hidden border border-gray-200">
         <div className="overflow-x-auto">
-          <table className="table w-full">
+          <table className="table w-full ">
             {/* Head */}
-            <thead className="bg-green-500 text-white text-lg">
-              <tr>
-                <th className="py-3 px-4 text-left">SL</th>
-                <th className="py-3 px-4 text-left">Image</th>
-                <th className="py-3 px-4 text-left">Name</th>
-                <th className="py-3 px-4 text-left">Email</th>
-                <th className="py-3 px-4 text-left">Role</th>
-                <th className="py-3 px-4 text-center">Action</th>
+            <thead className="bg-[#7C3AED] text-white text-sm">
+              <tr className="">
+                <th className="py-2 px-2 text-left">SL</th>
+                <th className=" text-left">Image</th>
+                <th className=" text-left">Name</th>
+                <th className=" text-left">Email</th>
+                <th className=" text-left">Role</th>
+                <th className=" text-center">Action</th>
               </tr>
             </thead>
 
@@ -78,36 +74,35 @@ const ManageUsers = () => {
                     key={user._id}
                     className="hover:bg-green-50 transition-all border-b"
                   >
-                    <td className="py-3 px-4 font-semibold text-gray-700">
-                      {index + 1}
-                    </td>
+                    <td className="font-semibold text-gray-700 px-2">{index + 1}</td>
 
                     {/* User Info */}
-                    <td className="py-3 px-4">
+                    <td className=" ">
                       <div className="flex items-center gap-3">
                         <div className="avatar">
-                          <div className="mask mask-squircle h-12 w-12">
+                          <div className="mask mask-squircle h-12 w-12 overflow-hidden">
                             <img
                               src={user?.photo}
                               alt={user.name || "User Avatar"}
+                              className="w-full h-full object-cover"
                             />
                           </div>
                         </div>
                       </div>
                     </td>
                     {/* name */}
-                    <td className="py-3 px-4 text-gray-600">{user.name}</td>
+                    <td className=" text-gray-600">{user.name}</td>
 
                     {/* Email */}
-                    <td className="py-3 px-4 text-gray-600">{user.email}</td>
+                    <td className=" text-gray-600">{user.email}</td>
 
                     {/* Role */}
-                    <td className="py-3 px-4">
+                    <td className="">
                       <span
-                        className={`px-3 py-1 rounded-full text-sm font-medium ${
+                        className={`px-1.5 py-1 rounded-full text-sm font-medium ${
                           user.role === "admin"
-                            ? "bg-green-200 text-green-800"
-                            : "bg-gray-200 text-gray-700"
+                            ? "bg-[#C084FC] text-white" // Accent color for admin
+                            : "bg-[#F3F4F6] text-[#111827]" // Subtle gray for users
                         }`}
                       >
                         {user.role || "user"}
@@ -115,11 +110,11 @@ const ManageUsers = () => {
                     </td>
 
                     {/* Action buttons */}
-                    <td className="py-3 mt-4 px-4 flex justify-center items-end   text-lg gap-3">
+                    <td className=" mt-4  flex justify-center items-end text-lg gap-3">
                       {user.role !== "admin" && (
                         <button
                           onClick={() => handleMakeAdmin(user)}
-                          className="btn btn-sm bg-green-600 border-2 border-gray-400 rounded-lg hover:bg-green-700 text-white"
+                          className="btn btn-sm bg-[#7C3AED] border-none hover:bg-[#6D28D9] text-white transition"
                           title="Make Admin"
                         >
                           <FaUserShield />
@@ -127,7 +122,7 @@ const ManageUsers = () => {
                       )}
                       <button
                         onClick={() => handleDeleteUser(user)}
-                        className="btn btn-sm bg-red-500 hover:bg-red-600 text-white"
+                        className="btn btn-sm bg-red-500 hover:bg-red-600 text-white transition"
                         title="Delete User"
                       >
                         <FaTrashAlt />
@@ -136,7 +131,8 @@ const ManageUsers = () => {
                   </tr>
                 ))
               ) : (
-                <tr>
+                <tr className="hover:bg-[#F9FAFB] transition-all border-b">
+                  {" "}
                   <td
                     colSpan="5"
                     className="text-center py-10 text-gray-500 text-lg"
