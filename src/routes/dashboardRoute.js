@@ -8,7 +8,7 @@ import AdminDashboard from "../pages/AdminDashboard/AdminDashboard";
 export const dashboardRoutes = [
   {
     icon: LayoutDashboard,
-    path: "",
+    path: "home",
     component: AdminDashboard,
     roles: ["admin"],
     label: "Dashboard",

@@ -19,7 +19,7 @@ export default function Navbar() {
       </Link>
       {user && isAdmin && (
         <Link
-          to="/dashboard/adminProfile"
+          to="/dashboard/"
           className="text-white text-sm font-bold"
         >
           Dashboard

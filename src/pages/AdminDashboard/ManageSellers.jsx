@@ -60,7 +60,7 @@ const ManageSellers = () => {
         <div className="overflow-x-auto">
           <table className="table w-full">
             {/* Head */}
-            <thead className="bg-[#7C3AED] text-white text-lg">
+            <thead className="bg-[#7C3AED] text-white text-sm">
               <tr>
                 <th className="py-2 px-2 text-left">SL</th>
                 <th className=" text-left">Image</th>

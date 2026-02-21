@@ -20,8 +20,8 @@ export const Button = ({
     danger: "bg-red-500 hover:bg-red-600 text-white",
     outline:
       "border border-green-500 text-green-500 hover:bg-green-500 hover:text-white",
+    menu: "bg-transparent text-left hover:bg-red-100 text-red-600 justify-start",
   };
-
   // Sizes
   const sizes = {
     sm: "px-3 py-1 text-sm",

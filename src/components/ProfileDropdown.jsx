@@ -1,19 +1,20 @@
 import { useContext, useState } from "react";
 import { AuthContext } from "../Providers/AuthProviders";
 import { Link } from "react-router-dom";
+import {  Logout } from "../lib/Logout";
 
 const ProfileDropdown = () => {
-  const { user, LogOut } = useContext(AuthContext);
+  const { user } = useContext(AuthContext);
   const [open, setOpen] = useState(false);
-  const handleLogOut = () => {
-    LogOut()
-      .then(() => {
-        toast.success("LogOut successfully!!");
-      })
-      .catch((e) => {
-        toast.error(e.message);
-      });
-  };
+//   const handleLogOut = () => {
+//     LogOut()
+//       .then(() => {
+//         toast.success("LogOut successfully!!");
+//       })
+//       .catch((e) => {
+//         toast.error(e.message);
+//       });
+//   };
   return (
     <div className="relative">
       <img
@@ -41,12 +42,13 @@ const ProfileDropdown = () => {
             Profile
           </Link>
 
-          <button
+          {/* <button
             onClick={handleLogOut}
             className="block w-full text-left px-4 py-2 hover:bg-red-100 text-red-600"
           >
             Logout
-          </button>
+          </button> */}
+          <Logout className="block w-full text-left px-4 py-2 hover:bg-red-100 text-red-600" />
         </div>
       )}
     </div>
