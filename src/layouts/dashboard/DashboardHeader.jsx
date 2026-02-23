@@ -9,6 +9,7 @@ const DashboardHeader = () => {
     if (location.pathname.includes("users")) return "Manage Users";
     if (location.pathname.includes("manageSeller")) return "Manage Sellers";
     if (location.pathname.includes("sellerProfile")) return "Seller Profile";
+    if (location.pathname.includes("product")) return "Manage Products";
     return "Dashboard";
   };
 

@@ -1,8 +1,9 @@
-import { LayoutDashboard, User, Users } from "lucide-react";
+import { LayoutDashboard, Package, User, Users } from "lucide-react";
 import ManageSellers from "../pages/AdminDashboard/ManageSellers";
 import ManageUsers from "../pages/AdminDashboard/ManageUsers";
 import AdminDashboard from "../pages/AdminDashboard/AdminDashboard";
 import Profile from "../pages/component/Profile";
+import ManageProduct from "../pages/SellerDashboard/product/ManageProduct";
 
 export const dashboardRoutes = [
   {
@@ -11,7 +12,7 @@ export const dashboardRoutes = [
     component: AdminDashboard,
     roles: ["admin"],
     label: "Dashboard",
-    showInSidebar: true,   
+    showInSidebar: true,
   },
 
   {
@@ -38,5 +39,12 @@ export const dashboardRoutes = [
     label: "Profile",
     showInSidebar: false,
   },
-  
+  {
+    icon: Package,
+    path: "product",
+    component: ManageProduct,
+    roles: ["seller"],
+    label: "Manage Product",
+    showInSidebar: true,
+  },
 ];
