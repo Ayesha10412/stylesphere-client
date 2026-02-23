@@ -1,9 +1,8 @@
 import { LayoutDashboard, User, Users } from "lucide-react";
-import AdminProfile from "../pages/AdminDashboard/AdminProfile";
 import ManageSellers from "../pages/AdminDashboard/ManageSellers";
 import ManageUsers from "../pages/AdminDashboard/ManageUsers";
-import ManageSellerProfile from "../pages/SellerDashboard/ManageSellerProfile";
 import AdminDashboard from "../pages/AdminDashboard/AdminDashboard";
+import Profile from "../pages/component/Profile";
 
 export const dashboardRoutes = [
   {
@@ -14,14 +13,7 @@ export const dashboardRoutes = [
     label: "Dashboard",
     showInSidebar: true,   
   },
-  {
-    icon: User,
-    path: "profile",
-    component: AdminProfile,
-    roles: ["admin"],
-    label: "Admin Profile",
-    showInSidebar: false,   
-  },
+
   {
     icon: User,
     path: "users",
@@ -39,11 +31,12 @@ export const dashboardRoutes = [
     showInSidebar: true,
   },
   {
-    icon: User,
-    path: "sellerProfile",
-    component: ManageSellerProfile,
-    roles: ["seller"],
-    label: "Seller Profile",
-    showInSidebar: false,   // 👈 ADD THIS
+    icon: Users,
+    path: "profile",
+    component: Profile,
+    roles: ["admin", "seller", "user"],
+    label: "Profile",
+    showInSidebar: false,
   },
+  
 ];

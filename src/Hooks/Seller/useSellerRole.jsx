@@ -10,7 +10,7 @@ const useSellerRole = () => {
     !isLoading && user
       ? sellers?.some((seller) => seller.email === user.email)
       : false;
-  console.log("isSeller", isSeller);
+  // console.log("isSeller", isSeller);
   return { isSeller, isLoading };
 };
 

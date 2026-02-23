@@ -7,6 +7,8 @@ const Input = ({
   register,
   validation,
   error,
+  value,
+  onChange,
   className = "",
   ...rest
 }) => {
@@ -20,8 +22,11 @@ const Input = ({
 
       <input
         type={type}
+        name={name}
+        value={value}
+        onChange={onChange}
         placeholder={placeholder}
-        {...(register && register(name, validation))}
+        // {...(register && register(name, validation))}
         className={`w-full px-4 py-2 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-green-500 transition-all ${className}`}
         {...rest}
       />
