@@ -27,7 +27,7 @@ const Input = ({
         onChange={onChange}
         placeholder={placeholder}
         // {...(register && register(name, validation))}
-        className={`w-full px-4 py-2 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-green-500 transition-all ${className}`}
+        className={`w-full px-4 text-sm py-1.5 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-green-500 transition-all ${className}`}
         {...rest}
       />
 

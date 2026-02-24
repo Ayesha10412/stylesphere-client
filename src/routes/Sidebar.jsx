@@ -53,15 +53,15 @@ const Sidebar = () => {
             className={({ isActive }) =>
               `flex items-center gap-2 p-2 rounded transition border-b border-gray-700 ${
                 isActive
-                  ? "bg-[#7C3AED] text-white"
-                  : "text-white hover:bg-[#C084FC]"
+                  ? "bg-[#7C3AED] text-white "
+                  : "text-white hover:bg-[#C084FC] "
               }`
             }
           >
             {({ isActive }) => (
               <>
                 {Icon && (
-                  <Icon size={18} color={isActive ? "#FFFFFF" : "#C084FC"} />
+                  <Icon size={18} color={isActive ? "#FFFFFF " : "#C084FC"} />
                 )}
                 <span>{route.label}</span>
               </>

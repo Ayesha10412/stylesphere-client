@@ -27,7 +27,7 @@ export default function Navbar() {
       )}
       {user && !isAdmin && isSeller && (
         <Link
-          to="/dashboard/sellerProfile"
+          to="/dashboard/"
           className="text-white text-sm font-bold"
         >
           Dashboard

@@ -11,7 +11,7 @@ export const Button = ({
 }) => {
   // Base style
   const baseStyle =
-    "rounded-lg font-semibold transition-all duration-200 flex items-center justify-center gap-2";
+    "rounded-lg font-semibold transition-all duration-200 flex items-center justify-center";
 
   // Variants (colors)
   const variants = {
@@ -24,9 +24,9 @@ export const Button = ({
   };
   // Sizes
   const sizes = {
-    sm: "px-3 py-1 text-sm",
-    md: "px-4 py-2 text-base",
-    lg: "px-6 py-3 text-lg",
+    sm: "px-1.5 py-1.5 text-sm",
+    md: "px-2 py-1.5 text-sm",
+    lg: "px-3 py-3 text-lg",
   };
 
   return (
