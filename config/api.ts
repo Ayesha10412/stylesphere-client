@@ -5,9 +5,7 @@ const api = axios.create({
   withCredentials: true, // 🔥 required for cookies
 });
 
-/**
- * RESPONSE INTERCEPTOR (AUTO REFRESH TOKEN)
- */
+
 api.interceptors.response.use(
   (response) => response,
   async (error) => {
