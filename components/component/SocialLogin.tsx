@@ -1,6 +1,7 @@
 "use client"
 
 import { Button } from "../ui/button";
+import { FaGoogle } from "react-icons/fa";
 
 
 const SocialLogin = () => {
@@ -10,16 +11,13 @@ const SocialLogin = () => {
   };
   return (
   
-      <div>
   <Button
     variant="outline"
     onClick={handleGoogleLogin}
-    className="flex items-center gap-2 border-[#7C3AED] text-[#111827] hover:bg-[#7C3AED] hover:text-white"
+    className="flex items-center border-none gap-2 bg-white/30 hover:bg-white/35 text-[#111827]  hover:text-white"
   >
-    {/* <FaGoogle className="text-[#111827] group-hover:text-white" /> */}
-    <span className="text-sm font-bold">Login With Google</span>
+    <span className=" font-bold"><FaGoogle /> </span>
   </Button>
-</div>
   );
 };
 

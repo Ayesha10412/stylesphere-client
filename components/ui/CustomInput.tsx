@@ -2,7 +2,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 
-import  { useEffect, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import {
   UseFormRegister,
   Controller,
@@ -82,19 +82,25 @@ export const CustomInput = <T extends FieldValues>({
   placeholder,
 }: CustomInputProps<T>) => {
   const [images, setImages] = useState<File[]>([]);
-  const [previewUrls, setPreviewUrls] = useState<string[]>([]);
+  // const [previewUrls, setPreviewUrls] = useState<string[]>([]);
   const [showPassword, setShowPassword] = useState(false);
   const fileInputRef = useRef<HTMLInputElement | null>(null);
-
+  const previewUrls = useMemo(() => {
+    return images.map((file) => URL.createObjectURL(file));
+  }, [images]);
   const focusColor =
     "focus-visible:ring-emerald-500 focus-visible:ring-2 rounded-lg bg-white";
 
+  // useEffect(() => {
+  //   const urls = images.map((file) => URL.createObjectURL(file));
+  //   setPreviewUrls(urls);
+  //   return () => urls.forEach((url) => URL.revokeObjectURL(url));
+  // }, [images]);
   useEffect(() => {
-    const urls = images.map((file) => URL.createObjectURL(file));
-    setPreviewUrls(urls);
-    return () => urls.forEach((url) => URL.revokeObjectURL(url));
-  }, [images]);
-
+    return () => {
+      previewUrls.forEach((url) => URL.revokeObjectURL(url));
+    };
+  }, [previewUrls]);
   return (
     <div className={cn("space-y-2", className)}>
       {label && type !== "checkbox" && (
@@ -115,113 +121,113 @@ export const CustomInput = <T extends FieldValues>({
         type === "password" ||
         type === "date" ||
         type === "daterange") && (
-          <>
-            {type === "password" ? (
-              <div className="relative">
-                <Input
-                  id={name}
-                  type={showPassword ? "text" : "password"}
-                  className={cn(focusColor, className)}
-                  {...register(name)}
-                  placeholder={placeholder}
-                  disabled={disabled}
-                />
-                {!disabled && (
-                  <button
-                    type="button"
-                    onClick={() => setShowPassword(!showPassword)}
-                    className="absolute right-2 top-1/2 -translate-y-1/2 text-gray-500"
-                  >
-                    {showPassword ? (
-                      <EyeOff className="h-4 w-4" />
-                    ) : (
-                      <Eye className="h-4 w-4" />
-                    )}
-                  </button>
-                )}
-              </div>
-            ) : type === "date" ? (
-              <Controller
-                control={control}
-                name={name}
-                render={({ field }) => (
-                  <Popover>
-                    <PopoverTrigger asChild>
-                      <Button
-                        variant="outline"
-                        className={cn(
-                          "w-full justify-start text-left font-normal h-10 text-sm",
-                          focusColor,
-                          !field.value && "text-muted-foreground",
-                        )}
-                        disabled={disabled}
-                      >
-                        <CalendarIcon className="h-4 w-4 mr-2" />
-                        {field.value
-                          ? dayjs(field.value).format("MM/DD/YY")
-                          : "Pick a date"}
-                      </Button>
-                    </PopoverTrigger>
-
-                    <PopoverContent className="w-full p-0">
-                      <Calendar
-                        mode="single"
-                        selected={field.value}
-                        onSelect={field.onChange}
-                      />
-                    </PopoverContent>
-                  </Popover>
-                )}
-              />
-            ) : type === "daterange" ? (
-              <Controller
-                control={control}
-                name={name}
-                render={({ field }) => (
-                  <Popover>
-                    <PopoverTrigger asChild>
-                      <Button
-                        variant="outline"
-                        className={cn(
-                          "w-full justify-start text-left font-normal h-10 text-sm",
-                          focusColor,
-                        )}
-                        disabled={disabled}
-                      >
-                        <CalendarIcon className="h-4 w-4 mr-2" />
-                        {field.value?.from
-                          ? field.value.to
-                            ? `${dayjs(field.value.from).format(
-                              "MM/DD/YY",
-                            )} - ${dayjs(field.value.to).format("MM/DD/YY")}`
-                            : dayjs(field.value.from).format("MM/DD/YY")
-                          : "Pick date range"}
-                      </Button>
-                    </PopoverTrigger>
-
-                    <PopoverContent className="w-auto p-0">
-                      <Calendar
-                        mode="range"
-                        numberOfMonths={2}
-                        selected={field.value}
-                        onSelect={field.onChange}
-                      />
-                    </PopoverContent>
-                  </Popover>
-                )}
-              />
-            ) : (
+        <>
+          {type === "password" ? (
+            <div className="relative">
               <Input
                 id={name}
-                type="text"
+                type={showPassword ? "text" : "password"}
                 className={cn(focusColor, className)}
                 {...register(name)}
-                disabled={disabled}
                 placeholder={placeholder}
+                disabled={disabled}
               />
-            )}
-          </>
-        )}
+              {!disabled && (
+                <button
+                  type="button"
+                  onClick={() => setShowPassword(!showPassword)}
+                  className="absolute right-2 top-1/2 -translate-y-1/2 text-gray-500"
+                >
+                  {showPassword ? (
+                    <EyeOff className="h-4 w-4" />
+                  ) : (
+                    <Eye className="h-4 w-4" />
+                  )}
+                </button>
+              )}
+            </div>
+          ) : type === "date" ? (
+            <Controller
+              control={control}
+              name={name}
+              render={({ field }) => (
+                <Popover>
+                  <PopoverTrigger asChild>
+                    <Button
+                      variant="outline"
+                      className={cn(
+                        "w-full justify-start text-left font-normal h-10 text-sm",
+                        focusColor,
+                        !field.value && "text-muted-foreground",
+                      )}
+                      disabled={disabled}
+                    >
+                      <CalendarIcon className="h-4 w-4 mr-2" />
+                      {field.value
+                        ? dayjs(field.value).format("MM/DD/YY")
+                        : "Pick a date"}
+                    </Button>
+                  </PopoverTrigger>
+
+                  <PopoverContent className="w-full p-0">
+                    <Calendar
+                      mode="single"
+                      selected={field.value}
+                      onSelect={field.onChange}
+                    />
+                  </PopoverContent>
+                </Popover>
+              )}
+            />
+          ) : type === "daterange" ? (
+            <Controller
+              control={control}
+              name={name}
+              render={({ field }) => (
+                <Popover>
+                  <PopoverTrigger asChild>
+                    <Button
+                      variant="outline"
+                      className={cn(
+                        "w-full justify-start text-left font-normal h-10 text-sm",
+                        focusColor,
+                      )}
+                      disabled={disabled}
+                    >
+                      <CalendarIcon className="h-4 w-4 mr-2" />
+                      {field.value?.from
+                        ? field.value.to
+                          ? `${dayjs(field.value.from).format(
+                              "MM/DD/YY",
+                            )} - ${dayjs(field.value.to).format("MM/DD/YY")}`
+                          : dayjs(field.value.from).format("MM/DD/YY")
+                        : "Pick date range"}
+                    </Button>
+                  </PopoverTrigger>
+
+                  <PopoverContent className="w-auto p-0">
+                    <Calendar
+                      mode="range"
+                      numberOfMonths={2}
+                      selected={field.value}
+                      onSelect={field.onChange}
+                    />
+                  </PopoverContent>
+                </Popover>
+              )}
+            />
+          ) : (
+            <Input
+              id={name}
+              type="text"
+              className={cn(focusColor, className)}
+              {...register(name)}
+              disabled={disabled}
+              placeholder={placeholder}
+            />
+          )}
+        </>
+      )}
 
       {/* ================= TEXTAREA ================= */}
       {type === "textarea" && (
@@ -266,7 +272,7 @@ export const CustomInput = <T extends FieldValues>({
         <Controller
           control={control}
           name={name}
-          render={({ field}) => (
+          render={({ field }) => (
             <MultiSelect
               options={options}
               value={field.value || []}
@@ -301,10 +307,28 @@ export const CustomInput = <T extends FieldValues>({
                 type="file"
                 accept={accept ?? "image/*"}
                 multiple={multiple}
-                onChange={(e:any) => {
-                  const files = Array.from(e.target.files ?? []);
-                  const fileList = multiple
-                    ? [...(field.value ?? []), ...files]
+                // onChange={(e:any) => {
+                //   const files = Array.from(e.target.files ?? []);
+                //   const fileList = multiple
+                //     ? [...(field.value ?? []), ...files]
+                //     : files;
+
+                //   field.onChange(fileList);
+                //   setImages(fileList);
+                //   onFilesChange?.(fileList);
+                // }}
+                onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                  const fileInput = e.target.files;
+
+                  if (!fileInput) return;
+
+                  const files: File[] = Array.from(fileInput);
+
+                  const fileList: File[] = multiple
+                    ? [
+                        ...(Array.isArray(field.value) ? field.value : []),
+                        ...files,
+                      ]
                     : files;
 
                   field.onChange(fileList);

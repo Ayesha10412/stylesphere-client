@@ -1,16 +1,14 @@
 "use client";
 
-import { useContext } from "react";
-import { useRouter, useSearchParams } from "next/navigation";
 import { useForm } from "react-hook-form";
 import Image from "next/image";
 import Link from "next/link";
 
 import { CustomInput } from "@/components/ui/CustomInput";
-
-import loginImg from "@/assets/login.jpg";
 import { Button } from "@/components/ui/button";
 import SocialLogin from "@/components/component/SocialLogin";
+
+import loginImg from "@/assets/login.jpg";
 
 type FormData = {
   email: string;
@@ -18,11 +16,6 @@ type FormData = {
 };
 
 export default function Login() {
-  const router = useRouter();
-  const searchParams = useSearchParams();
-
-  const from = searchParams.get("from") || "/";
-
   const {
     register,
     handleSubmit,
@@ -31,29 +24,39 @@ export default function Login() {
   } = useForm<FormData>();
 
   const onSubmit = async (data: FormData) => {
-
+    console.log(data);
   };
 
   return (
-    <div className="relative min-h-screen flex justify-center items-center">
-      {/* Background */}
-      <Image src={loginImg} alt="login" fill className="object-cover" />
+    <div className="relative w-full min-h-screen flex items-center justify-center">
+      {/* 🔹 Background Image */}
+      <Image
+        src={loginImg}
+        alt="login"
+        fill
+        className="object-cover"
+        priority
+      />
 
-      {/* Overlay */}
-      <div className="absolute inset-0 bg-black/50 z-10"></div>
+      {/* 🔹 Overlay (optional dark layer for better contrast) */}
+      <div className="absolute inset-0 bg-black/40"></div>
 
-      {/* Form */}
-      <div className="relative z-20 w-full max-w-md backdrop-blur-lg bg-white/10 border border-white/20 shadow-2xl rounded-2xl p-8 text-white">
-        <h2 className="text-3xl font-bold mb-6 text-center text-cyan-500">
+      {/* 🔹 Glass Form */}
+      <div
+        className="relative z-10 w-full max-w-max lg:max-w-md p-4 rounded-2xl 
+                  backdrop-blur-lg bg-white/10 border border-white/20 
+                  shadow-2xl text-white"
+      >
+        <h2 className="text-3xl font-bold mb-6 text-center text-white">
           Login Now!
         </h2>
 
-        <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
+        <form onSubmit={handleSubmit(onSubmit)} className="space-y-2">
           {/* Email */}
           <CustomInput
             name="email"
             label="Email"
-            type="email"
+            type="text"
             register={register}
             control={control}
             error={errors.email}
@@ -73,25 +76,28 @@ export default function Login() {
             required
           />
 
-          {/* Signup */}
-          <p className="text-sm text-gray-200">
+          {/* 🔹 Moved slightly UP (closer to password) */}
+          <span className="text-sm text-gray-200">
             New here?{" "}
             <Link href="/signup" className="underline hover:text-green-300">
               Create an account
             </Link>
-          </p>
-
-          {/* Buttons */}
-          <div className="mt-4 flex flex-col md:flex-row gap-3">
-            <Button
-              type="submit"
-              className="bg-[#111827] hover:bg-[#1f2937]"
-            >
+          </span>
+          <div className="flex justify-end gap-3 items-center">
+            <Button type="submit" className="bg-[#545556] hover:bg-[#1f2937]">
               Login
             </Button>
-
-            <SocialLogin />
           </div>
+          {/* 🔹 Divider with text */}
+          <div className="flex items-center gap-3">
+            <div className="h-px flex-1 bg-white/20"></div>
+            <span className="text-xs text-gray-300 whitespace-nowrap">
+              or continue with Google
+            </span>
+            <div className="h-px flex-1 bg-white/20"></div>
+          </div>
+
+          <SocialLogin />
         </form>
       </div>
     </div>

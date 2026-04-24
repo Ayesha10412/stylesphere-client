@@ -3,6 +3,8 @@ import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { SessionProvider } from "@/context/SessionProvider";
 import { Toaster } from "sonner";
+import ToastProviders from "@/context/ToastProviders";
+import ReduxProvider from "@/context/ReduxProvider";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -27,12 +29,16 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
+    
     >
-      <body className="min-h-full flex flex-col">
+      <body   className={`${geistSans.variable} ${geistMono.variable}  antialiased`}>
 
-        <SessionProvider>{children}</SessionProvider>
-        <Toaster richColors  />
+    <ToastProviders>
+      <SessionProvider>
+        <ReduxProvider>{children}</ReduxProvider>
+      </SessionProvider>
+    </ToastProviders>
+
       </body>
     </html>
   );
