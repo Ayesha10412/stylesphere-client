@@ -89,8 +89,7 @@ export const CustomInput = <T extends FieldValues>({
     return images.map((file) => URL.createObjectURL(file));
   }, [images]);
   const focusColor =
-    "focus-visible:ring-emerald-500 focus-visible:ring-2 rounded-lg bg-white";
-
+    "focus-visible:ring-emerald-500 focus-visible:ring-2 rounded-lg bg-white/20 backdrop-blur-md text-white placeholder:text-gray-200 border border-white/30";
   // useEffect(() => {
   //   const urls = images.map((file) => URL.createObjectURL(file));
   //   setPreviewUrls(urls);

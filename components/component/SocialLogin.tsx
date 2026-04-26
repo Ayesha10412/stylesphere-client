@@ -14,9 +14,9 @@ const SocialLogin = () => {
   <Button
     variant="outline"
     onClick={handleGoogleLogin}
-    className="flex items-center border-none gap-2 bg-white/30 hover:bg-white/35 text-[#111827]  hover:text-white"
+    className="flex justify-center  items-center border-none  bg-white/30 hover:bg-white/35 text-[#111827]  hover:text-white"
   >
-    <span className=" font-bold"><FaGoogle /> </span>
+    <span className="flex gap-2 items-center font-bold"><FaGoogle />Login with Google </span>
   </Button>
   );
 };
