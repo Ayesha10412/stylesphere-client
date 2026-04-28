@@ -6,7 +6,7 @@ import logo from "@/assets/logo.png";
 
 export default function Footer() {
   return (
-    <div className="mt-40 relative bg-[url('/image/footer.jpg')] shadow-xl bg-cover bg-center py-4">
+    <div className="mt-40 relative bg-[url('/image/footer.jpg')] shadow-xl bg-cover bg-center py-4 pb-1">
       
       {/* Overlay */}
       <div className="absolute inset-0 bg-black/60"></div>
