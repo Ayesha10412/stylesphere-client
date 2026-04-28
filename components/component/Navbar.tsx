@@ -10,7 +10,7 @@ export default function Navbar() {
   const [openMenu, setOpenMenu] = useState(false);
 
   return (
-    <nav className="bg-[#008080] fixed top-0 left-0 w-full z-10 shadow-lg border-2 border-red-400 ">
+    <nav className="bg-[#008080] fixed top-0 left-0 w-full z-10 shadow-lg ">
       <div className="container mx-auto px-4 py-3 flex justify-between items-center">
         {/* Logo */}
         <Link href="/" className="flex items-center space-x-2">
@@ -30,7 +30,7 @@ export default function Navbar() {
           <div className="flex space-x-6">{/* Add your links here */}</div>
 
           {/* Auth Buttons */}
-          <Link href="/signin" className="font-bold">
+          <Link href="/auth/signin" className="font-bold">
             SignIn
           </Link>
 
@@ -85,10 +85,10 @@ export default function Navbar() {
               <div className="p-3 border-b">{/* Add mobile links here */}</div>
 
               <Link
-                href="/signin"
+                href="/auth/signin"
                 className="block px-4 py-2 hover:bg-gray-100"
               >
-                Sign In
+                SignIn
               </Link>
 
               <button className="block w-full text-left px-4 py-2 hover:bg-red-100 text-red-600">

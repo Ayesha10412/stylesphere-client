@@ -1,6 +1,6 @@
 "use client";
 
-import  {
+import {
   createContext,
   useContext,
   useState,
@@ -8,8 +8,13 @@ import  {
   ReactNode,
 } from "react";
 import api from "@/config/api";
+import { useRouter } from "next/navigation";
 
-interface User {
+/* --------------------------
+   🔹 Types
+-------------------------- */
+interface SessionData {
+  
   id: string;
   name: string;
   email: string;
@@ -19,29 +24,52 @@ interface User {
 }
 
 interface SessionContextType {
-  user: User | null;
-  setUser: (user: User | null) => void;
-  refreshSession: () => Promise<void>;
-  signout: () => Promise<void>;
+  session: SessionData | null;
   loading: boolean;
+  setSession: (data: SessionData | null) => void;
+  clearSession: () => void;
+  signin: (data: SessionData, redirectUrl?: string) => void;
+  signout: () => void;
 }
 
+/* --------------------------
+   🔹 Context
+-------------------------- */
 const SessionContext = createContext<SessionContextType | undefined>(undefined);
 
+/* --------------------------
+   🔹 Provider
+-------------------------- */
 export const SessionProvider = ({ children }: { children: ReactNode }) => {
-  const [user, setUser] = useState<User | null>(null);
+  const [session, setSession] = useState<SessionData | null>(null);
   const [loading, setLoading] = useState(true);
+  const router = useRouter();
 
   /**
-   * Fetch user from backend
+   * Fetch session from backend
    */
   const refreshSession = async () => {
     try {
-      const res = await api.get("/me"); // cookie automatically sent
-      setUser(res.data);
+      const res = await api.get("/me");
+      setSession(res.data);
     } catch {
-      setUser(null);
+      setSession(null);
     }
+  };
+
+  /**
+   * Clear session locally
+   */
+  const clearSession = () => {
+    setSession(null);
+  };
+
+  /**
+   * Sign in (set session manually after login)
+   */
+  const signin = (data: SessionData, redirectUrl = "/") => {
+    setSession(data);
+    router.push(redirectUrl);
   };
 
   /**
@@ -53,8 +81,8 @@ export const SessionProvider = ({ children }: { children: ReactNode }) => {
     } catch (err) {
       console.error("Logout failed:", err);
     } finally {
-      setUser(null);
-      window.location.href = "/login"; // client redirect
+      setSession(null);
+      router.push("/login"); // ✅ Next.js way
     }
   };
 
@@ -73,11 +101,12 @@ export const SessionProvider = ({ children }: { children: ReactNode }) => {
   return (
     <SessionContext.Provider
       value={{
-        user,
-        setUser,
-        refreshSession,
-        signout,
+        session,
         loading,
+        setSession,
+        clearSession,
+        signin,
+        signout,
       }}
     >
       {children}
@@ -85,6 +114,9 @@ export const SessionProvider = ({ children }: { children: ReactNode }) => {
   );
 };
 
+/* --------------------------
+   🔹 Hook
+-------------------------- */
 export const useSession = () => {
   const context = useContext(SessionContext);
   if (!context) {

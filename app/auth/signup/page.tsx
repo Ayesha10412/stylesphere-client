@@ -28,11 +28,11 @@ export default function SignUp() {
 
   return (
     <div
-      className="min-h-screen w-full bg-cover bg-center flex items-center justify-center"
+      className="min-h-screen w-full bg-cover bg-center flex items-center justify-center bg-blend-overlay bg-black/15"
       style={{ backgroundImage: `url(${signup.src})` }}
     >
       <div className="w-full max-w-md backdrop-blur-lg bg-white/25 border border-white/5 shadow-2xl rounded-2xl p-6 text-white">
-        <h2 className="text-3xl font-bold mb-4 text-center text-blue-900">
+        <h2 className="text-3xl font-bold mb-4 text-center text-[#008080]">
           Create Your Account
         </h2>
 
@@ -78,13 +78,16 @@ export default function SignUp() {
 
           <p className="text-sm text-gray-200">
             Already have an account?{" "}
-            <Link href="/login" className="underline hover:text-green-300">
+            <Link href="/auth/signin" className="underline hover:text-green-300">
               Login
             </Link>
           </p>
 
           <div className="mt-4  flex flex-col md:flex-row gap-2 justify-center">
-            <Button type="submit" className="px-6 text-sm">
+            <Button
+              type="submit"
+              className="px-6 text-sm bg-[#008080] hover:bg-[#004040]"
+            >
               Sign Up
             </Button>
 

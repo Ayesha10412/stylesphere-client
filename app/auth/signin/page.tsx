@@ -9,6 +9,10 @@ import { Button } from "@/components/ui/button";
 import SocialLogin from "@/components/component/SocialLogin";
 
 import loginImg from "@/assets/login.jpg";
+import api from "@/config/api";
+import { useState } from "react";
+import { useSession } from "@/context/SessionProvider";
+import { useRouter } from "next/navigation";
 
 type FormData = {
   email: string;
@@ -16,15 +20,44 @@ type FormData = {
 };
 
 export default function Login() {
+  const { signin } = useSession();
+  const [loading, setLoading] = useState(false);
+  const router = useRouter();
   const {
     register,
     handleSubmit,
     control,
     formState: { errors },
-  } = useForm<FormData>();
+  } = useForm<FormData>({
+    defaultValues: { email: "admin@gmail.com", password: "Admin@123" },
+  });
 
   const onSubmit = async (data: FormData) => {
-    console.log(data);
+    setLoading(true);
+    try {
+      const payload = {
+        email: data.email,
+        password: data.password,
+      };
+      api.post("/signin", payload).then((res) => {
+        if (res.status === 200) {
+          const {  user } = res.data;
+          const { id, name, email, image } = user;
+          const sessionData = {
+            id, name, email, image ,
+            role: [],
+            permission_names: [],
+          };
+          signin(sessionData);
+          console.log("login data:", sessionData);
+          setLoading(false);
+          router.push("/admin");
+        }
+      });
+    } catch (error) {
+      console.error("Login failed:", error);
+      setLoading(false);
+    }
   };
 
   return (
@@ -43,15 +76,15 @@ export default function Login() {
 
       {/* 🔹 Glass Form */}
       <div
-        className="relative z-10 w-full max-w-max lg:max-w-md p-4 rounded-2xl 
+        className="relative z-10 w-full max-w-max lg:max-w-sm p-4 rounded-2xl 
                   backdrop-blur-lg bg-white/10 border border-white/20 
                   shadow-2xl text-white"
       >
-        <h2 className="text-3xl font-bold mb-6 text-center text-white">
+        <h2 className="text-3xl font-bold mb-4 text-center text-[#008080]">
           Login Now!
         </h2>
 
-        <form onSubmit={handleSubmit(onSubmit)} className="space-y-2">
+        <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
           {/* Email */}
           <CustomInput
             name="email"
@@ -79,25 +112,22 @@ export default function Login() {
           {/* 🔹 Moved slightly UP (closer to password) */}
           <span className="text-sm text-gray-200">
             New here?{" "}
-            <Link href="/signup" className="underline hover:text-green-300">
+            <Link
+              href="/auth/signup"
+              className="underline hover:text-green-300"
+            >
               Create an account
             </Link>
           </span>
-          <div className="flex justify-end gap-3 items-center">
-            <Button type="submit" className="bg-[#545556] hover:bg-[#1f2937]">
+          <div className="flex justify-end gap-3 items-center mt-4">
+            <Button
+              type="submit"
+              className="bg-[#008080] px-4 text-sm hover:bg-[#008080]/90 text-white"
+            >
               Login
             </Button>
+            <SocialLogin />
           </div>
-          {/* 🔹 Divider with text */}
-          <div className="flex items-center gap-3">
-            <div className="h-px flex-1 bg-white/20"></div>
-            <span className="text-xs text-gray-300 whitespace-nowrap">
-              or continue with Google
-            </span>
-            <div className="h-px flex-1 bg-white/20"></div>
-          </div>
-
-          <SocialLogin />
         </form>
       </div>
     </div>
