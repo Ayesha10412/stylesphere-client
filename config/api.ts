@@ -17,14 +17,14 @@ api.interceptors.response.use(
 
       try {
         // Call refresh endpoint (backend will set new cookies)
-        await api.post("/refresh");
+        await api.post("/auth/refresh-token");
 
         // Retry original request
         return api(originalRequest);
       } catch (refreshError) {
         // Refresh failed → force logout
         if (typeof window !== "undefined") {
-          window.location.href = "/login";
+          window.location.href = "/auth/signin";
         }
         return Promise.reject(refreshError);
       }

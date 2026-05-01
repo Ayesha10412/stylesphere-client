@@ -20,6 +20,7 @@ interface SessionData {
   email: string;
   image?: string | null;
   role?: { id: number; name: string }[];
+  
   permission_names?: string[];
 }
 
@@ -28,6 +29,7 @@ interface SessionContextType {
   loading: boolean;
   setSession: (data: SessionData | null) => void;
   clearSession: () => void;
+  refreshSession:()=>Promise<void>;
   signin: (data: SessionData, redirectUrl?: string) => void;
   signout: () => void;
 }
@@ -50,7 +52,7 @@ export const SessionProvider = ({ children }: { children: ReactNode }) => {
    */
   const refreshSession = async () => {
     try {
-      const res = await api.get("/me");
+      const res = await api.get("/user/me");
       setSession(res.data);
     } catch {
       setSession(null);
@@ -77,12 +79,12 @@ export const SessionProvider = ({ children }: { children: ReactNode }) => {
    */
   const signout = async () => {
     try {
-      await api.post("/logout");
+      await api.post("/auth/logout");
     } catch (err) {
       console.error("Logout failed:", err);
     } finally {
       setSession(null);
-      router.push("/login"); // ✅ Next.js way
+      router.push("/auth/signin"); // ✅ Next.js way
     }
   };
 
@@ -105,6 +107,7 @@ export const SessionProvider = ({ children }: { children: ReactNode }) => {
         loading,
         setSession,
         clearSession,
+        refreshSession,
         signin,
         signout,
       }}

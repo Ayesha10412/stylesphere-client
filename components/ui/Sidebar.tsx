@@ -1,7 +1,6 @@
 "use client";
 
 import type React from "react";
-import { useState, useEffect } from "react";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Button } from "@/components/ui/button";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
@@ -10,11 +9,10 @@ import { cn } from "@/lib/utils";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { usePathname } from "next/navigation";
 import SidebarItem from "./SidebarItem";
-import brandLogo from "@/assets/icons/logo.png";
 import Image from "next/image";
 import { useSession } from "@/context/SessionProvider";
 import { useMediaQuery } from "@/hooks/useMobile";
-
+import logo from "@/assets/logo.png";
 /* --------------------------
    🔹 Types
 -------------------------- */
@@ -148,7 +146,7 @@ const Sidebar = ({
           {!isCollapsed &&  (
             <div className="flex flex-row justify-center items-center">
               <Image
-                src={brandLogo}
+                src={logo}
                 alt="logo"
                 className="object-contain"
                 height={40}
@@ -159,7 +157,7 @@ const Sidebar = ({
           )}
           {isCollapsed && (
             <Image
-              src={brandLogo}
+              src={logo}
               alt="logo"
               className="px-2 object-contain"
               height={50}

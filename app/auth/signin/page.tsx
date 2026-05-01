@@ -20,7 +20,7 @@ type FormData = {
 };
 
 export default function Login() {
-  const { signin } = useSession();
+  const { refreshSession } = useSession();
   const [loading, setLoading] = useState(false);
   const router = useRouter();
   const {
@@ -35,27 +35,18 @@ export default function Login() {
   const onSubmit = async (data: FormData) => {
     setLoading(true);
     try {
-      const payload = {
-        email: data.email,
-        password: data.password,
-      };
-      api.post("/signin", payload).then((res) => {
-        if (res.status === 200) {
-          const {  user } = res.data;
-          const { id, name, email, image } = user;
-          const sessionData = {
-            id, name, email, image ,
-            role: [],
-            permission_names: [],
-          };
-          signin(sessionData);
-          console.log("login data:", sessionData);
-          setLoading(false);
-          router.push("/admin");
-        }
-      });
+      await api
+        .post("/auth/login", data, { withCredentials: true })
+        .then(async (res) => {
+          if (res.status === 200) {
+            await refreshSession();
+            router.push("/admin-layout");
+          }
+        });
     } catch (error) {
       console.error("Login failed:", error);
+      setLoading(false);
+    } finally {
       setLoading(false);
     }
   };

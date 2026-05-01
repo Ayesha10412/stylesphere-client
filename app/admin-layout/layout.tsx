@@ -1,0 +1,14 @@
+import AdminCustomLayout from "@/components/AdminLayout";
+import { getSession } from "@/lib/auth";
+import { redirect } from "next/navigation";
+
+const AdminLayout = async ({ children }: { children: React.ReactNode }) => {
+//   const session = await getSession();
+//   if (!session) {
+//     redirect("/auth/signin");
+//   }
+
+  return <AdminCustomLayout>{children}</AdminCustomLayout>;
+};
+export const dynamic = "force-dynamic";
+export default AdminLayout;

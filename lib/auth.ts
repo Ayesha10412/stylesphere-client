@@ -1,81 +1,52 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 "use server";
 
-import api from "@/config/api";
+import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 
-/**
- * LOGIN
- * Calls backend → backend sets httpOnly cookies
- */
-export async function login(formData: FormData) {
-  const email = formData.get("email");
-  const password = formData.get("password");
+const API_URL = process.env.NEXT_PUBLIC_API_URL;
 
-  try {
-    await api.post(
-      "/login",
-      { email, password },
-      {
-        withCredentials: true,
-      }
-    );
-
-    redirect("/");
-  } catch (error: any) {
-    throw new Error(error?.response?.data?.message || "Login failed");
-  }
-}
-
-/**
- * LOGOUT
- * Backend clears cookies
- */
-export async function logout() {
-  try {
-    await api.post("/logout", null, {
-      withCredentials: true,
-    });
-  } catch (error) {
-    console.error("Logout error:", error);
-  } finally {
-    redirect("/login");
-  }
-}
-
-/**
- * GET CURRENT USER (SERVER SIDE)
- * Calls backend /me
- */
+/* =========================
+   GET SESSION (ONLY IMPORTANT FUNCTION)
+========================= */
 export async function getSession() {
-  try {
-    const res = await api.get("/me", {
-      withCredentials: true,
-    });
+  const cookieStore = await cookies();
 
-    return res.data; // user object
-  } catch {
-    return null;
-  }
+  const token = cookieStore.get("accessToken")?.value;
+
+  if (!token) return null;
+
+  const res = await fetch(`${API_URL}/user/me`, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+    cache: "no-store",
+  });
+
+  if (!res.ok) return null;
+
+  return res.json();
 }
-
-/**
- * REQUIRE AUTH (for server components / pages)
- */
+/* =========================
+   REQUIRE AUTH (protect pages)
+========================= */
 export async function requireAuth() {
   const user = await getSession();
 
   if (!user) {
-    redirect("/login");
+    redirect("/auth/signin");
   }
 
   return user;
 }
 
-/**
- * OPTIONAL: CHECK AUTH (boolean)
- */
-export async function isAuthenticated() {
-  const user = await getSession();
-  return !!user;
+/* =========================
+   LOGOUT (simple)
+========================= */
+export async function logout() {
+  const cookieStore = await cookies();
+
+  cookieStore.delete("accessToken");
+  cookieStore.delete("refreshToken");
+
+  redirect("/auth/signin");
 }
