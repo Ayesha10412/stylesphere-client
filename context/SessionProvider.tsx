@@ -53,7 +53,7 @@ export const SessionProvider = ({ children }: { children: ReactNode }) => {
   const refreshSession = async () => {
     try {
       const res = await api.get("/user/me");
-      setSession(res.data);
+      setSession(res.data.data.data);
     } catch {
       setSession(null);
     }

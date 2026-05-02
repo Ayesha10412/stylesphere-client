@@ -40,7 +40,7 @@ export default function Login() {
         .then(async (res) => {
           if (res.status === 200) {
             //await refreshSession();
-            setSession(res.data);
+            setSession(res.data.data.data);
             router.push("/admin-layout");
           }
         });
