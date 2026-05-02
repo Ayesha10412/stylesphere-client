@@ -8,6 +8,7 @@ import { usePathname } from "next/navigation";
 import { Toaster } from "sonner";
 import Sidebar from "./ui/Sidebar";
 import Header from "./Header";
+import { useSession } from "@/context/SessionProvider";
 interface AdminLayoutProps {
   children: React.ReactNode;
 }
@@ -21,7 +22,8 @@ const AdminCustomLayout = ({ children }: AdminLayoutProps) => {
   const noLayoutRoutes = ["/not-found"];
 
   const isNoLayout = noLayoutRoutes.includes(pathname);
-
+const {session}=useSession()
+console.log(session)
   if (isNoLayout) {
     return (
       <div className="flex min-h-screen">

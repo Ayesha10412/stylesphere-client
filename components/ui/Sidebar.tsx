@@ -138,19 +138,19 @@ const Sidebar = ({
         className={cn(
           "fixed inset-y-0 left-0 z-50 bg-white text-black transition-all duration-300 ease-in-out md:relative md:translate-x-0 shadow",
           isMobile && !mobileOpen ? "-translate-x-full" : "translate-x-0",
-          isCollapsed ? "w-16" : "w-[224px]",
+          isCollapsed ? "w-16" : "w-[234px]",
         )}
       >
         {/* Sidebar Header */}
-        <div className="flex items-center h-[63px] border-b justify-center border-gray-200">
+        <div className="flex  items-center h-[70px] border-b justify-center border-gray-200">
           {!isCollapsed &&  (
-            <div className="flex flex-row justify-center items-center">
+            <div className="flex  flex-row justify-center items-center">
               <Image
                 src={logo}
                 alt="logo"
-                className="object-contain"
-                height={40}
-                width={50}
+                className="object-contain "
+                height={50}
+                width={80}
                 priority
               />
             </div>

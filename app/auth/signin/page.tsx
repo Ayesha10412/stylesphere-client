@@ -20,7 +20,7 @@ type FormData = {
 };
 
 export default function Login() {
-  const { refreshSession } = useSession();
+  const { refreshSession,setSession } = useSession();
   const [loading, setLoading] = useState(false);
   const router = useRouter();
   const {
@@ -39,7 +39,8 @@ export default function Login() {
         .post("/auth/login", data, { withCredentials: true })
         .then(async (res) => {
           if (res.status === 200) {
-            await refreshSession();
+            //await refreshSession();
+            setSession(res.data);
             router.push("/admin-layout");
           }
         });
