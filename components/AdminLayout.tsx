@@ -9,6 +9,7 @@ import { Toaster } from "sonner";
 import Sidebar from "./ui/Sidebar";
 import Header from "./Header";
 import { useSession } from "@/context/SessionProvider";
+import { HeadingProvider } from "@/context/HeadingContext";
 interface AdminLayoutProps {
   children: React.ReactNode;
 }
@@ -35,7 +36,8 @@ console.log(session)
   }
 
   return (
-    <div className="flex overflow-hidden">
+   <HeadingProvider>
+     <div className="flex overflow-hidden">
       <Toaster richColors />
       {/* Sidebar */}
       <Sidebar
@@ -62,8 +64,13 @@ console.log(session)
         <main className="h-[calc(100vh-64px)] overflow-y-auto p-2 lg:p-5 bg-gray-200">
           {children}
         </main>
+        <div className="text-center p-4 text-sm text-gray-400">
+          -------Developed by Ayesha Khan--------
+        </div>
       </div>
+    
     </div>
+   </HeadingProvider>
   );
 };
 

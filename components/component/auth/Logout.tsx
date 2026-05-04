@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { useSession } from "@/context/SessionProvider";
+import { LogOutIcon } from "lucide-react";
 
 export default function LogoutButton() {
   const { signout } = useSession();
@@ -32,7 +33,9 @@ export default function LogoutButton() {
       {open && (
         <div className="fixed inset-0 flex items-center justify-center bg-black/50 z-50">
           <div className="bg-white w-[90%] max-w-md rounded-2xl shadow-xl p-6">
-            
+            <div>
+                <LogOutIcon size={24} />
+            </div>
             {/* Title */}
             <h2 className="text-xl font-semibold text-gray-800 mb-2">
               Confirm Logout

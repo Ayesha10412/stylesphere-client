@@ -74,7 +74,7 @@ const expanded = shouldAutoExpand || manualExpanded;
                     size="icon"
                     className={cn(
                       "w-full h-10 p-0 my-1",
-                      isActive && "bg-[#00875D] text-white"
+                      isActive && "bg-[#008080] text-white"
                     )}
                     asChild
                   >
@@ -89,7 +89,7 @@ const expanded = shouldAutoExpand || manualExpanded;
                     size="icon"
                     className={cn(
                       "w-full h-10 p-0 my-1",
-                      isActive && "bg-[#00875D] text-white"
+                      isActive && "bg-[#008080] text-white"
                     )}
                     onClick={hasSubItems ? toggleExpand : onClick}
                   >
@@ -122,8 +122,8 @@ const expanded = shouldAutoExpand || manualExpanded;
                   key={index}
                   variant="ghost"
                   className={cn(
-                    "w-full justify-start gap-3 p-3 font-medium text-slate-300 hover:bg-[#00875D] hover:text-white",
-                    isSubItemActive && "bg-[#00875D] text-white"
+                    "w-full justify-start gap-3 p-3 font-medium text-slate-300 hover:bg-[#008080] hover:text-white",
+                    isSubItemActive && "bg-[#008080] text-white"
                   )}
                   asChild
                 >
@@ -156,8 +156,8 @@ const expanded = shouldAutoExpand || manualExpanded;
         <Button
           variant="ghost"
           className={cn(
-            "w-full justify-start gap-3 p-3 font-medium hover:bg-[#00875D] hover:text-white",
-            isActive && "bg-[#00875D] text-white"
+            "w-full justify-start gap-3 p-3 font-medium hover:bg-[#008080] hover:text-white",
+            isActive && "bg-[#008080] text-white"
           )}
           asChild
         >
@@ -170,8 +170,8 @@ const expanded = shouldAutoExpand || manualExpanded;
         <Button
           variant="ghost"
           className={cn(
-            "w-full justify-start gap-3 p-3 font-medium hover:bg-[#00875D] hover:text-white",
-            isActive && "bg-[#00875D] text-white"
+            "w-full justify-start gap-3 p-3 font-medium hover:bg-[#008080] hover:text-white",
+            isActive && "bg-[#008080] text-white"
           )}
           onClick={hasSubItems ? toggleExpand : onClick}
         >
@@ -202,8 +202,8 @@ const expanded = shouldAutoExpand || manualExpanded;
                 key={index}
                 variant="ghost"
                 className={cn(
-                  "w-full justify-start gap-3 p-3  font-medium hover:bg-[#00875D] hover:text-white",
-                  isSubItemActive && "bg-[#00875D] text-white"
+                  "w-full justify-start gap-3 p-3  font-medium hover:bg-[#008080] hover:text-white",
+                  isSubItemActive && "bg-[#008080] text-white"
                 )}
                 asChild
               >

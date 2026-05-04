@@ -1,8 +1,11 @@
-import React from 'react'
+import PageHeading from '@/components/ui/PageHeading'
 
 const Dashboard = () => {
   return (
-    <div>Dashboard</div>
+   <>
+   <PageHeading back>Dashboard</PageHeading>
+<p>Welcome to the Dashboard</p>
+   </>
   )
 }
 

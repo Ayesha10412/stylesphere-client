@@ -3,12 +3,11 @@
 import React from "react";
 import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
-import {   ChevronLeft, Menu } from "lucide-react";
+import { ChevronLeft, Menu } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useMediaQuery } from "@/hooks/useMobile";
 import ProfileDropdown from "./component/ProfileDropdown";
-
-
+import { useHeading } from "@/context/HeadingContext";
 
 interface HeaderProps {
   onMenuClick?: () => void;
@@ -30,7 +29,7 @@ const Header = ({
 }: HeaderProps) => {
   const [internalCollapsed, setInternalCollapsed] = useState(collapsed);
   const isMobile = useMediaQuery("(max-width: 768px)");
-
+  const { heading } = useHeading();
 
   useEffect(() => {
     setInternalCollapsed(collapsed);
@@ -52,7 +51,7 @@ const Header = ({
     <header
       className={cn(
         "flex h-[64px] items-center justify-between border-b border-gray-200 bg-white px-6",
-        className
+        className,
       )}
     >
       <div className="flex items-center gap-4">
@@ -73,7 +72,7 @@ const Header = ({
           onClick={toggleCollapse}
           className={cn(
             "h-8 w-8 bg-gray-100 text-slate-700 p-0 hidden md:flex cursor-pointer",
-            collapsed ? "rotate-180" : ""
+            collapsed ? "rotate-180" : "",
           )}
         >
           <ChevronLeft className="h-6 w-6" />
@@ -99,6 +98,7 @@ const Header = ({
             </BreadcrumbList>
           </Breadcrumb>
         </div> */}
+        <div className="ml-2">{heading}</div>
       </div>
 
       <div className="flex items-center gap-4">
@@ -157,7 +157,7 @@ const Header = ({
         </Button> */}
 
         {/* Profile Dropdown */}
-        <ProfileDropdown/>
+        <ProfileDropdown />
       </div>
     </header>
   );
