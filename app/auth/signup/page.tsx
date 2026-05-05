@@ -11,54 +11,51 @@ import { CustomInput } from "@/components/ui/CustomInput";
 import api from "@/config/api";
 import { useState } from "react";
 import { RegisterFormData } from "@/lib/schema";
+import { handleApiError } from "@/lib/handleApiError";
 
 export default function SignUp() {
   const {
     register,
     reset,
     handleSubmit,
-    control,setError,
+    control,
+    setError,
     formState: { errors },
   } = useForm<RegisterFormData>();
 
- const router = useRouter();
-const [loading, setLoading] = useState(false);
+  const router = useRouter();
+  const [loading, setLoading] = useState(false);
 
-const onSubmit = async (data: RegisterFormData) => {
-  setLoading(true);
+  const onSubmit = async (data: RegisterFormData) => {
+    setLoading(true);
 
-  try {
-    const payload = {
-      name: data.name,
-      email: data.email,
-      password: data.password,
-      confirmPassword: data.confirmPassword,
-    };
+    try {
+      const payload = {
+        name: data.name,
+        email: data.email,
+        password: data.password,
+        confirmPassword: data.confirmPassword,
+      };
 
-    const res = await api.post("/user/register", payload, {
-      withCredentials: true,
-    });
-
-    if (res.status === 201 || res.status === 200) {
-      // Optional: auto login OR redirect
-      reset();
-
-      // redirect to login page
-      router.push("/auth/signin");
-    }
-  } catch (error: any) {
-    console.error("Signup failed:", error);
-
-    // Optional: show backend validation error
-    if (error?.response?.data?.message) {
-      setError("root", {
-        message: error.response.data.message,
+      const res = await api.post("/user/register", payload, {
+        withCredentials: true,
       });
+
+      if (res.status === 201 || res.status === 200) {
+        // Optional: auto login OR redirect
+        reset();
+
+        // redirect to login page
+        router.push("/auth/signin");
+      }
+    } catch (error: any) {
+      console.error("Signup failed:", error);
+
+      handleApiError<RegisterFormData>(error, setError);
+    } finally {
+      setLoading(false);
     }
-  } finally {
-    setLoading(false);
-  }
-};
+  };
   return (
     <div
       className="min-h-screen w-full bg-cover bg-center flex items-center justify-center bg-blend-overlay bg-black/15"
@@ -122,7 +119,10 @@ const onSubmit = async (data: RegisterFormData) => {
 
           <p className="text-sm text-gray-200">
             Already have an account?{" "}
-            <Link href="/auth/signin" className="underline hover:text-green-300">
+            <Link
+              href="/auth/signin"
+              className="underline hover:text-green-300"
+            >
               Login
             </Link>
           </p>
@@ -137,6 +137,11 @@ const onSubmit = async (data: RegisterFormData) => {
 
             <SocialLogin />
           </div>
+          {errors.root && (
+            <p className="text-red-400 text-sm text-center">
+              {errors.root.message}
+            </p>
+          )}
         </form>
       </div>
     </div>
