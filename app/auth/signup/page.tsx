@@ -8,24 +8,57 @@ import signup from "@/assets/signup.jpg";
 import SocialLogin from "@/components/component/SocialLogin";
 import { Button } from "@/components/ui/button";
 import { CustomInput } from "@/components/ui/CustomInput";
+import api from "@/config/api";
+import { useState } from "react";
+import { RegisterFormData } from "@/lib/schema";
 
 export default function SignUp() {
   const {
     register,
     reset,
     handleSubmit,
-    control,
+    control,setError,
     formState: { errors },
-  } = useForm();
+  } = useForm<RegisterFormData>();
 
-  const onSubmit = async (data: any) => {
-    try {
-      console.log(data);
-    } catch (err) {
-      console.error("User saving failed:", err);
+ const router = useRouter();
+const [loading, setLoading] = useState(false);
+
+const onSubmit = async (data: RegisterFormData) => {
+  setLoading(true);
+
+  try {
+    const payload = {
+      name: data.name,
+      email: data.email,
+      password: data.password,
+      confirmPassword: data.confirmPassword,
+    };
+
+    const res = await api.post("/user/register", payload, {
+      withCredentials: true,
+    });
+
+    if (res.status === 201 || res.status === 200) {
+      // Optional: auto login OR redirect
+      reset();
+
+      // redirect to login page
+      router.push("/auth/signin");
     }
-  };
+  } catch (error: any) {
+    console.error("Signup failed:", error);
 
+    // Optional: show backend validation error
+    if (error?.response?.data?.message) {
+      setError("root", {
+        message: error.response.data.message,
+      });
+    }
+  } finally {
+    setLoading(false);
+  }
+};
   return (
     <div
       className="min-h-screen w-full bg-cover bg-center flex items-center justify-center bg-blend-overlay bg-black/15"
@@ -45,6 +78,7 @@ export default function SignUp() {
             placeholder="Enter your name"
             name="name"
             register={register}
+            error={errors.name}
           />
 
           {/* Email */}
@@ -55,16 +89,17 @@ export default function SignUp() {
             name="email"
             control={control}
             register={register}
+            error={errors.email}
           />
 
           {/* Photo URL */}
-          <CustomInput
+          {/* <CustomInput
             label="Upload Photo"
             type="image"
             control={control}
             name="photo"
             register={register}
-          />
+          /> */}
 
           {/* Password */}
           <CustomInput
@@ -73,6 +108,15 @@ export default function SignUp() {
             control={control}
             placeholder="Enter your password"
             name="password"
+            register={register}
+            error={errors.password}
+          />
+          <CustomInput
+            label="Confirm Password"
+            type="password"
+            control={control}
+            placeholder="Confirm your password"
+            name="confirmPassword"
             register={register}
           />
 
