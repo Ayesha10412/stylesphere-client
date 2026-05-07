@@ -14,22 +14,19 @@ import { useRouter } from "next/navigation";
    🔹 Types
 -------------------------- */
 interface SessionData {
-  
   id: string;
   name: string;
   email: string;
   image?: string | null;
-  role?: { id: number; name: string }[];
-  
+  role?: string;
   permission_names?: string[];
 }
-
 interface SessionContextType {
   session: SessionData | null;
   loading: boolean;
   setSession: (data: SessionData | null) => void;
   clearSession: () => void;
-  refreshSession:()=>Promise<void>;
+  refreshSession: () => Promise<void>;
   signin: (data: SessionData, redirectUrl?: string) => void;
   signout: () => void;
 }

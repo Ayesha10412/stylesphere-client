@@ -81,7 +81,13 @@ export function DataTable<T>({
   loading,
 }: DataTableProps<T>): React.JSX.Element {
   const { session } = useSession();
-  const userRoles = (session?.role || []).map((r: string) => r.toLowerCase());
+  console.log("session:", session?.role);
+  // const userRoles = (session?.role || []).map((r) => r.name.toLowerCase());
+  const userRoles = Array.isArray(session?.role)
+    ? session.role.map((r) => r.name.toLowerCase())
+    : typeof session?.role === "string"
+      ? [session.role.toLowerCase()]
+      : [];
   console.log("DataTable filterkey:", filterkey);
   const [globalFilter, setGlobalFilter] = React.useState("");
 
@@ -127,14 +133,13 @@ export function DataTable<T>({
   return (
     <TableWrapper>
       <div className="w-full space-y-4 ">
-        <div className="flex flex-col gap-2 sm:flex-row sm:items-center  sm:justify-between  bg-white p-2 rounded-xl border border-gray-100 shadow-sm">
-       
+        <div className="flex flex-col gap-2 sm:flex-row sm:items-center  sm:justify-between  bg-white p-3  border border-gray-100 shadow-sm">
           <div className="relative w-full sm:max-w-xs md:max-w-sm">
             <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400" />
             <Input
               placeholder="Search..."
               value={globalFilter ?? ""}
-              onChange={(event:any) => {
+              onChange={(event: any) => {
                 const value = event.target.value;
 
                 setGlobalFilter(value); // <-- always update local filter
@@ -155,13 +160,13 @@ export function DataTable<T>({
           </div>
           {/* Right side buttons and dropdown */}
           {/* <div className="flex flex-wrap items-center gap-2 justify-start sm:justify-end border-2 border-red-500" > */}
-          <div className="flex items-center gap-2 justify-start sm:justify-end  whitespace-nowrap">
+          <div className="flex items-center gap-2  justify-start sm:justify-end  whitespace-nowrap">
             {/* Column Selector Dropdown */}
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
                 <Button
                   variant="outline"
-                  className="w-full sm:w-auto h-9 font-medium text-xs"
+                  className="w-full sm:w-auto h-9 font-medium text-xs "
                 >
                   <Columns2 className="w-4 h-4" />
                   Columns
@@ -171,13 +176,13 @@ export function DataTable<T>({
               <DropdownMenuContent align="end" className="bg-white">
                 {table
                   .getAllColumns()
-                  .filter((column:any) => column.getCanHide())
-                  .map((column:any) => (
+                  .filter((column: any) => column.getCanHide())
+                  .map((column: any) => (
                     <DropdownMenuCheckboxItem
                       key={column.id}
                       className="capitalize"
                       checked={column.getIsVisible()}
-                      onCheckedChange={(value:any) =>
+                      onCheckedChange={(value: any) =>
                         column.toggleVisibility(!!value)
                       }
                     >
@@ -204,7 +209,7 @@ export function DataTable<T>({
                     key={index}
                     variant="outline"
                     className={
-                      "flex items-center gap-2 w-full sm:w-auto h-9 font-medium text-xs " +
+                      "flex items-center gap-2 w-full px-3 sm:w-auto h-9 font-medium text-sm " +
                       button?.className
                     }
                     onClick={() => button.onClick && button.onClick()}
@@ -218,15 +223,15 @@ export function DataTable<T>({
           </div>
         </div>
 
-        <div className="overflow-x-auto w-full bg-white rounded-xl border border-gray-100 shadow-sm ">
+        <div className="overflow-x-auto w-full bg-white  border border-gray-100 shadow-sm ">
           <Table className="min-w-max table-auto">
             <TableHeader className="border-b border-emerald-900/10">
-              {table.getHeaderGroups().map((headerGroup:any) => (
+              {table.getHeaderGroups().map((headerGroup: any) => (
                 <TableRow
                   key={headerGroup.id}
-                  className="bg-[#1B5B34] hover:bg-[#1B5B34] border-none"
+                  className="bg-[#008080] hover:bg-[#008080] border-none"
                 >
-                  {headerGroup.headers.map((header:any) => (
+                  {headerGroup.headers.map((header: any) => (
                     <TableHead
                       key={header.id}
                       onClick={header.column.getToggleSortingHandler()}
@@ -260,17 +265,17 @@ export function DataTable<T>({
                     className="h-32 text-center"
                   >
                     <div className="flex justify-center items-center">
-                      <div className="animate-spin rounded-full h-8 w-8 border-4 border-slate-300 border-t-slate-600"></div>
+                      <div className="animate-spin  h-8 w-8 border-4 border-slate-300 border-t-slate-600"></div>
                     </div>
                   </TableCell>
                 </TableRow>
               ) : table.getRowModel().rows?.length ? (
-                table.getRowModel().rows.map((row:any) => (
+                table.getRowModel().rows.map((row: any) => (
                   <TableRow
                     key={row.id}
                     className="border-b border-gray-50 hover:bg-slate-50/50 transition-colors"
                   >
-                    {row.getVisibleCells().map((cell:any) => (
+                    {row.getVisibleCells().map((cell: any) => (
                       <TableCell
                         key={cell.id}
                         className="py-3.5 px-4 text-sm text-gray-700 font-medium"
@@ -297,9 +302,8 @@ export function DataTable<T>({
           </Table>
         </div>
 
-      
         {/* Pagination Controls */}
-        <div className="pt-2 flex flex-col md:flex-row items-center justify-between gap-4 border-t border-transparent text-slate-600 bg-transparent">
+        <div className="pt-2 flex flex-col md:flex-row items-center justify-between gap-4 border-t border-transparent text-slate-600 bg-transparent bg-white p-2">
           {/* Numbered Pagination — LEFT */}
           <PaginationBar
             currentPage={
@@ -383,10 +387,10 @@ function PaginationBar({
   const pages = getPages();
 
   const btnBase =
-    "h-8 min-w-[2rem] px-2.5 rounded-md text-xs font-semibold border transition-colors duration-150 select-none";
-  const btnActive = "bg-[#1B5B34] text-white border-[#1B5B34] shadow-sm";
+    "h-8 min-w-[2rem] px-2.5  text-xs font-semibold border transition-colors duration-150 select-none";
+  const btnActive = "bg-[#008080] text-white border-[#008080] shadow-sm";
   const btnInactive =
-    "bg-white text-slate-700 border-gray-200 hover:bg-[#1B5B34]/10 hover:border-[#1B5B34]/40 hover:text-[#1B5B34]";
+    "bg-white text-slate-700 border-gray-200 hover:bg-[#008080]/10 hover:border-[#008080]/40 hover:text-[#1B5B34]";
   const btnNav =
     "bg-white text-slate-700 border-gray-200 hover:bg-slate-50 hover:text-slate-900 disabled:opacity-40 disabled:cursor-not-allowed";
 

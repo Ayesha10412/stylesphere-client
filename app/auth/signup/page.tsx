@@ -11,7 +11,7 @@ import { CustomInput } from "@/components/ui/CustomInput";
 import api from "@/config/api";
 import { useState } from "react";
 import { RegisterFormData } from "@/lib/schema";
-import { handleApiError } from "@/lib/handleApiError";
+import { handleApiError } from "@/helper/handleApiError";
 
 export default function SignUp() {
   const {
@@ -37,18 +37,13 @@ export default function SignUp() {
         confirmPassword: data.confirmPassword,
       };
 
-      const res = await api.post("/user/register", payload, {
-        withCredentials: true,
-      });
+      const res = await api.post("/user/register", payload);
 
       if (res.status === 201 || res.status === 200) {
-        // Optional: auto login OR redirect
         reset();
-
-        // redirect to login page
-        router.push("/auth/signin");
+        router.push("/admin-layout");
       }
-    } catch (error: any) {
+    } catch (error: unknown) {
       console.error("Signup failed:", error);
 
       handleApiError<RegisterFormData>(error, setError);
@@ -126,22 +121,18 @@ export default function SignUp() {
               Login
             </Link>
           </p>
-
-          <div className="mt-4  flex flex-col md:flex-row gap-2 justify-center">
+          {errors.root && (
+            <p className="text-red-500 text-sm ">{errors.root.message}</p>
+          )}
+          <div className="mt-4  flex flex-col md:flex-row gap-2 justify-end">
+            <SocialLogin />
             <Button
               type="submit"
               className="px-6 text-sm bg-[#008080] hover:bg-[#004040]"
             >
               Sign Up
             </Button>
-
-            <SocialLogin />
           </div>
-          {errors.root && (
-            <p className="text-red-400 text-sm text-center">
-              {errors.root.message}
-            </p>
-          )}
         </form>
       </div>
     </div>
