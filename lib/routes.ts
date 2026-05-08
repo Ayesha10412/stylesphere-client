@@ -15,6 +15,13 @@ export const adminRoutes = () => [
     label: "Users",
     href: "/admin-layout/user",
     permissions:[ "all"],
+    roles: ["super_admin"],
+  },
+  {
+    icon: Users,
+    label: "Product",
+    href: "/admin-layout/product",
+    permissions:[ "all"],
     roles: ["all"],
   },
   
