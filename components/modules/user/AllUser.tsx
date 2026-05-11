@@ -5,9 +5,8 @@ import * as React from "react";
 import { ColumnDef } from "@tanstack/react-table";
 import { DataTable } from "@/components/ui/DataTable"; // adjust path
 import api from "@/config/api";
-import { Button } from "@/components/ui/button";
 import { User } from "@/types/data";
-import { Edit, Eye, Plus, Settings, Trash } from "lucide-react";
+import { Edit,  Plus, Settings, Trash } from "lucide-react";
 import { CustomTooltip } from "@/components/ui/CustomTooltip";
 import { formatDateTime } from "@/helper/dateTime";
 

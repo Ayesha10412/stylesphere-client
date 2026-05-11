@@ -1,4 +1,4 @@
-import { LayoutDashboard, Users } from "lucide-react";
+import { LayoutDashboard, User2, Users } from "lucide-react";
 
 
 export const adminRoutes = () => [
@@ -15,7 +15,14 @@ export const adminRoutes = () => [
     label: "Users",
     href: "/admin-layout/user",
     permissions:[ "all"],
-    roles: ["super_admin"],
+    roles: ["all"],
+  },
+  {
+    icon: User2,
+    label: "Sellers",
+    href: "/admin-layout/seller",
+    permissions:[ "all"],
+    roles: ["all"],
   },
   {
     icon: Users,

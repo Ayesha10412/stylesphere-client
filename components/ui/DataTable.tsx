@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 
 import * as React from "react";
@@ -48,7 +47,7 @@ import { Input } from "./input";
 type DataTableProps<T> = {
   data: T[];
   columns: ColumnDef<T, unknown>[];
-  topRIghtButtons: {
+  topRIghtButtons?: {
     name: string;
     icon?: React.ReactNode;
     onClick?: () => void;
@@ -139,7 +138,7 @@ export function DataTable<T>({
             <Input
               placeholder="Search..."
               value={globalFilter ?? ""}
-              onChange={(event: any) => {
+              onChange={(event) => {
                 const value = event.target.value;
 
                 setGlobalFilter(value); // <-- always update local filter
@@ -176,13 +175,13 @@ export function DataTable<T>({
               <DropdownMenuContent align="end" className="bg-white">
                 {table
                   .getAllColumns()
-                  .filter((column: any) => column.getCanHide())
-                  .map((column: any) => (
+                  .filter((column) => column.getCanHide())
+                  .map((column) => (
                     <DropdownMenuCheckboxItem
                       key={column.id}
                       className="capitalize"
                       checked={column.getIsVisible()}
-                      onCheckedChange={(value: any) =>
+                      onCheckedChange={(value) =>
                         column.toggleVisibility(!!value)
                       }
                     >
@@ -193,7 +192,7 @@ export function DataTable<T>({
             </DropdownMenu>
 
             {/* Top Right Buttons */}
-            {topRIghtButtons.map(
+            {topRIghtButtons?.map(
               (button, index) =>
                 // (userPermissions.includes(button.permission) ||
                 //   button.permission === "all")
@@ -226,12 +225,12 @@ export function DataTable<T>({
         <div className="overflow-x-auto w-full bg-white  border border-gray-100 shadow-sm ">
           <Table className="min-w-max table-auto">
             <TableHeader className="border-b border-emerald-900/10">
-              {table.getHeaderGroups().map((headerGroup: any) => (
+              {table.getHeaderGroups().map((headerGroup) => (
                 <TableRow
                   key={headerGroup.id}
                   className="bg-[#008080] hover:bg-[#008080] border-none"
                 >
-                  {headerGroup.headers.map((header: any) => (
+                  {headerGroup.headers.map((header) => (
                     <TableHead
                       key={header.id}
                       onClick={header.column.getToggleSortingHandler()}
@@ -270,12 +269,12 @@ export function DataTable<T>({
                   </TableCell>
                 </TableRow>
               ) : table.getRowModel().rows?.length ? (
-                table.getRowModel().rows.map((row: any) => (
+                table.getRowModel().rows.map((row) => (
                   <TableRow
                     key={row.id}
                     className="border-b border-gray-50 hover:bg-slate-50/50 transition-colors"
                   >
-                    {row.getVisibleCells().map((cell: any) => (
+                    {row.getVisibleCells().map((cell) => (
                       <TableCell
                         key={cell.id}
                         className="py-3.5 px-4 text-sm text-gray-700 font-medium"
