@@ -24,3 +24,20 @@ export type Seller = {
   createdAt?: string;
   updatedAt?: string;
 };
+export interface Store {
+  _id: string;
+  owner: string;
+
+  storeName: string;
+  storeBanner?: string;
+  storeDescription?: string;
+
+  ratingAverage?: number;
+  totalSales?: number;
+  totalRevenue?: number;
+
+  isApproved?: boolean;
+
+  createdAt?: string;
+  updatedAt?: string;
+}

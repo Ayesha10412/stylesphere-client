@@ -31,3 +31,23 @@ export const createSellerSchemaValidation = z.object({
 });
 
 export type CreateSellerFormData = z.infer<typeof createSellerSchemaValidation>;
+
+export const createStoreSchema = z.object({
+  storeName: z
+    .string()
+    .min(3, "Store name must be at least 3 characters"),
+
+  storeDescription: z.string().optional(),
+
+  storeBanner: z.any().optional(),
+});
+
+export const updateStoreSchema = z.object({
+  storeName: z.string().optional(),
+  storeDescription: z.string().optional(),
+  storeBanner: z.any().optional(),
+  isApproved: z.boolean().optional(),
+});
+
+export type CreateStoreFormData = z.infer<typeof createStoreSchema>;
+export type UpdateStoreFormData = z.infer<typeof updateStoreSchema>;

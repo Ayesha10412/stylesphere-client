@@ -1,0 +1,106 @@
+"use client";
+
+import { useState } from "react";
+import { useForm, FieldError } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+
+import api from "@/config/api";
+
+import { Button } from "@/components/ui/button";
+import { CustomInput } from "@/components/ui/CustomInput";
+import { CreateStoreFormData, createStoreSchema } from "@/lib/schema";
+
+
+export default function AddStore() {
+  const [loading, setLoading] = useState(false);
+
+  const {
+    register,
+    control,
+    reset,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<CreateStoreFormData>({
+    resolver: zodResolver(createStoreSchema),
+  });
+
+  const onSubmit = async (data: CreateStoreFormData) => {
+    setLoading(true);
+
+    try {
+      const formData = new FormData();
+
+      formData.append("storeName", data.storeName);
+
+      if (data.storeDescription) {
+        formData.append("storeDescription", data.storeDescription);
+      }
+
+      if (data.storeBanner?.[0]) {
+        formData.append("storeBanner", data.storeBanner[0]);
+      }
+
+      const res = await api.post("/store", formData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      });
+
+      console.log(res.data);
+
+      reset();
+    } catch (error) {
+      console.error(error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  return (
+    <div className="max-w-2xl mx-auto bg-white p-6 rounded-2xl shadow">
+      <h2 className="text-2xl font-bold mb-6 text-[#008080]">
+        Create Store
+      </h2>
+
+      <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
+        <CustomInput
+          label="Store Name"
+          name="storeName"
+          type="text"
+          placeholder="Enter store name"
+          register={register}
+          control={control}
+          error={errors.storeName}
+        />
+
+        <CustomInput
+          label="Store Description"
+          name="storeDescription"
+          type="textarea"
+          placeholder="Store description"
+          register={register}
+          control={control}
+          error={errors.storeDescription}
+        />
+
+        <CustomInput
+          label="Store Banner"
+          name="storeBanner"
+          type="file"
+          accept="image/*"
+          register={register}
+          control={control}
+          error={errors.storeBanner as FieldError}
+        />
+
+        <Button
+          type="submit"
+          disabled={loading}
+          className="bg-[#008080] hover:bg-[#004040]"
+        >
+          {loading ? "Creating..." : "Create Store"}
+        </Button>
+      </form>
+    </div>
+  );
+}

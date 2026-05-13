@@ -10,7 +10,7 @@ import api from "@/config/api";
 
 import { Check, Eye, Trash, X } from "lucide-react";
 import type { Seller } from "@/types/data";
-import { TableAction } from "@/components/ui/TableAction";
+import TableAction, {  TableActionType } from "@/components/ui/TableAction";
 import {
   Dialog,
   DialogContent,
@@ -18,6 +18,7 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import SellerDetails from "./SellerDetails";
+import { getStatusColor } from "@/helper/getStatusColor";
 
 export default function Seller() {
   const [data, setData] = React.useState<Seller[]>([]);
@@ -56,7 +57,7 @@ export default function Seller() {
     fetchSeller();
   }, [page, search]);
 
-  const actionButtons: TableAction<Seller>[] = [
+  const actionButtons: TableActionType<Seller>[] = [
     {
       icon: <Eye size="1.3em" />,
       className: "text-blue-500 bg-blue-100",
@@ -100,7 +101,7 @@ export default function Seller() {
       icon: <Trash size="1.3em" />,
       className: "text-red-500 bg-red-100",
       name: "Delete Seller",
-      hoverText: "Delete",
+      hoverText: "Delete Seller",
       onClick: (row) => {
         console.log("Delete seller", row.original);
       },
@@ -136,24 +137,19 @@ export default function Seller() {
       ),
     },
 
-    {
-      accessorKey: "status",
-      header: "Status",
-      cell: ({ row }) => (
-        <span
-          className={`px-2 py-1 rounded text-xs font-medium ${
-            row.original.status === "approved"
-              ? "bg-green-100 text-green-600"
-              : row.original.status === "rejected"
-                ? "bg-red-100 text-red-600"
-                : "bg-yellow-100 text-yellow-600"
-          }`}
-        >
-          {row.original.status}
-        </span>
-      ),
-    },
-
+ {
+  accessorKey: "status",
+  header: "Status",
+  cell: ({ row }) => (
+    <span
+      className={`px-2 py-1 rounded text-xs font-medium ${getStatusColor(
+        row.original.status,
+      )}`}
+    >
+      {row.original.status}
+    </span>
+  ),
+},
     {
       accessorKey: "cvLink",
       header: "CV",
@@ -180,23 +176,7 @@ export default function Seller() {
       id: "actions",
       header: () => <div className="text-center">Actions</div>,
       cell: ({ row }) => (
-        <div className="flex gap-2 items-center">
-          {actionButtons
-            .filter((action) => {
-              if (!action.show) return true;
-              return action.show(row);
-            })
-            .map((action, index) => (
-              <CustomTooltip key={index} hoverText={action.hoverText}>
-                <div
-                  className={`p-2 rounded-lg cursor-pointer ${action.className}`}
-                  onClick={() => action.onClick(row)}
-                >
-                  {action.icon}
-                </div>
-              </CustomTooltip>
-            ))}
-        </div>
+   <TableAction row={row} actions={actionButtons} />
       ),
     },
   ];
