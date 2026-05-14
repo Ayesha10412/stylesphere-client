@@ -8,6 +8,7 @@ import {
   Edit,
   Eye,
   Pencil,
+  Plus,
   Trash,
 } from "lucide-react";
 
@@ -31,11 +32,13 @@ import { getStatusColor } from "@/helper/getStatusColor";
 import { getStatusLabel } from "@/helper/getStatusLabel";
 import TableAction, { TableActionType } from "@/components/ui/TableAction";
 import DeleteModal from "@/components/ui/DeleteModal";
+import AddStore from "./AddStore";
 
 export default function StorePage() {
   const [data, setData] = React.useState<Store[]>([]);
   const [loading, setLoading] = React.useState(false);
-const [deleteOpen, setDeleteOpen] = React.useState(false);
+  const [deleteOpen, setDeleteOpen] = React.useState(false);
+  const [addOpen, setAddOpen] = React.useState(false);
 const [deleteId, setDeleteId] = React.useState<string | null>(null);
 const [deleteName, setDeleteName] = React.useState("");
 const [loadingDelete, setLoadingDelete] = React.useState(false);
@@ -84,6 +87,17 @@ const handleConfirmDelete = async () => {
     setLoadingDelete(false);
   }
 };
+const topRightButtons=[
+      {
+      name: "Add Store",
+      permission: "all",
+      className: "text-white bg-[#008080] hover:bg-[#008080]",
+      onClick: () => {
+       setAddOpen(true)
+      },
+      icon: <Plus />,
+    },
+]
 const actionButtons: TableActionType<Store>[] = [
   {
     icon: <Eye size={18} />,
@@ -173,9 +187,20 @@ const actionButtons: TableActionType<Store>[] = [
       <DataTable<Store>
         data={data}
         columns={columns}
+        topRIghtButtons={topRightButtons}
         loading={loading}
       />
+{/* ADD MODAL */}
+<Dialog open={addOpen} onOpenChange={setAddOpen}>
+  <DialogContent>
+    <DialogHeader>
+      <DialogTitle>Add Store</DialogTitle>
+    </DialogHeader>
 
+    <AddStore   refetch={fetchStores}
+  onClose={() => setAddOpen(false)} />
+  </DialogContent>
+</Dialog>
       {/* DETAILS MODAL */}
       <Dialog
         open={detailsOpen}
@@ -215,12 +240,12 @@ const actionButtons: TableActionType<Store>[] = [
         </DialogContent>
       </Dialog>
       <DeleteModal
-  open={deleteOpen}
-  onOpenChange={setDeleteOpen}
-  itemName={deleteName}
-  loading={loadingDelete}
-  onConfirm={handleConfirmDelete}
-/>
+      open={deleteOpen}
+     onOpenChange={setDeleteOpen}
+     itemName={deleteName}
+     loading={loadingDelete}
+     onConfirm={handleConfirmDelete}
+     />
     </div>
   );
 }

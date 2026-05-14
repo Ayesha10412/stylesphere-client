@@ -10,8 +10,13 @@ import { Button } from "@/components/ui/button";
 import { CustomInput } from "@/components/ui/CustomInput";
 import { CreateStoreFormData, createStoreSchema } from "@/lib/schema";
 
-
-export default function AddStore() {
+export default function AddStore({
+  refetch,
+  onClose,
+}: {
+  refetch: () => void;
+  onClose: () => void;
+}) {
   const [loading, setLoading] = useState(false);
 
   const {
@@ -47,8 +52,9 @@ export default function AddStore() {
       });
 
       console.log(res.data);
-
       reset();
+      refetch();
+      onClose()
     } catch (error) {
       console.error(error);
     } finally {
@@ -57,10 +63,7 @@ export default function AddStore() {
   };
 
   return (
-    <div className="max-w-2xl mx-auto bg-white p-6 rounded-2xl shadow">
-      <h2 className="text-2xl font-bold mb-6 text-[#008080]">
-        Create Store
-      </h2>
+    
 
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
         <CustomInput
@@ -101,6 +104,5 @@ export default function AddStore() {
           {loading ? "Creating..." : "Create Store"}
         </Button>
       </form>
-    </div>
   );
 }
