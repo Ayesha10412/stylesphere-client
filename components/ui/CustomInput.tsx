@@ -10,6 +10,7 @@ import {
   Control,
   FieldValues,
   Path,
+  useWatch,
 } from "react-hook-form";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
@@ -21,7 +22,13 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { X, Calendar as CalendarIcon, Eye, EyeOff, UploadCloud } from "lucide-react";
+import {
+  X,
+  Calendar as CalendarIcon,
+  Eye,
+  EyeOff,
+  UploadCloud,
+} from "lucide-react";
 import { Popover, PopoverContent, PopoverTrigger } from "./popover";
 import { Button } from "./button";
 import dayjs from "dayjs";
@@ -84,12 +91,14 @@ export const CustomInput = <T extends FieldValues>({
   const [images, setImages] = useState<File[]>([]);
   // const [previewUrls, setPreviewUrls] = useState<string[]>([]);
   const [showPassword, setShowPassword] = useState(false);
+  const watchedFile = useWatch({ control, name });
+  const fileName = watchedFile?.[0]?.name || watchedFile?.name || "";
   const fileInputRef = useRef<HTMLInputElement | null>(null);
   const previewUrls = useMemo(() => {
     return images.map((file) => URL.createObjectURL(file));
   }, [images]);
- const focusColor =
-  "h-10 border border-gray-300 bg-white text-gray-900 placeholder:text-gray-400 rounded-lg px-3 shadow-sm transition-all duration-200 focus-visible:ring-2 focus-visible:ring-[#008080]/20 focus-visible:border-[#008080] hover:border-gray-400";
+  const focusColor =
+    "h-10 border border-gray-300 bg-white text-gray-900 placeholder:text-gray-400 rounded-lg px-3 shadow-sm transition-all duration-200 focus-visible:ring-2 focus-visible:ring-[#008080]/20 focus-visible:border-[#008080] hover:border-gray-400";
   // useEffect(() => {
   //   const urls = images.map((file) => URL.createObjectURL(file));
   //   setPreviewUrls(urls);
@@ -126,7 +135,7 @@ export const CustomInput = <T extends FieldValues>({
               <Input
                 id={name}
                 type={showPassword ? "text" : "password"}
-                className={cn(focusColor, className) }
+                className={cn(focusColor, className)}
                 {...register(name)}
                 placeholder={placeholder}
                 disabled={disabled}
@@ -232,7 +241,8 @@ export const CustomInput = <T extends FieldValues>({
       {type === "textarea" && (
         <Textarea
           id={name}
-className={cn(focusColor, "min-h-[120px]", className)}          {...register(name)}
+          className={cn(focusColor, "min-h-[120px]", className)}
+          {...register(name)}
           disabled={disabled}
         />
       )}
@@ -283,144 +293,132 @@ className={cn(focusColor, "min-h-[120px]", className)}          {...register(nam
       )}
 
       {/* ================= FILE ================= */}
-{type === "file" && (
-  <label
-    htmlFor={name}
-    className="group flex items-center justify-between h-11 px-4 border border-gray-300 rounded-lg bg-white shadow-sm cursor-pointer transition-all duration-200 hover:border-[#008080] hover:bg-gray-50"
-  >
-    <div className="flex items-center gap-3">
-      <div className="flex items-center justify-center w-8 h-8 rounded-lg bg-[#008080]/10 ">
-        <UploadCloud className="w-4 h-4 text-[#008080]" size={24} />
-      </div>
-
-      <span className="text-sm text-gray-600">
-        Choose file
-      </span>
-    </div>
-
-    <span className="text-xs text-gray-400 group-hover:text-[#008080] transition">
-      Browse
-    </span>
-
-    <Input
-      id={name}
-      type="file"
-      accept={accept}
-      {...register(name)}
-      disabled={disabled}
-      className="hidden"
-    />
-  </label>
-)}
-
-      {/* ================= IMAGE ================= */}
-  {type === "image" && (
-  <Controller
-    control={control}
-    name={name}
-    render={({ field }) => (
-      <>
+      {type === "file" && (
         <label
           htmlFor={name}
-          className="group flex items-center justify-between h-11 px-4 border border-gray-300 rounded-lg bg-white shadow-sm cursor-pointer transition-all duration-200 hover:border-[#008080] hover:bg-gray-50"
+          className={cn(
+            "flex items-center justify-between h-10 pr-3 border border-gray-300 bg-white rounded-lg shadow-sm cursor-pointer transition-all duration-200",
+            "hover:border-[#008080] hover:bg-gray-50",
+            disabled && "opacity-50 cursor-not-allowed",
+          )}
         >
-       <div className="flex items-center gap-3">
-  <div className="flex items-center justify-center w-9 h-9 rounded-xl bg-[#008080]/10 border border-[#008080]/20">
-    <UploadCloud className="w-4 h-4 text-[#008080]" />
-  </div>
+          {/* Left */}
+          <div className="flex items-center gap-2 min-w-0 h-full pl-2 pr-3 bg-[#008080]/10 rounded-l-lg">
+            <div className="flex items-center justify-center w-7 h-7 rounded-md bg-[#008080]/20">
+              <UploadCloud className="w-4 h-4 text-[#008080]" />
+            </div>
 
-  <div className="flex flex-col leading-tight">
-    <span className="text-sm font-medium text-gray-700">
-      Upload Image
-    </span>
+            <span className="text-sm text-gray-700 truncate">Upload file</span>
+          </div>
 
-    <span className="text-xs text-gray-400">
-      PNG, JPG up to 5MB
-    </span>
-  </div>
-</div>
-
-<div className="px-3 py-1 text-xs font-medium rounded-lg bg-gray-100 text-gray-500 border border-gray-200 transition-all duration-200 group-hover:bg-[#008080] group-hover:text-white group-hover:border-[#008080]">
-  Browse
-</div>
-
+          {/* Right hint */}
+          <span className="text-sm text-blue-600 truncate max-w-[440px] text-center">
+            {fileName ? fileName : "No file selected"}
+          </span>
           <Input
             id={name}
-            ref={fileInputRef}
             type="file"
-            accept={accept ?? "image/*"}
-            multiple={multiple}
+            accept={accept}
+            {...register(name)}
+            disabled={disabled}
             className="hidden"
-            onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-              const fileInput = e.target.files;
-
-              if (!fileInput) return;
-
-              const files: File[] = Array.from(fileInput);
-
-              const fileList: File[] = multiple
-                ? [
-                    ...(Array.isArray(field.value)
-                      ? field.value
-                      : []),
-                    ...files,
-                  ]
-                : files;
-
-              field.onChange(fileList);
-              setImages(fileList);
-              onFilesChange?.(fileList);
-            }}
           />
         </label>
+      )}
 
-        {previewUrls.length > 0 && (
-          <div className="flex flex-col gap-3 mt-4">
-            {images.map((file, idx) => (
-              <div
-                key={idx}
-                className="flex items-center gap-3 bg-gray-50 border border-gray-200 rounded-lg p-3 shadow-sm hover:shadow-md transition"
+      {/* ================= IMAGE ================= */}
+      {type === "image" && (
+        <Controller
+          control={control}
+          name={name}
+          render={({ field }) => (
+            <>
+              <label
+                htmlFor={name}
+                className={cn(
+                  "flex items-center justify-between h-10 pr-3 border border-gray-300 bg-white rounded-lg shadow-sm cursor-pointer transition-all duration-200",
+                  "hover:border-[#008080] hover:bg-gray-50",
+                  disabled && "opacity-50 cursor-not-allowed",
+                )}
               >
-                <div className="relative w-12 h-12 shrink-0">
-                  <Image
-                    src={previewUrls[idx]}
-                    alt="preview"
-                    fill
-                    className="object-cover rounded-lg border"
-                  />
+                {/* Left */}
+                <div className="flex items-center gap-2 min-w-0 h-full pl-2 pr-3 bg-[#008080]/10 rounded-l-lg">
+                  <div className="flex items-center justify-center w-7 h-7 rounded-md bg-[#008080]/10">
+                    <UploadCloud className="w-4 h-4 text-[#008080]" />
+                  </div>
+
+                  <span className="text-sm text-gray-600 truncate">
+                    Upload image
+                  </span>
                 </div>
 
-                <div className="flex-1 min-w-0">
-                  <p className="text-sm font-medium text-gray-700 truncate">
-                    {file.name}
-                  </p>
+                {/* Right hint */}
+                <span className="text-xs text-gray-400">Choose image</span>
 
-                  <p className="text-xs text-gray-400">
-                    Image selected
-                  </p>
-                </div>
+                <Input
+                  id={name}
+                  type="file"
+                  accept={accept ?? "image/*"}
+                  multiple={multiple}
+                  className="hidden"
+                  onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                    const files = Array.from(e.target.files || []);
 
-                <button
-                  type="button"
-                  onClick={() => {
-                    const updated = [...images];
-                    updated.splice(idx, 1);
+                    const updated = multiple
+                      ? [
+                          ...(Array.isArray(field.value) ? field.value : []),
+                          ...files,
+                        ]
+                      : files;
 
-                    setImages(updated);
                     field.onChange(updated);
+                    setImages(updated);
+                    onFilesChange?.(updated);
                   }}
-                  className="p-1.5 rounded-lg hover:bg-red-100 transition"
-                >
-                  <X className="w-4 h-4 text-red-500" />
-                </button>
-              </div>
-            ))}
-          </div>
-        )}
-      </>
-    )}
-  />
-)}
+                />
+              </label>
+
+              {/* Preview (cleaned) */}
+              {previewUrls.length > 0 && (
+                <div className="mt-3 space-y-2">
+                  {images.map((file, idx) => (
+                    <div
+                      key={idx}
+                      className="flex items-center gap-3 h-10 px-3 bg-white border border-gray-200 rounded-lg"
+                    >
+                      <div className="relative w-7 h-7 shrink-0">
+                        <Image
+                          src={previewUrls[idx]}
+                          alt="preview"
+                          fill
+                          className="object-cover rounded-md"
+                        />
+                      </div>
+
+                      <p className="text-sm text-gray-700 truncate flex-1">
+                        {file.name}
+                      </p>
+
+                      <button
+                        type="button"
+                        onClick={() => {
+                          const updated = [...images];
+                          updated.splice(idx, 1);
+                          setImages(updated);
+                          field.onChange(updated);
+                        }}
+                        className="text-red-500 hover:text-red-600"
+                      >
+                        <X className="w-4 h-4" />
+                      </button>
+                    </div>
+                  ))}
+                </div>
+              )}
+            </>
+          )}
+        />
+      )}
       {/* ================= CHECKBOX ================= */}
       {type === "checkbox" && (
         <div className="flex items-center gap-2">

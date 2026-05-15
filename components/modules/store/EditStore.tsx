@@ -94,20 +94,29 @@ export default function EditStore({ store, refetch }: Props) {
       <CustomInput
         label="Store Banner"
         name="storeBanner"
-        type="file"
+        type="image"
         accept="image/*"
         register={register}
         control={control}
         error={errors.storeBanner as FieldError}
       />
 
-      <Button
-        type="submit"
-        disabled={loading}
-        className="bg-[#008080]"
-      >
-        {loading ? "Updating..." : "Update Store"}
-      </Button>
+      <div className="flex  justify-end gap-2 mt-6">
+        <Button
+          type="button"
+          disabled={loading}
+          className="bg-red-100 text-red-500 hover:bg-red-200"
+        >
+          Cancel{" "}
+        </Button>
+        <Button
+          type="submit"
+          disabled={loading}
+          className="bg-[#008080] hover:bg-[#004040]"
+        >
+          {loading ? "Creating..." : "Create Store"}
+        </Button>
+      </div>
     </form>
   );
 }

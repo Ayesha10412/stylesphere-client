@@ -58,8 +58,8 @@ export default function ApplySeller() {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center px-4">
-      <div className="w-full max-w-2xl rounded-2xl border p-6 shadow-lg bg-white">
+    <div className=" w-full">
+      <div className="p-6 rounded-lg border shadow-lg bg-white">
         <h2 className="text-3xl font-bold text-center mb-6 text-[#008080]">
           Apply As Seller
         </h2>
@@ -90,7 +90,14 @@ export default function ApplySeller() {
             <p className="text-red-500 text-sm">{errors.root.message}</p>
           )}
 
-          <div className="flex justify-end">
+          <div className="flex justify-end mt-6 gap-2">
+            <Button
+              type="button"
+              disabled={loading}
+              className="bg-red-100 text-red-500 hover:bg-red-200"
+            >
+              Cancel{" "}
+            </Button>
             <Button
               type="submit"
               disabled={loading}

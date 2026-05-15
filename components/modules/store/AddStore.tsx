@@ -9,6 +9,7 @@ import api from "@/config/api";
 import { Button } from "@/components/ui/button";
 import { CustomInput } from "@/components/ui/CustomInput";
 import { CreateStoreFormData, createStoreSchema } from "@/lib/schema";
+import { handleApiError } from "@/helper/handleApiError";
 
 export default function AddStore({
   refetch,
@@ -22,7 +23,7 @@ export default function AddStore({
   const {
     register,
     control,
-    reset,
+    reset,setError,
     handleSubmit,
     formState: { errors },
   } = useForm<CreateStoreFormData>({
@@ -54,48 +55,59 @@ export default function AddStore({
       console.log(res.data);
       reset();
       refetch();
-      onClose()
-    } catch (error) {
-      console.error(error);
-    } finally {
-      setLoading(false);
-    }
+      onClose();
+    } catch (error: unknown) {
+          console.error(error);
+    
+          handleApiError<CreateStoreFormData>(error, setError);
+        } finally {
+          setLoading(false);
+        }
   };
 
   return (
-    
+    <form onSubmit={handleSubmit(onSubmit)} className="space-y-4 p-4">
+      <CustomInput
+        label="Store Name"
+        name="storeName"
+        type="text"
+        placeholder="Enter store name"
+        register={register}
+        control={control}
+        error={errors.storeName}
+      />
 
-      <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
-        <CustomInput
-          label="Store Name"
-          name="storeName"
-          type="text"
-          placeholder="Enter store name"
-          register={register}
-          control={control}
-          error={errors.storeName}
-        />
+      <CustomInput
+        label="Store Description"
+        name="storeDescription"
+        type="textarea"
+        placeholder="Store description"
+        register={register}
+        control={control}
+        error={errors.storeDescription}
+      />
 
-        <CustomInput
-          label="Store Description"
-          name="storeDescription"
-          type="textarea"
-          placeholder="Store description"
-          register={register}
-          control={control}
-          error={errors.storeDescription}
-        />
+      <CustomInput
+        label="Store Banner"
+        name="storeBanner"
+        type="image"
+        accept="image/*"
+        register={register}
+        control={control}
+        error={errors.storeBanner as FieldError}
+      />
+      {errors.root && (
+        <p className="text-red-500 text-sm">{errors.root.message}</p>
+      )}
 
-        <CustomInput
-          label="Store Banner"
-          name="storeBanner"
-          type="file"
-          accept="image/*"
-          register={register}
-          control={control}
-          error={errors.storeBanner as FieldError}
-        />
-
+      <div className="flex  justify-end gap-2 mt-6">
+        <Button
+          type="button"
+          disabled={loading}
+          className="bg-red-100 text-red-500 hover:bg-red-200"
+        >
+          Cancel{" "}
+        </Button>
         <Button
           type="submit"
           disabled={loading}
@@ -103,6 +115,7 @@ export default function AddStore({
         >
           {loading ? "Creating..." : "Create Store"}
         </Button>
-      </form>
+      </div>
+    </form>
   );
 }

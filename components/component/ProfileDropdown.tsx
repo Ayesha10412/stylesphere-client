@@ -75,6 +75,14 @@ export default function ProfileDropdown() {
           >
             👤 Profile
           </button>
+          <button
+            className="w-full text-left px-3 py-2 rounded-lg hover:bg-gray-100 text-sm text-gray-700 transition"
+            onClick={() => {
+              window.location.href = "/admin-layout/user/applySeller";
+            }}
+          >
+            👤 Apply As Seller
+          </button>
 
           {/* Logout */}
           <div className="mt-2">

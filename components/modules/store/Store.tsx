@@ -4,16 +4,9 @@ import * as React from "react";
 
 import { ColumnDef } from "@tanstack/react-table";
 
-import {
-  Edit,
-  Eye,
-  Pencil,
-  Plus,
-  Trash,
-} from "lucide-react";
+import { Edit, Eye, Pencil, Plus, Trash } from "lucide-react";
 
 import api from "@/config/api";
-
 
 import { DataTable } from "@/components/ui/DataTable";
 import { CustomTooltip } from "@/components/ui/CustomTooltip";
@@ -39,17 +32,14 @@ export default function StorePage() {
   const [loading, setLoading] = React.useState(false);
   const [deleteOpen, setDeleteOpen] = React.useState(false);
   const [addOpen, setAddOpen] = React.useState(false);
-const [deleteId, setDeleteId] = React.useState<string | null>(null);
-const [deleteName, setDeleteName] = React.useState("");
-const [loadingDelete, setLoadingDelete] = React.useState(false);
-  const [selectedStore, setSelectedStore] =
-    React.useState<Store | null>(null);
+  const [deleteId, setDeleteId] = React.useState<string | null>(null);
+  const [deleteName, setDeleteName] = React.useState("");
+  const [loadingDelete, setLoadingDelete] = React.useState(false);
+  const [selectedStore, setSelectedStore] = React.useState<Store | null>(null);
 
-  const [detailsOpen, setDetailsOpen] =
-    React.useState(false);
+  const [detailsOpen, setDetailsOpen] = React.useState(false);
 
-  const [editOpen, setEditOpen] =
-    React.useState(false);
+  const [editOpen, setEditOpen] = React.useState(false);
 
   const fetchStores = async () => {
     setLoading(true);
@@ -69,97 +59,97 @@ const [loadingDelete, setLoadingDelete] = React.useState(false);
     fetchStores();
   }, []);
 
-const handleConfirmDelete = async () => {
-  if (!deleteId) return;
+  const handleConfirmDelete = async () => {
+    if (!deleteId) return;
 
-  setLoadingDelete(true);
+    setLoadingDelete(true);
 
-  try {
-    await api.delete(`/store/${deleteId}`);
+    try {
+      await api.delete(`/store/${deleteId}`);
 
-    setDeleteOpen(false);
-    setDeleteId(null);
+      setDeleteOpen(false);
+      setDeleteId(null);
 
-    fetchStores();
-  } catch (error) {
-    console.error(error);
-  } finally {
-    setLoadingDelete(false);
-  }
-};
-const topRightButtons=[
-      {
+      fetchStores();
+    } catch (error) {
+      console.error(error);
+    } finally {
+      setLoadingDelete(false);
+    }
+  };
+  const topRightButtons = [
+    {
       name: "Add Store",
       permission: "all",
       className: "text-white bg-[#008080] hover:bg-[#008080]",
       onClick: () => {
-       setAddOpen(true)
+        setAddOpen(true);
       },
       icon: <Plus />,
     },
-]
-const actionButtons: TableActionType<Store>[] = [
-  {
-    icon: <Eye size={18} />,
-    name:"Store",
-    className: "text-blue-600 bg-blue-100",
-    hoverText: "View Store",
-    onClick: (row) => {
-      setSelectedStore(row.original);
-      setDetailsOpen(true);
+  ];
+  const actionButtons: TableActionType<Store>[] = [
+    {
+      icon: <Eye size={18} />,
+      name: "Store",
+      className: "text-blue-600 bg-blue-100",
+      hoverText: "View Store",
+      onClick: (row) => {
+        setSelectedStore(row.original);
+        setDetailsOpen(true);
+      },
+
+      permission: "all",
     },
 
-    permission: "all",
-  },
+    {
+      icon: <Edit size={18} />,
+      name: "Store",
+      className: "text-green-600 bg-green-100",
+      hoverText: "Edit Store",
 
-  {
-    icon: <Edit size={18} />,
-    name:"Store",
-    className: "text-green-600 bg-green-100",
-    hoverText: "Edit Store",
+      onClick: (row) => {
+        setSelectedStore(row.original);
+        setEditOpen(true);
+      },
 
-    onClick: (row) => {
-      setSelectedStore(row.original);
-      setEditOpen(true);
+      permission: "all",
     },
 
-    permission: "all",
-  },
+    {
+      icon: <Trash size={18} />,
+      name: "Store",
+      className: "text-red-600 bg-red-100",
+      hoverText: "Delete Store",
 
-  {
-    icon: <Trash size={18} />,
-    name:"Store",
-    className: "text-red-600 bg-red-100",
-    hoverText: "Delete Store",
-
-  onClick: (row) => {
-  setDeleteId(row.original._id);
-  setDeleteName(row.original.storeName);
-  setDeleteOpen(true);
-},
-    permission: "all",
-  },
-];
+      onClick: (row) => {
+        setDeleteId(row.original._id);
+        setDeleteName(row.original.storeName);
+        setDeleteOpen(true);
+      },
+      permission: "all",
+    },
+  ];
   const columns: ColumnDef<Store>[] = [
     {
       accessorKey: "storeName",
       header: "Store Name",
     },
 
-  {
-  accessorKey: "isApproved",
-  header: "Status",
+    {
+      accessorKey: "isApproved",
+      header: "Status",
 
-  cell: ({ row }) => (
-    <span
-      className={`px-2 py-1 rounded text-xs ${getStatusColor(
-        row.original?.isApproved,
-      )}`}
-    >
-      {getStatusLabel(row.original?.isApproved)}
-    </span>
-  ),
-},
+      cell: ({ row }) => (
+        <span
+          className={`px-2 py-1 rounded text-xs ${getStatusColor(
+            row.original?.isApproved,
+          )}`}
+        >
+          {getStatusLabel(row.original?.isApproved)}
+        </span>
+      ),
+    },
 
     {
       accessorKey: "totalSales",
@@ -176,9 +166,7 @@ const actionButtons: TableActionType<Store>[] = [
 
       header: "Actions",
 
-      cell: ({ row }) => (
-    <TableAction row={row} actions={actionButtons} />
-      ),
+      cell: ({ row }) => <TableAction row={row} actions={actionButtons} />,
     },
   ];
 
@@ -190,62 +178,50 @@ const actionButtons: TableActionType<Store>[] = [
         topRIghtButtons={topRightButtons}
         loading={loading}
       />
-{/* ADD MODAL */}
-<Dialog open={addOpen} onOpenChange={setAddOpen}>
-  <DialogContent>
-    <DialogHeader>
-      <DialogTitle>Add Store</DialogTitle>
-    </DialogHeader>
-
-    <AddStore   refetch={fetchStores}
-  onClose={() => setAddOpen(false)} />
-  </DialogContent>
-</Dialog>
-      {/* DETAILS MODAL */}
-      <Dialog
-        open={detailsOpen}
-        onOpenChange={setDetailsOpen}
-      >
-        <DialogContent>
+      {/* ADD MODAL */}
+      <Dialog open={addOpen} onOpenChange={setAddOpen}>
+        <DialogContent className="lg:max-w-xl max-w-lg">
           <DialogHeader>
-            <DialogTitle>
-              Store Details
+            <DialogTitle className="text-[#008080] text-xl">
+              Add Store
             </DialogTitle>
           </DialogHeader>
 
-          {selectedStore && (
-            <StoreDetails store={selectedStore} />
-          )}
+          <AddStore refetch={fetchStores} onClose={() => setAddOpen(false)} />
+        </DialogContent>
+      </Dialog>
+      {/* DETAILS MODAL */}
+      <Dialog open={detailsOpen} onOpenChange={setDetailsOpen}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>Store Details</DialogTitle>
+          </DialogHeader>
+
+          {selectedStore && <StoreDetails store={selectedStore} />}
         </DialogContent>
       </Dialog>
 
       {/* EDIT MODAL */}
-      <Dialog
-        open={editOpen}
-        onOpenChange={setEditOpen}
-      >
-        <DialogContent>
+      <Dialog open={editOpen} onOpenChange={setEditOpen}>
+        <DialogContent className="lg:max-w-xl max-w-lg">
           <DialogHeader>
-            <DialogTitle>
+            <DialogTitle className="text-[#008080] text-xl">
               Edit Store
             </DialogTitle>
           </DialogHeader>
 
           {selectedStore && (
-            <EditStore
-              store={selectedStore}
-              refetch={fetchStores}
-            />
+            <EditStore store={selectedStore} refetch={fetchStores} />
           )}
         </DialogContent>
       </Dialog>
       <DeleteModal
-      open={deleteOpen}
-     onOpenChange={setDeleteOpen}
-     itemName={deleteName}
-     loading={loadingDelete}
-     onConfirm={handleConfirmDelete}
-     />
+        open={deleteOpen}
+        onOpenChange={setDeleteOpen}
+        itemName={deleteName}
+        loading={loadingDelete}
+        onConfirm={handleConfirmDelete}
+      />
     </div>
   );
 }
