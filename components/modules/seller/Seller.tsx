@@ -10,7 +10,7 @@ import api from "@/config/api";
 
 import { Check, Eye, Trash, X } from "lucide-react";
 import type { Seller } from "@/types/data";
-import TableAction, {  TableActionType } from "@/components/ui/TableAction";
+import TableAction, { TableActionType } from "@/components/ui/TableAction";
 import {
   Dialog,
   DialogContent,
@@ -19,6 +19,7 @@ import {
 } from "@/components/ui/dialog";
 import SellerDetails from "./SellerDetails";
 import { getStatusColor } from "@/helper/getStatusColor";
+import ReviewApplication from "./ReviewApplication";
 
 export default function Seller() {
   const [data, setData] = React.useState<Seller[]>([]);
@@ -34,7 +35,14 @@ export default function Seller() {
   );
   // search
   const [search, setSearch] = React.useState("");
+  const [reviewOpen, setReviewOpen] = React.useState(false);
 
+  const [reviewType, setReviewType] = React.useState<
+    "approved" | "rejected" | null
+  >(null);
+
+  const [selectedReviewSeller, setSelectedReviewSeller] =
+    React.useState<Seller | null>(null);
   const fetchSeller = async () => {
     setLoading(true);
 
@@ -79,7 +87,9 @@ export default function Seller() {
       show: (row) => row.original.status === "pending",
 
       onClick: (row) => {
-        console.log("Approving seller", row.original);
+        setSelectedReviewSeller(row.original);
+        setReviewType("approved");
+        setReviewOpen(true);
       },
       permission: "all",
     },
@@ -93,7 +103,9 @@ export default function Seller() {
       show: (row) => row.original.status === "pending",
 
       onClick: (row) => {
-        console.log("Reject seller", row.original);
+        setSelectedReviewSeller(row.original);
+        setReviewType("rejected");
+        setReviewOpen(true);
       },
       permission: "all",
     },
@@ -137,19 +149,19 @@ export default function Seller() {
       ),
     },
 
- {
-  accessorKey: "status",
-  header: "Status",
-  cell: ({ row }) => (
-    <span
-      className={`px-2 py-1 rounded text-xs font-medium ${getStatusColor(
-        row.original.status,
-      )}`}
-    >
-      {row.original.status}
-    </span>
-  ),
-},
+    {
+      accessorKey: "status",
+      header: "Status",
+      cell: ({ row }) => (
+        <span
+          className={`px-2 py-1 rounded text-xs font-medium ${getStatusColor(
+            row.original.status,
+          )}`}
+        >
+          {row.original.status}
+        </span>
+      ),
+    },
     {
       accessorKey: "cvLink",
       header: "CV",
@@ -175,9 +187,7 @@ export default function Seller() {
     {
       id: "actions",
       header: () => <div className="text-center">Actions</div>,
-      cell: ({ row }) => (
-   <TableAction row={row} actions={actionButtons} />
-      ),
+      cell: ({ row }) => <TableAction row={row} actions={actionButtons} />,
     },
   ];
 
@@ -197,12 +207,21 @@ export default function Seller() {
       <Dialog open={open} onOpenChange={setOpen}>
         <DialogContent className="sm:max-w-lg rounded-2xl">
           <DialogHeader>
-            <DialogTitle className="text-[#008080] text-xl">Seller Details</DialogTitle>
+            <DialogTitle className="text-[#008080] text-xl">
+              Seller Details
+            </DialogTitle>
           </DialogHeader>
 
           {selectedSeller && <SellerDetails seller={selectedSeller} />}
         </DialogContent>
       </Dialog>
+      <ReviewApplication
+        open={reviewOpen}
+        onClose={() => setReviewOpen(false)}
+        seller={selectedReviewSeller}
+        type={reviewType}
+        refetch={fetchSeller}
+      />
     </div>
   );
 }
