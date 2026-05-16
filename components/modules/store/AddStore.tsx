@@ -42,9 +42,9 @@ export default function AddStore({
         formData.append("storeDescription", data.storeDescription);
       }
 
-      if (data.storeBanner?.[0]) {
-        formData.append("storeBanner", data.storeBanner[0]);
-      }
+   if (data.storeBanner && data.storeBanner.length > 0) {
+     formData.append("storeBanner", data.storeBanner[0]);
+   }
 
       const res = await api.post("/store", formData, {
         headers: {
@@ -104,6 +104,7 @@ export default function AddStore({
         <Button
           type="button"
           disabled={loading}
+          onClick={onClose}
           className="bg-red-100 text-red-500 hover:bg-red-200"
         >
           Cancel{" "}

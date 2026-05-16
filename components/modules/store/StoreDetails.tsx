@@ -9,7 +9,7 @@ type Props = {
 
 export default function StoreDetails({ store }: Props) {
   return (
-    <div className="space-y-4">
+    <div className="space-y-4 p-4">
       {store.storeBanner && (
         <img
           src={store.storeBanner}

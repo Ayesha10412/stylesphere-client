@@ -354,26 +354,24 @@ export const CustomInput = <T extends FieldValues>({
 
                 {/* Right hint */}
                 <span className="text-xs text-gray-400">Choose image</span>
-
                 <Input
                   id={name}
                   type="file"
                   accept={accept ?? "image/*"}
                   multiple={multiple}
                   className="hidden"
-                  onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-                    const files = Array.from(e.target.files || []);
+                  name={field.name}
+                  ref={field.ref}
+                  onBlur={field.onBlur}
+                  onChange={(e) => {
+                    const file = e.target.files?.[0];
+                    if (!file) return;
 
-                    const updated = multiple
-                      ? [
-                          ...(Array.isArray(field.value) ? field.value : []),
-                          ...files,
-                        ]
-                      : files;
+                    // RHF is the source of truth
+                    field.onChange(file);
 
-                    field.onChange(updated);
-                    setImages(updated);
-                    onFilesChange?.(updated);
+                    // UI preview only
+                    setImages([file]);
                   }}
                 />
               </label>

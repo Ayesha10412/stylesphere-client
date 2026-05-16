@@ -26,6 +26,7 @@ import { getStatusLabel } from "@/helper/getStatusLabel";
 import TableAction, { TableActionType } from "@/components/ui/TableAction";
 import DeleteModal from "@/components/ui/DeleteModal";
 import AddStore from "./AddStore";
+import { formatDateTime } from "@/helper/dateTime";
 
 export default function StorePage() {
   const [data, setData] = React.useState<Store[]>([]);
@@ -135,6 +136,10 @@ export default function StorePage() {
       accessorKey: "storeName",
       header: "Store Name",
     },
+    {
+      accessorKey: "storeDescription",
+      header: "Store Description",
+    },
 
     {
       accessorKey: "isApproved",
@@ -159,6 +164,11 @@ export default function StorePage() {
     {
       accessorKey: "totalRevenue",
       header: "Revenue",
+    },
+    {
+      accessorKey: "createdAt",
+      header: "Created At",
+      cell: ({ row }) => formatDateTime(row.original.createdAt ?? "-"),
     },
 
     {
@@ -194,7 +204,9 @@ export default function StorePage() {
       <Dialog open={detailsOpen} onOpenChange={setDetailsOpen}>
         <DialogContent>
           <DialogHeader>
-            <DialogTitle>Store Details</DialogTitle>
+            <DialogTitle className="text-[#008080] text-xl">
+              Store Details
+            </DialogTitle>
           </DialogHeader>
 
           {selectedStore && <StoreDetails store={selectedStore} />}
@@ -211,7 +223,11 @@ export default function StorePage() {
           </DialogHeader>
 
           {selectedStore && (
-            <EditStore store={selectedStore} refetch={fetchStores} />
+            <EditStore
+              store={selectedStore}
+              refetch={fetchStores}
+              onClose={() => setEditOpen(false)}
+            />
           )}
         </DialogContent>
       </Dialog>

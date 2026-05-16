@@ -45,7 +45,8 @@ export const createStoreSchema = z.object({
 export const updateStoreSchema = z.object({
   storeName: z.string().optional(),
   storeDescription: z.string().optional(),
-  storeBanner: z.any().optional(),
+  // storeBanner: z.any().optional(),
+  storeBanner: z.instanceof(File).optional().nullable(),
   isApproved: z.boolean().optional(),
 });
 
