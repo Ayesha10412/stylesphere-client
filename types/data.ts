@@ -24,6 +24,7 @@ export type Seller = {
   createdAt?: string;
   updatedAt?: string;
 };
+//store
 export interface Store {
   _id: string;
   owner: string;
@@ -40,4 +41,30 @@ export interface Store {
 
   createdAt?: string;
   updatedAt?: string;
+}
+//product
+export interface ProductVariant {
+  size: string;
+
+  color: string;
+
+  stock: number;
+
+  sku?: string;
+}
+
+export interface Product {
+  _id: string;
+
+  title: string;
+
+  description: string;
+
+  price: number;
+
+  category: string;
+
+  images: string[];
+
+  variants: ProductVariant[];
 }

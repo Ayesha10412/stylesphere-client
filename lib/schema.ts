@@ -33,9 +33,7 @@ export const createSellerSchemaValidation = z.object({
 export type CreateSellerFormData = z.infer<typeof createSellerSchemaValidation>;
 
 export const createStoreSchema = z.object({
-  storeName: z
-    .string()
-    .min(3, "Store name must be at least 3 characters"),
+  storeName: z.string().min(3, "Store name must be at least 3 characters"),
 
   storeDescription: z.string().optional(),
 
@@ -52,3 +50,46 @@ export const updateStoreSchema = z.object({
 
 export type CreateStoreFormData = z.infer<typeof createStoreSchema>;
 export type UpdateStoreFormData = z.infer<typeof updateStoreSchema>;
+
+const productVariantSchema = z.object({
+  size: z.string(),
+  color: z.string(),
+  stock: z.number(),
+  sku: z.string().optional(),
+});
+
+export const createProductSchema = z.object({
+  title: z.string().min(1, "Title is required"),
+
+  description: z.string().min(1, "Description is required"),
+
+  price: z.number(),
+
+  discountPrice: z.number().optional(),
+
+  category: z.string().min(1, "Category is required"),
+
+  images: z.array(z.instanceof(File)).optional(),
+
+  variants: z.array(productVariantSchema).optional(),
+});
+
+export const updateProductSchema = z.object({
+  title: z.string().optional(),
+
+  description: z.string().optional(),
+
+  price: z.coerce.number().optional(),
+
+  discountPrice: z.number().optional(),
+
+  category: z.string().optional(),
+
+  images: z.array(z.instanceof(File)).optional(),
+
+  variants: z.array(productVariantSchema).optional(),
+});
+
+export type CreateProductFormData = z.infer<typeof createProductSchema>;
+
+export type UpdateProductFormData = z.infer<typeof updateProductSchema>;

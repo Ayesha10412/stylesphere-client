@@ -238,10 +238,24 @@ export const CustomInput = <T extends FieldValues>({
       )}
 
       {/* ================= TEXTAREA ================= */}
+      {/* ================= TEXTAREA ================= */}
       {type === "textarea" && (
         <Textarea
           id={name}
-          className={cn(focusColor, "min-h-[120px]", className)}
+          className={cn(
+            focusColor,
+
+            // 👇 make it input-like height
+            "h-10 min-h-10",
+
+            // 👇 allow vertical growth but controlled
+            "max-h-60 overflow-y-auto resize-y",
+
+            // 👇 nicer UX
+            "leading-5",
+
+            className,
+          )}
           {...register(name)}
           disabled={disabled}
         />

@@ -103,33 +103,33 @@ export default function StorePage() {
       permission: "all",
     },
 
-    {
-      icon: <Edit size={18} />,
-      name: "Store",
-      className: "text-green-600 bg-green-100",
-      hoverText: "Edit Store",
+    // {
+    //   icon: <Edit size={18} />,
+    //   name: "Store",
+    //   className: "text-green-600 bg-green-100",
+    //   hoverText: "Edit Store",
 
-      onClick: (row) => {
-        setSelectedStore(row.original);
-        setEditOpen(true);
-      },
+    //   onClick: (row) => {
+    //     setSelectedStore(row.original);
+    //     setEditOpen(true);
+    //   },
 
-      permission: "all",
-    },
+    //   permission: "all",
+    // },
 
-    {
-      icon: <Trash size={18} />,
-      name: "Store",
-      className: "text-red-600 bg-red-100",
-      hoverText: "Delete Store",
+    // {
+    //   icon: <Trash size={18} />,
+    //   name: "Store",
+    //   className: "text-red-600 bg-red-100",
+    //   hoverText: "Delete Store",
 
-      onClick: (row) => {
-        setDeleteId(row.original._id);
-        setDeleteName(row.original.storeName);
-        setDeleteOpen(true);
-      },
-      permission: "all",
-    },
+    //   onClick: (row) => {
+    //     setDeleteId(row.original._id);
+    //     setDeleteName(row.original.storeName);
+    //     setDeleteOpen(true);
+    //   },
+    //   permission: "all",
+    // },
   ];
   const columns: ColumnDef<Store>[] = [
     {
