@@ -23,7 +23,8 @@ export default function AddStore({
   const {
     register,
     control,
-    reset,setError,
+    reset,
+    setError,
     handleSubmit,
     formState: { errors },
   } = useForm<CreateStoreFormData>({
@@ -42,9 +43,9 @@ export default function AddStore({
         formData.append("storeDescription", data.storeDescription);
       }
 
-   if (data.storeBanner && data.storeBanner.length > 0) {
-     formData.append("storeBanner", data.storeBanner[0]);
-   }
+      if (data.storeBanner && data.storeBanner.length > 0) {
+        formData.append("storeBanner", data.storeBanner[0]);
+      }
 
       const res = await api.post("/store", formData, {
         headers: {
@@ -57,12 +58,12 @@ export default function AddStore({
       refetch();
       onClose();
     } catch (error: unknown) {
-          console.error(error);
-    
-          handleApiError<CreateStoreFormData>(error, setError);
-        } finally {
-          setLoading(false);
-        }
+      console.error(error);
+
+      handleApiError<CreateStoreFormData>(error, setError);
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
