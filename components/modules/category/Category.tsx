@@ -77,7 +77,7 @@ export default function Category() {
     {
       name: "Add Category",
       permission: "all",
-      className: "text-white bg-[#008080] hover:bg-[#006666]",
+      className: "text-white bg-[#008080] hover:bg-[#006666] hover:text-white cursor-pointer",
       onClick: () => setAddOpen(true),
       icon: <Plus />,
     },

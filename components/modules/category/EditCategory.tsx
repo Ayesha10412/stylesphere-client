@@ -16,9 +16,8 @@ import z from "zod";
 import { handleApiError } from "@/helper/handleApiError";
 
 const categorySchema = z.object({
-    name: z.string().min(1, "Category name is required"),
-    isDeleted:z.boolean().optional()
-
+  name: z.string().min(1, "Category name is required"),
+  isDeleted: z.string().optional(),
 });
 
 type FormData = z.infer<typeof categorySchema>;
@@ -27,6 +26,7 @@ type Props = {
   category: {
     _id: string;
     name: string;
+    isDeleted?:boolean
   };
 
   refetch: () => void;
@@ -40,14 +40,15 @@ export default function EditCategory({ category, refetch, onClose }: Props) {
   const {
     register,
     control,
-    handleSubmit,setError,
+    handleSubmit,
+    setError,
     formState: { errors },
   } = useForm<FormData>({
     resolver: zodResolver(categorySchema),
 
     defaultValues: {
-        name: category.name,
-        isDeleted:false
+      name: category.name,
+      isDeleted: String(category.isDeleted) ,
     },
   });
 
@@ -55,7 +56,11 @@ export default function EditCategory({ category, refetch, onClose }: Props) {
     setLoading(true);
 
     try {
-      await api.patch(`/category/${category._id}`, data);
+      const payload = {
+        ...data,
+        isDeleted:data.isDeleted ==="true"
+      }
+      await api.patch(`/category/${category._id}`, payload);
 
       refetch();
 
