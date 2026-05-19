@@ -1,48 +1,48 @@
 "use client";
 
 import { useState } from "react";
-
 import api from "@/config/api";
-
 import ProductForm from "./ProductForm";
+import { handleApiError } from "@/helper/handleApiError";
+import { CreateProductFormData } from "@/lib/schema";
+import { UseFormSetError } from "react-hook-form";
+import { useRouter } from "next/navigation";
 
-type Props = {
-  refetch: () => void;
-  onClose: () => void;
-};
-
-export default function AddProduct({ refetch, onClose }: Props) {
+export default function AddProduct({ onSuccess }: { onSuccess?: () => void }) {
   const [loading, setLoading] = useState(false);
-
-  const handleCreate = async (data: any) => {
+  const router = useRouter();
+  const handleCreate = async (
+    data: CreateProductFormData,
+    setError: UseFormSetError<CreateProductFormData>,
+  ) => {
     setLoading(true);
 
     try {
       const formData = new FormData();
 
       formData.append("title", data.title);
-
       formData.append("description", data.description);
-
-      formData.append("price", String(data.price));
-
       formData.append("category", data.category);
 
-      formData.append("variants", JSON.stringify(data.variants));
+      // ✅ FIX HERE
+      formData.append("price", String(Number(data.price)));
 
-      if (data.images?.length) {
-        data.images.forEach((file: File) => {
-          formData.append("images", file);
-        });
-      }
+      // ✅ FIX VARIANTS
+      const cleanedVariants = data.variants?.map((v) => ({
+        ...v,
+        stock: Number(v.stock),
+      }));
+
+      formData.append("variants", JSON.stringify(cleanedVariants));
+
+      data.images?.forEach((file) => {
+        formData.append("images", file);
+      });
 
       await api.post("/product", formData);
-
-      refetch();
-
-      onClose();
+      router.push("/admin-layout/product");
     } catch (error) {
-      console.error(error);
+      handleApiError(error, setError);
     } finally {
       setLoading(false);
     }

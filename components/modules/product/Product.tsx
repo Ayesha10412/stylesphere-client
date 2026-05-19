@@ -14,13 +14,12 @@ import React from "react";
 import { DataTable } from "@/components/ui/DataTable";
 import { ColumnDef } from "@tanstack/react-table";
 import { Product } from "@/types/data";
-import AddProduct from "./AddProduct";
+import { useRouter } from "next/navigation";
 
 export default function ProductPage() {
   const [data, setData] = React.useState<Product[]>([]);
   const [loading, setLoading] = React.useState(false);
-
-  const [addOpen, setAddOpen] = React.useState(false);
+  const router = useRouter();
   const [editOpen, setEditOpen] = React.useState(false);
 
   const [selectedProduct, setSelectedProduct] = React.useState<Product | null>(
@@ -32,8 +31,8 @@ export default function ProductPage() {
 
     try {
       const res = await api.get("/product");
-console.log(res?.data?.data)
-      setData(res.data.data || []);
+      console.log(res);
+      setData(res?.data?.data || []);
     } catch (error) {
       console.error(error);
     } finally {
@@ -45,8 +44,9 @@ console.log(res?.data?.data)
     {
       name: "Add Product",
       permission: "all",
-      className: "text-white bg-[#008080] hover:bg-[#006666]",
-      onClick: () => setAddOpen(true),
+      className:
+        "text-white hover:text-white cursor-pointer bg-[#008080] hover:bg-[#006666]",
+      onClick: () => router.push("/admin-layout/product/addProduct"),
       icon: <Plus />,
     },
   ];
@@ -128,22 +128,6 @@ console.log(res?.data?.data)
         loading={loading}
         topRIghtButtons={topRightButtons}
       />
-
-      {/* ADD MODAL */}
-      <Dialog open={addOpen} onOpenChange={setAddOpen}>
-        <DialogContent className="max-w--xl lg:max-w-3xl">
-          <DialogHeader>
-            <DialogTitle className="text-[#008080] text-xl">
-              Add Product
-            </DialogTitle>
-          </DialogHeader>
-
-          <AddProduct
-            refetch={fetchProducts}
-            onClose={() => setAddOpen(false)}
-          />
-        </DialogContent>
-      </Dialog>
 
       {/* EDIT MODAL */}
       <Dialog open={editOpen} onOpenChange={setEditOpen}>

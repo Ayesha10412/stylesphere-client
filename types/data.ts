@@ -48,7 +48,7 @@ export interface ProductVariant {
 
   color: string;
 
-  stock: number;
+  stock: string;
 
   sku?: string;
 }
@@ -60,7 +60,7 @@ export interface Product {
 
   description: string;
 
-  price: number;
+  price: string;
 
   category: string;
 

@@ -36,7 +36,16 @@ import { cn } from "@/lib/utils";
 import { Calendar } from "./calendar";
 import Image from "next/image";
 import { MultiSelect } from "./multisekect";
+import { Check, ChevronsUpDown } from "lucide-react";
 
+import {
+  Command,
+  CommandEmpty,
+  CommandGroup,
+  CommandInput,
+  CommandItem,
+  CommandList,
+} from "@/components/ui/command";
 type Option = { value: string; label: string };
 
 type InputType =
@@ -46,6 +55,7 @@ type InputType =
   | "date"
   | "daterange"
   | "select"
+  | "searchable-select"
   | "multiselect"
   | "file"
   | "image"
@@ -94,6 +104,7 @@ export const CustomInput = <T extends FieldValues>({
   const watchedFile = useWatch({ control, name });
   const fileName = watchedFile?.[0]?.name || watchedFile?.name || "";
   const fileInputRef = useRef<HTMLInputElement | null>(null);
+  const [open, setOpen] = useState(false);
   const previewUrls = useMemo(() => {
     return images.map((file) => URL.createObjectURL(file));
   }, [images]);
@@ -260,7 +271,72 @@ export const CustomInput = <T extends FieldValues>({
           disabled={disabled}
         />
       )}
+      {/* ================= SEARCHABLE SELECT ================= */}
+      {type === "searchable-select" && (
+        <Controller
+          control={control}
+          name={name}
+          render={({ field }) => (
+            <Popover open={open} onOpenChange={setOpen}>
+              <PopoverTrigger asChild>
+                <Button
+                  type="button"
+                  variant="outline"
+                  role="combobox"
+                  aria-expanded={open}
+                  disabled={disabled}
+                  className={cn(
+                    "w-full justify-between h-10 font-normal",
+                    focusColor,
+                  )}
+                >
+                  <span className="truncate">
+                    {field.value
+                      ? options.find((opt) => opt.value === field.value)?.label
+                      : placeholder || "Select option"}
+                  </span>
 
+                  <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
+                </Button>
+              </PopoverTrigger>
+
+              <PopoverContent className="w-[var(--radix-popover-trigger-width)] p-0">
+                <Command>
+                  <CommandInput placeholder="Search..." />
+
+                  <CommandList>
+                    <CommandEmpty>No option found.</CommandEmpty>
+
+                    <CommandGroup>
+                      {options.map((opt) => (
+                        <CommandItem
+                          key={opt.value}
+                          value={opt.label}
+                          onSelect={() => {
+                            field.onChange(opt.value);
+                            setOpen(false);
+                          }}
+                        >
+                          <Check
+                            className={cn(
+                              "mr-2 h-4 w-4",
+                              field.value === opt.value
+                                ? "opacity-100"
+                                : "opacity-0",
+                            )}
+                          />
+
+                          {opt.label}
+                        </CommandItem>
+                      ))}
+                    </CommandGroup>
+                  </CommandList>
+                </Command>
+              </PopoverContent>
+            </Popover>
+          )}
+        />
+      )}
       {/* ================= SELECT ================= */}
       {type === "select" && (
         <Controller
@@ -378,14 +454,10 @@ export const CustomInput = <T extends FieldValues>({
                   ref={field.ref}
                   onBlur={field.onBlur}
                   onChange={(e) => {
-                    const file = e.target.files?.[0];
-                    if (!file) return;
+                    const files = Array.from(e.target.files ?? []);
 
-                    // RHF is the source of truth
-                    field.onChange(file);
-
-                    // UI preview only
-                    setImages([file]);
+                    field.onChange(files);
+                    setImages(files);
                   }}
                 />
               </label>

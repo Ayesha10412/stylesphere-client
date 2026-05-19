@@ -52,9 +52,9 @@ export type CreateStoreFormData = z.infer<typeof createStoreSchema>;
 export type UpdateStoreFormData = z.infer<typeof updateStoreSchema>;
 
 const productVariantSchema = z.object({
-  size: z.string(),
-  color: z.string(),
-  stock: z.number(),
+  size: z.string().min(1, "Size is required."),
+  color: z.string().min(1, "Color is required."),
+  stock: z.string().min(1, "Stock is required."),
   sku: z.string().optional(),
 });
 
@@ -63,7 +63,7 @@ export const createProductSchema = z.object({
 
   description: z.string().min(1, "Description is required"),
 
-  price: z.number(),
+  price: z.string().optional(),
 
   discountPrice: z.number().optional(),
 
@@ -71,7 +71,7 @@ export const createProductSchema = z.object({
 
   images: z.array(z.instanceof(File)).optional(),
 
-  variants: z.array(productVariantSchema).optional(),
+  variants: z.array(productVariantSchema),
 });
 
 export const updateProductSchema = z.object({
@@ -79,7 +79,7 @@ export const updateProductSchema = z.object({
 
   description: z.string().optional(),
 
-  price: z.coerce.number().optional(),
+  price: z.number().optional(),
 
   discountPrice: z.number().optional(),
 

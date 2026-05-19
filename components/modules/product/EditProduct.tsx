@@ -6,6 +6,9 @@ import api from "@/config/api";
 
 import ProductForm from "./ProductForm";
 import { Product } from "@/types/data";
+import { CreateProductFormData } from "@/lib/schema";
+import { useForm } from "react-hook-form";
+import { handleApiError } from "@/helper/handleApiError";
 
 type Props = {
   product: Product;
@@ -17,8 +20,8 @@ type Props = {
 
 export default function EditProduct({ product, refetch, onClose }: Props) {
   const [loading, setLoading] = useState(false);
-
-  const handleUpdate = async (data: any) => {
+  const { setError } = useForm();
+  const handleUpdate = async (data: CreateProductFormData) => {
     setLoading(true);
 
     try {
@@ -46,7 +49,7 @@ export default function EditProduct({ product, refetch, onClose }: Props) {
 
       onClose();
     } catch (error) {
-      console.error(error);
+      handleApiError(error, setError);
     } finally {
       setLoading(false);
     }
