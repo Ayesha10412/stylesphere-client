@@ -1,5 +1,5 @@
 "use client";
-
+console.log("ProductPage rendered");
 import {
   Dialog,
   DialogContent,
@@ -10,7 +10,7 @@ import { Edit, Eye, Plus, Trash } from "lucide-react";
 import EditProduct from "./EditProduct";
 import TableAction, { TableActionType } from "@/components/ui/TableAction";
 import api from "@/config/api";
-import React from "react";
+import React, { useEffect } from "react";
 import { DataTable } from "@/components/ui/DataTable";
 import { ColumnDef } from "@tanstack/react-table";
 import { Product } from "@/types/data";
@@ -21,7 +21,6 @@ export default function ProductPage() {
   const [loading, setLoading] = React.useState(false);
   const router = useRouter();
   const [editOpen, setEditOpen] = React.useState(false);
-
   const [selectedProduct, setSelectedProduct] = React.useState<Product | null>(
     null,
   );
@@ -39,7 +38,10 @@ export default function ProductPage() {
       setLoading(false);
     }
   };
-
+  useEffect(() => {
+    console.log("fetchProducts called");
+    fetchProducts();
+  }, []);
   const topRightButtons = [
     {
       name: "Add Product",
@@ -59,7 +61,10 @@ export default function ProductPage() {
       hoverText: "View Product",
       permission: "all",
       onClick: (row) => {
-        console.log(row.original);
+        console.log("ROW:", row.original);
+        console.log("ID:", row.original?._id);
+
+        router.push(`/admin-layout/product/${row.original._id}`);
       },
     },
 
@@ -88,6 +93,12 @@ export default function ProductPage() {
   ];
 
   const columns: ColumnDef<Product>[] = [
+  
+  {
+  id: "serial",
+  header: "Id",
+  cell: ({ row }) => row.index + 1,
+},
     {
       accessorKey: "title",
       header: "Title",
@@ -101,12 +112,13 @@ export default function ProductPage() {
     {
       accessorKey: "discountPrice",
       header: "Discount Price",
+      cell: ({ row }) => row?.original?.discountPrice ?? "-",
     },
 
-    {
-      accessorKey: "category",
-      header: "Category",
-    },
+    // {
+    //   accessorKey: "category",
+    //   header: "Category",
+    // },
 
     {
       accessorKey: "ratingsAverage",

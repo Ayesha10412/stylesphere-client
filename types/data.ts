@@ -61,10 +61,16 @@ export interface Product {
   description: string;
 
   price: string;
+  discountPrice?: string;
 
   category: string;
 
   images: string[];
 
   variants: ProductVariant[];
+  createdAt?: string;
+  updatedAt?: string;
+  createdBy?: string;
+  isApproved?: boolean;
+  ratingsCount?: number;
 }
