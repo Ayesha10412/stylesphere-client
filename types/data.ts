@@ -60,10 +60,13 @@ export interface Product {
 
   description: string;
 
-  price: string;
+  price: number;
   discountPrice?: string;
 
-  category: string;
+  category: {
+    _id: string;
+    name: string;
+  };
 
   images: string[];
 

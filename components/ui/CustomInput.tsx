@@ -79,6 +79,7 @@ interface CustomInputProps<T extends FieldValues = FieldValues> {
   onFilesChange?: (files: File[]) => void;
   required?: boolean;
   placeholder?: string;
+  existingImages?: string[];
 }
 
 export const CustomInput = <T extends FieldValues>({
@@ -97,6 +98,7 @@ export const CustomInput = <T extends FieldValues>({
   className,
   required,
   placeholder,
+  existingImages
 }: CustomInputProps<T>) => {
   const [images, setImages] = useState<File[]>([]);
   // const [previewUrls, setPreviewUrls] = useState<string[]>([]);
@@ -248,7 +250,6 @@ export const CustomInput = <T extends FieldValues>({
         </>
       )}
 
-      {/* ================= TEXTAREA ================= */}
       {/* ================= TEXTAREA ================= */}
       {type === "textarea" && (
         <Textarea
@@ -423,79 +424,45 @@ export const CustomInput = <T extends FieldValues>({
           name={name}
           render={({ field }) => (
             <>
-              <label
-                htmlFor={name}
-                className={cn(
-                  "flex items-center justify-between h-10 pr-3 border border-gray-300 bg-white rounded-lg shadow-sm cursor-pointer transition-all duration-200",
-                  "hover:border-[#008080] hover:bg-gray-50",
-                  disabled && "opacity-50 cursor-not-allowed",
-                )}
-              >
-                {/* Left */}
-                <div className="flex items-center gap-2 min-w-0 h-full pl-2 pr-3 bg-[#008080]/10 rounded-l-lg">
-                  <div className="flex items-center justify-center w-7 h-7 rounded-md bg-[#008080]/10">
-                    <UploadCloud className="w-4 h-4 text-[#008080]" />
-                  </div>
+              {/* FILE INPUT UI */}
+              <label className="flex items-center justify-between h-10 border rounded-lg cursor-pointer">
+                <span className="px-3 text-sm">Upload image</span>
 
-                  <span className="text-sm text-gray-600 truncate">
-                    Upload image
-                  </span>
-                </div>
-
-                {/* Right hint */}
-                <span className="text-xs text-gray-400">Choose image</span>
                 <Input
-                  id={name}
                   type="file"
-                  accept={accept ?? "image/*"}
                   multiple={multiple}
                   className="hidden"
-                  name={field.name}
-                  ref={field.ref}
-                  onBlur={field.onBlur}
                   onChange={(e) => {
                     const files = Array.from(e.target.files ?? []);
-
                     field.onChange(files);
                     setImages(files);
                   }}
                 />
               </label>
 
-              {/* Preview (cleaned) */}
-              {previewUrls.length > 0 && (
-                <div className="mt-3 space-y-2">
-                  {images.map((file, idx) => (
-                    <div
-                      key={idx}
-                      className="flex items-center gap-3 h-10 px-3 bg-white border border-gray-200 rounded-lg"
-                    >
-                      <div className="relative w-7 h-7 shrink-0">
-                        <Image
-                          src={previewUrls[idx]}
-                          alt="preview"
-                          fill
-                          className="object-cover rounded-md"
-                        />
-                      </div>
-
-                      <p className="text-sm text-gray-700 truncate flex-1">
-                        {file.name}
-                      </p>
-
-                      <button
-                        type="button"
-                        onClick={() => {
-                          const updated = [...images];
-                          updated.splice(idx, 1);
-                          setImages(updated);
-                          field.onChange(updated);
-                        }}
-                        className="text-red-500 hover:text-red-600"
-                      >
-                        <X className="w-4 h-4" />
-                      </button>
+              {/* ✅ MERGED PREVIEW (THIS IS WHAT YOU WANT) */}
+              {(existingImages??[] ).length > 0 && (
+                <div className="mt-2 flex gap-3 flex-wrap">
+                  {existingImages?.map((img, i) => (
+                    <div key={i} className="relative">
+                      <img
+                        src={img}
+                        className="w-20 h-20 object-cover rounded border"
+                      />
                     </div>
+                  ))}
+                </div>
+              )}
+
+              {/* NEW SELECTED FILES */}
+              {previewUrls.length > 0 && (
+                <div className="mt-2 flex gap-3 flex-wrap">
+                  {previewUrls.map((url, i) => (
+                    <img
+                      key={i}
+                      src={url}
+                      className="w-20 h-20 object-cover rounded border"
+                    />
                   ))}
                 </div>
               )}

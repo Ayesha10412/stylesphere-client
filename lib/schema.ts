@@ -63,7 +63,7 @@ export const createProductSchema = z.object({
 
   description: z.string().min(1, "Description is required"),
 
-  price: z.string().optional(),
+  price: z.number().optional(),
 
   discountPrice: z.number().optional(),
 
@@ -74,22 +74,7 @@ export const createProductSchema = z.object({
   variants: z.array(productVariantSchema),
 });
 
-export const updateProductSchema = z.object({
-  title: z.string().optional(),
 
-  description: z.string().optional(),
-
-  price: z.number().optional(),
-
-  discountPrice: z.number().optional(),
-
-  category: z.string().optional(),
-
-  images: z.array(z.instanceof(File)).optional(),
-
-  variants: z.array(productVariantSchema).optional(),
-});
 
 export type CreateProductFormData = z.infer<typeof createProductSchema>;
 
-export type UpdateProductFormData = z.infer<typeof updateProductSchema>;

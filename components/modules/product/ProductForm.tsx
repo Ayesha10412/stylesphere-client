@@ -13,9 +13,11 @@ import { Plus, Trash } from "lucide-react";
 import { useCategories } from "../hooks/useCategories";
 
 import { UseFormSetError } from "react-hook-form";
+import { useEffect } from "react";
 
 type Props = {
   defaultValues?: Partial<CreateProductFormData>;
+  existingImages?: string[]; // ✅ add this
   loading?: boolean;
   onCancel?: () => void;
   onSubmit: (
@@ -27,12 +29,15 @@ type Props = {
 export default function ProductForm({
   defaultValues,
   loading,
-  onSubmit,onCancel,
+  onSubmit,existingImages,
+  onCancel,
 }: Props) {
   const {
     register,
-    control,setError,
+    control,
+    setError,
     handleSubmit,
+    reset,
     formState: { errors },
   } = useForm<CreateProductFormData>({
     resolver: zodResolver(createProductSchema),
@@ -40,7 +45,7 @@ export default function ProductForm({
     defaultValues: {
       title: defaultValues?.title || "",
       description: defaultValues?.description || "",
-      price: defaultValues?.price || "0",
+      price: defaultValues?.price ?? 0,
       category: defaultValues?.category || "",
 
       variants: defaultValues?.variants || [
@@ -52,7 +57,18 @@ export default function ProductForm({
       ],
     },
   });
-const {categories}=useCategories()
+  useEffect(() => {
+    if (defaultValues) {
+      reset({
+        title: defaultValues.title || "",
+        description: defaultValues.description || "",
+        price: defaultValues.price ?? 0,
+        category: defaultValues.category || "",
+        variants: defaultValues.variants || [],
+      });
+    }
+  }, [defaultValues, reset]);
+  const { categories } = useCategories();
   const { fields, append, remove } = useFieldArray({
     control,
     name: "variants",
@@ -106,7 +122,7 @@ const {categories}=useCategories()
           options={categories}
           error={errors.category}
         />
-
+       
         <CustomInput
           label="Images"
           name="images"
@@ -116,6 +132,7 @@ const {categories}=useCategories()
           register={register}
           control={control}
           error={errors.images as any}
+          existingImages={existingImages} // ✅ ADD THIS
         />
 
         {/* VARIANTS */}

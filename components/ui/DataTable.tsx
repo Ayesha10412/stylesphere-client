@@ -40,15 +40,33 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import { useSession } from "@/context/SessionProvider";
 import TableWrapper from "./TableWrapper";
 import { Input } from "./input";
+type TableFilter = {
+  key: string;
+  placeholder?: string;
+  type?: "select" | "multiselect";
+  options: TableFilterOption[];
 
+  value?: string | string[];
+
+  onChange?: (value: string | string[]) => void;
+
+  permission?: string;
+};
 type DataTableProps<T> = {
   data: T[];
   columns: ColumnDef<T, unknown>[];
   topRIghtButtons?: {
-    name: string;
+    name?: string;
     icon?: React.ReactNode;
     onClick?: () => void;
     className?: string;
@@ -56,6 +74,7 @@ type DataTableProps<T> = {
     customRender?: React.ReactNode;
   }[];
   filterkey?: string;
+  filters?: TableFilter[];
   backendPagination?: boolean;
   currentPage?: number;
   totalPages?: number;
@@ -65,11 +84,17 @@ type DataTableProps<T> = {
 
   loading?: boolean;
 };
+type TableFilterOption = {
+  label: string;
+  value: string;
+};
+
 
 export function DataTable<T>({
   data,
   columns,
   topRIghtButtons,
+  filters,
   filterkey,
   backendPagination,
   currentPage = 1,
@@ -160,6 +185,42 @@ export function DataTable<T>({
           {/* Right side buttons and dropdown */}
           {/* <div className="flex flex-wrap items-center gap-2 justify-start sm:justify-end border-2 border-red-500" > */}
           <div className="flex items-center gap-2  justify-start sm:justify-end  whitespace-nowrap">
+            {/* Filters */}
+            {filters?.map((filter) => {
+              const canAccess =
+                !filter.permission ||
+                isSuperAdmin ||
+                userPermissions.includes(filter.permission);
+
+              if (!canAccess) return null;
+
+              // SELECT FILTER
+              if (filter.type === "select" || !filter.type) {
+                return (
+                  <Select
+                    key={filter.key}
+                    value={filter.value as string}
+                    onValueChange={(value) => filter.onChange?.(value)}
+                  >
+                    <SelectTrigger className="h-9 min-w-[140px] text-xs">
+                      <SelectValue
+                        placeholder={filter.placeholder || "Select"}
+                      />
+                    </SelectTrigger>
+
+                    <SelectContent className="bg-white">
+                      {filter.options.map((option) => (
+                        <SelectItem key={option.value} value={option.value}>
+                          {option.label}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                );
+              }
+
+              return null;
+            })}
             {/* Column Selector Dropdown */}
             <DropdownMenu>
               <DropdownMenuTrigger asChild>

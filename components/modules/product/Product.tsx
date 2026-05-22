@@ -6,31 +6,30 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
-import { Edit, Eye, Plus, Trash } from "lucide-react";
+import { Edit, Eye, Plus, RefreshCcw, Trash } from "lucide-react";
 import EditProduct from "./EditProduct";
 import TableAction, { TableActionType } from "@/components/ui/TableAction";
 import api from "@/config/api";
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { DataTable } from "@/components/ui/DataTable";
 import { ColumnDef } from "@tanstack/react-table";
 import { Product } from "@/types/data";
 import { useRouter } from "next/navigation";
+import { useCategories } from "../hooks/useCategories";
 
 export default function ProductPage() {
   const [data, setData] = React.useState<Product[]>([]);
   const [loading, setLoading] = React.useState(false);
   const router = useRouter();
-  const [editOpen, setEditOpen] = React.useState(false);
-  const [selectedProduct, setSelectedProduct] = React.useState<Product | null>(
-    null,
-  );
 
+  const [refresh, setRefresh]=useState(false)
   const fetchProducts = async () => {
     setLoading(true);
 
     try {
-      const res = await api.get("/product");
-      console.log(res);
+  
+      const res = await api.get("/product",);
+
       setData(res?.data?.data || []);
     } catch (error) {
       console.error(error);
@@ -39,10 +38,16 @@ export default function ProductPage() {
     }
   };
   useEffect(() => {
-    console.log("fetchProducts called");
     fetchProducts();
-  }, []);
+  }, [refresh]);
   const topRightButtons = [
+    {
+      permission: "all",
+      className:
+        "text-white hover:text-white cursor-pointer bg-[#008080] hover:bg-[#006666]",
+      onClick: () => setRefresh((pev) => !pev),
+      icon: <RefreshCcw />,
+    },
     {
       name: "Add Product",
       permission: "all",
@@ -52,7 +57,34 @@ export default function ProductPage() {
       icon: <Plus />,
     },
   ];
+  // const filters = [
+  //   // Category Filter
+  //   {
+  //     key: "category",
+  //     placeholder: "Category",
+  //     options: categories.map((c) => ({
+  //       label: c.label,
+  //       value: c.value,
+  //     })),
+  //     value: category,
+  //     onChange: (value: string | string[]) => setCategory(value as string),
+  //   },
 
+  //   // Price Filter
+  //   {
+  //     key: "price",
+  //     placeholder: "Price",
+  //     options: [
+  //       { label: "Below ৳500", value: "0-500" },
+  //       { label: "৳500 - ৳1000", value: "500-1000" },
+  //       { label: "৳1000 - ৳5000", value: "1000-5000" },
+  //       { label: "Above ৳5000", value: "5000-above" },
+  //     ],
+  //     value: priceRange,
+  //     onChange: (value: string | string[]) => setPriceRange(value as string),
+  //   },
+  // ];
+ 
   const actionButtons: TableActionType<Product>[] = [
     {
       icon: <Eye size={18} />,
@@ -61,9 +93,6 @@ export default function ProductPage() {
       hoverText: "View Product",
       permission: "all",
       onClick: (row) => {
-        console.log("ROW:", row.original);
-        console.log("ID:", row.original?._id);
-
         router.push(`/admin-layout/product/${row.original._id}`);
       },
     },
@@ -75,8 +104,7 @@ export default function ProductPage() {
       hoverText: "Edit Product",
       permission: "all",
       onClick: (row) => {
-        setSelectedProduct(row.original);
-        setEditOpen(true);
+        router.push(`/admin-layout/product/editProduct/${row.original?._id}`)
       },
     },
 
@@ -93,12 +121,11 @@ export default function ProductPage() {
   ];
 
   const columns: ColumnDef<Product>[] = [
-  
-  {
-  id: "serial",
-  header: "Id",
-  cell: ({ row }) => row.index + 1,
-},
+    {
+      id: "serial",
+      header: "Id",
+      cell: ({ row }) => row.index + 1,
+    },
     {
       accessorKey: "title",
       header: "Title",
@@ -115,10 +142,11 @@ export default function ProductPage() {
       cell: ({ row }) => row?.original?.discountPrice ?? "-",
     },
 
-    // {
-    //   accessorKey: "category",
-    //   header: "Category",
-    // },
+    {
+      accessorKey: "category",
+      header: "Category",
+      cell: ({ row }) => row?.original?.category?.name ?? "",
+    },
 
     {
       accessorKey: "ratingsAverage",
@@ -136,29 +164,13 @@ export default function ProductPage() {
     <div>
       <DataTable<Product>
         data={data}
+        // filters={filters}
         columns={columns}
         loading={loading}
         topRIghtButtons={topRightButtons}
       />
 
-      {/* EDIT MODAL */}
-      <Dialog open={editOpen} onOpenChange={setEditOpen}>
-        <DialogContent className="max-w-3xl">
-          <DialogHeader>
-            <DialogTitle className="text-[#008080] text-xl">
-              Edit Product
-            </DialogTitle>
-          </DialogHeader>
 
-          {selectedProduct && (
-            <EditProduct
-              product={selectedProduct}
-              refetch={fetchProducts}
-              onClose={() => setEditOpen(false)}
-            />
-          )}
-        </DialogContent>
-      </Dialog>
     </div>
   );
 }
