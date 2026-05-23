@@ -15,20 +15,21 @@ import { DataTable } from "@/components/ui/DataTable";
 import { ColumnDef } from "@tanstack/react-table";
 import { Product } from "@/types/data";
 import { useRouter } from "next/navigation";
-import { useCategories } from "../hooks/useCategories";
+import DeleteModal from "@/components/ui/DeleteModal";
 
 export default function ProductPage() {
   const [data, setData] = React.useState<Product[]>([]);
   const [loading, setLoading] = React.useState(false);
   const router = useRouter();
-
-  const [refresh, setRefresh]=useState(false)
+  const [deleteOpen, setDeleteOpen] = useState(false);
+  const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
+  const [deleteLoading, setDeleteLoading] = useState(false);
+  const [refresh, setRefresh] = useState(false);
   const fetchProducts = async () => {
     setLoading(true);
 
     try {
-  
-      const res = await api.get("/product",);
+      const res = await api.get("/product");
 
       setData(res?.data?.data || []);
     } catch (error) {
@@ -40,6 +41,28 @@ export default function ProductPage() {
   useEffect(() => {
     fetchProducts();
   }, [refresh]);
+  //delete api
+  const handleDelete = async () => {
+    if (!selectedProduct) return;
+
+    setDeleteLoading(true);
+
+    try {
+      // 👉 YOUR API ENDPOINT GOES HERE
+      await api.delete(`/product/${selectedProduct._id}`);
+
+      // refresh table after delete
+      setRefresh((prev) => !prev);
+
+      // close modal
+      setDeleteOpen(false);
+      setSelectedProduct(null);
+    } catch (error) {
+      console.error(error);
+    } finally {
+      setDeleteLoading(false);
+    }
+  };
   const topRightButtons = [
     {
       permission: "all",
@@ -84,7 +107,7 @@ export default function ProductPage() {
   //     onChange: (value: string | string[]) => setPriceRange(value as string),
   //   },
   // ];
- 
+
   const actionButtons: TableActionType<Product>[] = [
     {
       icon: <Eye size={18} />,
@@ -104,7 +127,7 @@ export default function ProductPage() {
       hoverText: "Edit Product",
       permission: "all",
       onClick: (row) => {
-        router.push(`/admin-layout/product/editProduct/${row.original?._id}`)
+        router.push(`/admin-layout/product/editProduct/${row.original?._id}`);
       },
     },
 
@@ -115,7 +138,8 @@ export default function ProductPage() {
       hoverText: "Delete Product",
       permission: "all",
       onClick: (row) => {
-        console.log(row.original);
+        setSelectedProduct(row.original);
+        setDeleteOpen(true);
       },
     },
   ];
@@ -169,8 +193,13 @@ export default function ProductPage() {
         loading={loading}
         topRIghtButtons={topRightButtons}
       />
-
-
+      <DeleteModal
+        open={deleteOpen}
+        onOpenChange={setDeleteOpen}
+        itemName={selectedProduct?.title}
+        loading={deleteLoading}
+        onConfirm={handleDelete}
+      />
     </div>
   );
 }
