@@ -12,7 +12,7 @@ import loginImg from "@/assets/login.jpg";
 import api from "@/config/api";
 import { useState } from "react";
 import { useSession } from "@/context/SessionProvider";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 
 type FormData = {
   email: string;
@@ -31,7 +31,9 @@ export default function Login() {
   } = useForm<FormData>({
     defaultValues: { email: "admin@gmail.com", password: "Admin@123" },
   });
+const searchParams = useSearchParams();
 
+const redirectUrl = searchParams.get("redirect") || "/admin-layout";
   const onSubmit = async (data: FormData) => {
     setLoading(true);
     try {
@@ -41,7 +43,7 @@ export default function Login() {
           if (res.status === 200) {
             //await refreshSession();
             setSession(res.data.data.data);
-            router.push("/admin-layout");
+            router.push(redirectUrl);
           }
         });
     } catch (error) {

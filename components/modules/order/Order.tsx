@@ -7,7 +7,6 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import { Edit, Eye, Plus, RefreshCcw, Trash } from "lucide-react";
-import EditProduct from "./EditProduct";
 import TableAction, { TableActionType } from "@/components/ui/TableAction";
 import api from "@/config/api";
 import React, { useEffect, useState } from "react";
@@ -17,7 +16,7 @@ import { Product } from "@/types/data";
 import { useRouter } from "next/navigation";
 import DeleteModal from "@/components/ui/DeleteModal";
 
-export default function ProductPage() {
+export default function Order() {
   const [data, setData] = React.useState<Product[]>([]);
   const [loading, setLoading] = React.useState(false);
   const router = useRouter();
@@ -29,7 +28,7 @@ export default function ProductPage() {
     setLoading(true);
 
     try {
-      const res = await api.get("/product");
+      const res = await api.get("/order");
 
       setData(res?.data?.data || []);
     } catch (error) {

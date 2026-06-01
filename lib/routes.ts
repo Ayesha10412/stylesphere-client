@@ -1,6 +1,4 @@
-import { LayoutDashboard, LayoutGrid, StopCircle, Store, StoreIcon, User2, Users } from "lucide-react";
-
-
+import { Files, LayoutDashboard, LayoutGrid, LayoutGridIcon, ListOrdered, Store, StoreIcon, User2, Users } from "lucide-react";
 export const adminRoutes = () => [
   {
     icon: LayoutDashboard,
@@ -45,11 +43,24 @@ export const adminRoutes = () => [
     permissions:[ "all"],
     roles: ["all"],
   },
-  
   {
-    icon: Users,
+    icon: LayoutGridIcon,
     label: "Product",
     href: "/admin-layout/product",
+    permissions:[ "all"],
+    roles: ["all"],
+  },
+  {
+    icon: ListOrdered,
+    label: "Order",
+    href: "/admin-layout/order",
+    permissions:[ "all"],
+    roles: ["all"],
+  },
+  {
+    icon: Files,
+    label: "Report",
+    href: "/admin-layout/report",
     permissions:[ "all"],
     roles: ["all"],
   },
