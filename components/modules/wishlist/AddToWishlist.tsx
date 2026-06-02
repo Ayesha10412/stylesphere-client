@@ -2,27 +2,40 @@
 
 import { Button } from "@/components/ui/button";
 import { Heart } from "lucide-react";
+import { useState } from "react";
 
 interface Props {
   productId: string;
 }
 
-export default function WishlistButton({ productId }: Props) {
-  const handleWishlist = async () => {
-    console.log("wishlist:", productId);
+export default function AddToWishlist({ productId }: Props) {
+  const [liked, setLiked] = useState(false);
 
-    // API call later
-    // await api.post("/wishlist", { productId });
+  const toggleWishlist = async () => {
+    try {
+      setLiked(!liked);
+
+      // TODO: backend API
+      // await api.post("/wishlist/toggle", { productId });
+
+      console.log("wishlist:", productId);
+    } catch (error) {
+      console.error(error);
+    }
   };
 
   return (
     <Button
       size="icon"
-      variant="secondary"
-      onClick={handleWishlist}
-      className="rounded-full bg-white shadow-md"
+      onClick={toggleWishlist}
+      className={`
+        rounded-full shadow-md bg-white hover:bg-white
+      `}
     >
-      <Heart size={18} />
+      <Heart
+        size={18}
+        className={liked ? "text-red-500 fill-red-500" : "text-gray-500"}
+      />
     </Button>
   );
 }

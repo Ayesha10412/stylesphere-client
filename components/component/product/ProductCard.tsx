@@ -2,8 +2,8 @@
 
 import { Button } from "@/components/ui/button";
 import { useRouter } from "next/navigation";
-import OrderButton from "./OrderButton";
 import AddToCartButton from "@/components/modules/cart/AddToCartButton";
+import AddToWishlist from "@/components/modules/wishlist/AddToWishlist";
 
 type Product = {
   _id: string;
@@ -18,12 +18,18 @@ export default function ProductCard({ product }: { product: Product }) {
 
   return (
     <div className="border rounded-xl overflow-hidden bg-white hover:shadow-md transition">
-      {/* Image */}
-      <img
-        src={product.images?.[0] || "/placeholder.jpg"}
-        className="h-52 w-full object-cover"
-      />
+      {/* IMAGE WRAPPER (IMPORTANT) */}
+      <div className="relative">
+        <img
+          src={product.images?.[0] || "/placeholder.jpg"}
+          className="h-52 w-full object-cover"
+        />
 
+        {/* WISHLIST BUTTON GOES HERE */}
+        <div className="absolute top-2 right-2">
+          <AddToWishlist productId={product._id} />
+        </div>
+      </div>
       {/* Content */}
       <div className="p-4">
         <h3 className="font-semibold line-clamp-1">{product.title}</h3>
@@ -42,10 +48,7 @@ export default function ProductCard({ product }: { product: Product }) {
             Details
           </Button>
           {/* Order */}
-          <div className="grid grid-cols-2 gap-2">
-            <AddToCartButton productId={product._id} />
-            <OrderButton productId={product._id} />
-          </div>{" "}
+          <AddToCartButton productId={product._id} />
         </div>
       </div>
     </div>

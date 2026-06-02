@@ -28,7 +28,7 @@ export default function AddToCartButton({ productId }: Props) {
   return (
     <Button
       onClick={handleAddToCart}
-      className="bg-[#008080] hover:bg-[#006666]"
+      className="flex-1 bg-[#008080] hover:bg-[#006666]"
     >
       <ShoppingCart className="mr-2 h-4 w-4" />
       Cart
