@@ -3,6 +3,7 @@
 import { Button } from "@/components/ui/button";
 import { useRouter } from "next/navigation";
 import OrderButton from "./OrderButton";
+import AddToCartButton from "@/components/modules/cart/AddToCartButton";
 
 type Product = {
   _id: string;
@@ -40,9 +41,11 @@ export default function ProductCard({ product }: { product: Product }) {
           >
             Details
           </Button>
-
           {/* Order */}
-          <OrderButton  productId={product._id} />
+          <div className="grid grid-cols-2 gap-2">
+            <AddToCartButton productId={product._id} />
+            <OrderButton productId={product._id} />
+          </div>{" "}
         </div>
       </div>
     </div>

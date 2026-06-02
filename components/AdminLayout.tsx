@@ -61,7 +61,7 @@ console.log(session)
         />
 
         {/* Scrollable Content */}
-        <main className="h-[calc(100vh-64px)] overflow-y-auto p-2 lg:p-5 bg-gray-200">
+        <main className="h-[calc(90vh-35px)] overflow-y-auto p-2 lg:p-4 bg-gray-200">
           {children}
         </main>
         <div className="text-center p-4 text-sm text-gray-400">

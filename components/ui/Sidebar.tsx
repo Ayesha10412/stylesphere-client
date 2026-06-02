@@ -104,11 +104,7 @@ function processRoutes(
 -------------------------- */
 const Sidebar = ({
   routes,
-  user = {
-    name: "Admin User",
-    email: "admin@example.com",
-    fallback: "AU",
-  },
+
   mobileOpen = false,
   setMobileOpen,
   collapsed = false,
@@ -117,6 +113,7 @@ const Sidebar = ({
   const pathname = usePathname();
 
   const { session } = useSession();
+  console.log("🚀 ~ file: Sidebar.tsx:123 ~ Sidebar ~ session:", {session});
   const userPermissions = session?.permission_names || [];
   // Map userRoles to an array of role names (strings)
   const userRoles = Array.isArray(session?.role)
@@ -178,7 +175,7 @@ const Sidebar = ({
         </div>
 
         {/* Scrollable Nav */}
-        <ScrollArea className="h-[calc(100vh-63px)]">
+        <ScrollArea className="h-[calc(80vh-30px)]">
           <div className={cn("py-4", isCollapsed ? "px-1" : "px-3")}>
             <div className="space-y-1 text-gray-900">
               {processedRoutes.map((route, index) => (
@@ -197,7 +194,7 @@ const Sidebar = ({
         </ScrollArea>
 
         {/* User Profile */}
-        {user && (
+        {session && (
           <div
             className={cn(
               "absolute bottom-0 w-full border-t border-slate-700",
@@ -206,18 +203,16 @@ const Sidebar = ({
           >
             {isCollapsed ? (
               <Avatar>
-                <AvatarImage src={user.image} alt={user.name} />
-                <AvatarFallback>{user.fallback}</AvatarFallback>
+                <AvatarImage src={session?.image || `/image/avatar.jpg`} alt={session?.name} />
               </Avatar>
             ) : (
               <div className="flex items-center gap-3">
                 <Avatar>
-                  <AvatarImage src={user.image} alt={user.name} />
-                  <AvatarFallback>{user.fallback}</AvatarFallback>
+                  <AvatarImage src={session?.image || `/image/avatar.jpg`} alt={session?.name} />
                 </Avatar>
                 <div>
-                  <p className="text-sm font-medium">{user.name}</p>
-                  <p className="text-xs text-slate-400">{user.email}</p>
+                  <p className="text-sm font-medium">{session?.name}</p>
+                  <p className="text-xs text-slate-400">{session?.email}</p>
                 </div>
               </div>
             )}

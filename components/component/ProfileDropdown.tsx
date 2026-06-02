@@ -31,7 +31,7 @@ export default function ProfileDropdown() {
         <img
           src={
             user?.image ||
-            "https://ui-avatars.com/api/?name=User&background=0D8ABC&color=fff"
+            "/image/avatar.jpg"
           }
           alt="user"
           className="w-10 h-10 rounded-full border-2 border-gray-200 hover:border-blue-500 transition"
@@ -47,7 +47,7 @@ export default function ProfileDropdown() {
             <img
               src={
                 user?.image ||
-                "https://ui-avatars.com/api/?name=User&background=0D8ABC&color=fff"
+                "/image/avatar.jpg"
               }
               className="w-12 h-12 rounded-full"
               alt="avatar"
