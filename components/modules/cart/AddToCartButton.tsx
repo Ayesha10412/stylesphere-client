@@ -2,6 +2,8 @@
 
 import { Button } from "@/components/ui/button";
 import api from "@/config/api";
+import { useCart } from "@/context/CartProvider";
+import { useSession } from "@/context/SessionProvider";
 import { ShoppingCart } from "lucide-react";
 
 interface Props {
@@ -9,20 +11,34 @@ interface Props {
 }
 
 export default function AddToCartButton({ productId }: Props) {
+  const { session } = useSession();
+  const { refreshCart } = useCart();
   const handleAddToCart = async () => {
-    try {
-      await api.post("/cart/add-to-cart", {
-        items: [
-          {
-            product: productId,
-            quantity: 1,
-          },
-        ],
+    if (!session) {
+      const cart = JSON.parse(localStorage.getItem("guestCart") || "[]");
+
+      cart.push({
+        product: productId,
+        quantity: 1,
       });
 
-    } catch (error) {
-      console.error(error);
+      localStorage.setItem("guestCart", JSON.stringify(cart));
+
+      await refreshCart();
+
+      return;
     }
+
+    await api.post("/cart/add-to-cart", {
+      items: [
+        {
+          product: productId,
+          quantity: 1,
+        },
+      ],
+    });
+
+    await refreshCart();
   };
 
   return (

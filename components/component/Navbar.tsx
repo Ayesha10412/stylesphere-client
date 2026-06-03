@@ -4,11 +4,13 @@ import Image from "next/image";
 import Link from "next/link";
 import logo from "@/assets/logo.png";
 import { useState } from "react";
+import { ShoppingCart } from "lucide-react";
+import { useCart } from "@/context/CartProvider";
 
 export default function Navbar() {
   const [openProfile, setOpenProfile] = useState(false);
   const [openMenu, setOpenMenu] = useState(false);
-
+const {cartCount}=useCart()
   return (
     <nav className="bg-[#008080] fixed top-0 left-0 w-full z-10 shadow-lg ">
       <div className="container mx-auto px-4 py-3 flex justify-between items-center">
@@ -35,7 +37,15 @@ export default function Navbar() {
           </Link>
 
           <button className="font-bold">Logout</button>
+          <Link href="/admin-layout/cart" className="relative">
+            <ShoppingCart size={24} />
 
+            {cartCount > 0 && (
+              <span className="absolute -top-2 -right-2 bg-red-500 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center">
+                {cartCount}
+              </span>
+            )}
+          </Link>
           {/* Profile */}
           <div className="relative">
             <button onClick={() => setOpenProfile(!openProfile)}>

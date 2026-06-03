@@ -1,5 +1,4 @@
-import React from 'react'
-
+"use client"
 export default function Cart() {
   return (
     <div>Cart</div>

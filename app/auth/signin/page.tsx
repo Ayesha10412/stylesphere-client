@@ -13,6 +13,7 @@ import api from "@/config/api";
 import { useState } from "react";
 import { useSession } from "@/context/SessionProvider";
 import { useRouter, useSearchParams } from "next/navigation";
+import { useCart } from "@/context/CartProvider";
 
 type FormData = {
   email: string;
@@ -20,7 +21,7 @@ type FormData = {
 };
 
 export default function Login() {
-  const { refreshSession,setSession } = useSession();
+  const { refreshSession, setSession } = useSession();
   const [loading, setLoading] = useState(false);
   const router = useRouter();
   const {
@@ -31,9 +32,12 @@ export default function Login() {
   } = useForm<FormData>({
     defaultValues: { email: "admin@gmail.com", password: "Admin@123" },
   });
-const searchParams = useSearchParams();
+  const searchParams = useSearchParams();
+  const { refreshCart } = useCart();
+  const rawRedirect = searchParams.get("redirect");
 
-const redirectUrl = searchParams.get("redirect") || "/admin-layout";
+  const redirectUrl =
+    rawRedirect && rawRedirect.startsWith("/") ? rawRedirect : "/admin-layout";
   const onSubmit = async (data: FormData) => {
     setLoading(true);
     try {
@@ -41,8 +45,29 @@ const redirectUrl = searchParams.get("redirect") || "/admin-layout";
         .post("/auth/login", data, { withCredentials: true })
         .then(async (res) => {
           if (res.status === 200) {
-            //await refreshSession();
             setSession(res.data.data.data);
+
+            // 1. Merge guest cart → DB cart
+            const guestCart = JSON.parse(
+              localStorage.getItem("guestCart") || "[]",
+            );
+
+            if (guestCart.length > 0) {
+              try {
+                await api.post("/cart/add-to-cart", {
+                  items: guestCart,
+                });
+
+                localStorage.removeItem("guestCart");
+              } catch (err) {
+                console.error("Cart merge failed:", err);
+              }
+            }
+
+            // 2. Refresh cart badge (IMPORTANT)
+            await refreshCart();
+
+            // 3. Safe redirect
             router.push(redirectUrl);
           }
         });

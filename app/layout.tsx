@@ -5,6 +5,7 @@ import { SessionProvider } from "@/context/SessionProvider";
 import { Toaster } from "sonner";
 import ToastProviders from "@/context/ToastProviders";
 import ReduxProvider from "@/context/ReduxProvider";
+import { CartProvider } from "@/context/CartProvider";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -27,18 +28,17 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html
-      lang="en"
-    
-    >
-      <body   className={`${geistSans.variable} ${geistMono.variable}  antialiased`}>
-
-    <ToastProviders>
-      <SessionProvider>
-        <ReduxProvider>{children}</ReduxProvider>
-      </SessionProvider>
-    </ToastProviders>
-
+    <html lang="en">
+      <body
+        className={`${geistSans.variable} ${geistMono.variable}  antialiased`}
+      >
+        <ToastProviders>
+          <SessionProvider>
+            <ReduxProvider>
+              <CartProvider>{children}</CartProvider>
+            </ReduxProvider>
+          </SessionProvider>
+        </ToastProviders>
       </body>
     </html>
   );
