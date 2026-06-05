@@ -8,27 +8,30 @@ import { ShoppingCart } from "lucide-react";
 
 interface Props {
   productId: string;
+  selectedVariant?: {
+    size?: string;
+    color?: string;
+  };
 }
-
-export default function AddToCartButton({ productId }: Props) {
+export default function AddToCartButton({ productId, selectedVariant }: Props) {
   const { session } = useSession();
-    const { addToGuestCart, refreshCart } = useCart();
+  const { addToGuestCart, refreshCart } = useCart();
 
-  
   const handleAddToCart = async () => {
     if (!session) {
-    //   const cart = JSON.parse(localStorage.getItem("guestCart") || "[]");
+      //   const cart = JSON.parse(localStorage.getItem("guestCart") || "[]");
 
-    //   cart.push({
-    //     product: productId,
-    //     quantity: 1,
-    //   });
+      //   cart.push({
+      //     product: productId,
+      //     quantity: 1,
+      //   });
 
-    //   localStorage.setItem("guestCart", JSON.stringify(cart));
-  addToGuestCart({
-    product: productId,
-    quantity: 1,
-  });
+      //   localStorage.setItem("guestCart", JSON.stringify(cart));
+      addToGuestCart({
+        product: productId,
+        quantity: 1,
+        variant: selectedVariant, // ✅ ADD THIS
+      });
       await refreshCart();
 
       return;
@@ -39,6 +42,7 @@ export default function AddToCartButton({ productId }: Props) {
         {
           product: productId,
           quantity: 1,
+          variant: selectedVariant, // ✅ ADD THIS
         },
       ],
     });

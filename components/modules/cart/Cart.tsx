@@ -15,6 +15,10 @@ interface CartItem {
     images: string[];
   };
   quantity: number;
+  variant?: {
+    size?: string;
+    color?: string;
+  };
 }
 
 export default function CartPage() {
@@ -45,9 +49,12 @@ export default function CartPage() {
     if (quantity < 1) return;
 
     try {
+      const item = items.find((i) => i.product._id === productId);
+
       await api.patch("/cart/update-cart-item", {
         productId,
         quantity,
+        variant: item?.variant, // ✅ FIXED
       });
 
       fetchCart();
@@ -56,11 +63,15 @@ export default function CartPage() {
     }
   };
 
-  const removeItem = async (productId: string) => {
+  const removeItem = async (
+    productId: string,
+    variant?: { size?: string; color?: string },
+  ) => {
     try {
       await api.delete("/cart/remove-cart-item", {
         data: {
           productId,
+          variant,
         },
       });
 
@@ -122,11 +133,27 @@ export default function CartPage() {
 
               {/* TITLE */}
               <h3 className="font-semibold text-lg">{item.product.title}</h3>
+              {/* Colors */}
+              {item.variant?.color && (
+                <div className="flex items-center gap-2 mt-2">
+                  <span className="text-xs text-gray-500">Color:</span>
 
-              <p className="text-[#008080] font-bold mt-1">
-                ৳ {item.product.price}
-              </p>
-
+                  <div className="flex items-center gap-2">
+                    <span
+                      className="w-4 h-4 rounded-full border"
+                      style={{
+                        backgroundColor: item.variant.color.toLowerCase(),
+                      }}
+                    />
+                    <span className="text-xs">{item.variant.color}</span>
+                  </div>
+                </div>
+              )}
+              {item.variant?.size && (
+                <div className="mt-1 text-xs text-gray-600">
+                  Size: <span className="font-medium">{item.variant.size}</span>
+                </div>
+              )}
               {/* QUANTITY */}
               <div className="flex items-center justify-between mt-4">
                 <div className="flex items-center gap-2">
@@ -157,14 +184,12 @@ export default function CartPage() {
 
                 {/* DELETE */}
                 <Button
-                  onClick={() => removeItem(item.product._id)}
+                  onClick={() => removeItem(item.product._id, item.variant)}
                   className="text-red-500 bg-red-100 hover:bg-red-200 border-none"
                 >
                   <Trash2 size={18} />
                 </Button>
               </div>
-
-           
             </div>
           ))}
         </div>
