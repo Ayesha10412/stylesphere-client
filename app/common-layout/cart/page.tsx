@@ -4,7 +4,7 @@ import PageHeading from '@/components/ui/PageHeading'
 const CartPage = () => {
   return (
     <>
-      <PageHeading>Cart List</PageHeading>
+      {/* <PageHeading>Cart List</PageHeading> */}
       <Cart />
     </>
   );

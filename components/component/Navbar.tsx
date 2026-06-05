@@ -6,11 +6,23 @@ import logo from "@/assets/logo.png";
 import { useState } from "react";
 import { ShoppingCart } from "lucide-react";
 import { useCart } from "@/context/CartProvider";
+import { useSession } from "@/context/SessionProvider";
+import { useRouter } from "next/navigation";
 
 export default function Navbar() {
   const [openProfile, setOpenProfile] = useState(false);
+  const { session } = useSession();
+  const router = useRouter();
   const [openMenu, setOpenMenu] = useState(false);
-const {cartCount}=useCart()
+  const { cartCount } = useCart()
+  const handleCartClick = () => {
+    if (!session) {
+      router.push(`/auth/signin?redirect=${encodeURIComponent("/common-layout/cart")}`);
+      return;
+    }
+
+    router.push("/common-layout/cart");
+  };
   return (
     <nav className="bg-[#008080] fixed top-0 left-0 w-full z-10 shadow-lg ">
       <div className="container mx-auto px-4 py-3 flex justify-between items-center">
@@ -37,7 +49,10 @@ const {cartCount}=useCart()
           </Link>
 
           <button className="font-bold">Logout</button>
-          <Link href="/admin-layout/cart" className="relative">
+          <button
+            className="relative cursor-pointer"
+            onClick={handleCartClick}
+          >
             <ShoppingCart size={24} />
 
             {cartCount > 0 && (
@@ -45,7 +60,7 @@ const {cartCount}=useCart()
                 {cartCount}
               </span>
             )}
-          </Link>
+          </button>
           {/* Profile */}
           <div className="relative">
             <button onClick={() => setOpenProfile(!openProfile)}>

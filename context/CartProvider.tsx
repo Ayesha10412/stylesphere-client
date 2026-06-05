@@ -13,6 +13,7 @@ import {
 type CartContextType = {
   cartCount: number;
   refreshCart: () => Promise<void>;
+  addToGuestCart: (item: any) => void;
 };
 
 const CartContext = createContext<CartContextType | undefined>(undefined);
@@ -53,7 +54,15 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
       setCartCount(0);
     }
   };
+const addToGuestCart = (item: any) => {
+  const guestCart = JSON.parse(localStorage.getItem("guestCart") || "[]");
 
+  guestCart.push(item);
+
+  localStorage.setItem("guestCart", JSON.stringify(guestCart));
+
+  refreshCart(); // important
+};
   useEffect(() => {
     refreshCart();
   }, [session]);
@@ -62,7 +71,8 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
     <CartContext.Provider
       value={{
         cartCount,
-        refreshCart,
+              refreshCart,
+                addToGuestCart,
       }}
     >
       {children}

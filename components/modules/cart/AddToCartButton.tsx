@@ -12,18 +12,23 @@ interface Props {
 
 export default function AddToCartButton({ productId }: Props) {
   const { session } = useSession();
-  const { refreshCart } = useCart();
+    const { addToGuestCart, refreshCart } = useCart();
+
+  
   const handleAddToCart = async () => {
     if (!session) {
-      const cart = JSON.parse(localStorage.getItem("guestCart") || "[]");
+    //   const cart = JSON.parse(localStorage.getItem("guestCart") || "[]");
 
-      cart.push({
-        product: productId,
-        quantity: 1,
-      });
+    //   cart.push({
+    //     product: productId,
+    //     quantity: 1,
+    //   });
 
-      localStorage.setItem("guestCart", JSON.stringify(cart));
-
+    //   localStorage.setItem("guestCart", JSON.stringify(cart));
+  addToGuestCart({
+    product: productId,
+    quantity: 1,
+  });
       await refreshCart();
 
       return;
