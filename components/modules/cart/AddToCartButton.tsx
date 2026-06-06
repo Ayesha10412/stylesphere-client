@@ -10,7 +10,8 @@ interface Props {
   productId: string;
   selectedVariant?: {
     size?: string;
-    color?: string;
+      color?: string;
+    stock?: string;
   };
 }
 export default function AddToCartButton({ productId, selectedVariant }: Props) {
@@ -19,14 +20,7 @@ export default function AddToCartButton({ productId, selectedVariant }: Props) {
 
   const handleAddToCart = async () => {
     if (!session) {
-      //   const cart = JSON.parse(localStorage.getItem("guestCart") || "[]");
-
-      //   cart.push({
-      //     product: productId,
-      //     quantity: 1,
-      //   });
-
-      //   localStorage.setItem("guestCart", JSON.stringify(cart));
+     
       addToGuestCart({
         product: productId,
         quantity: 1,

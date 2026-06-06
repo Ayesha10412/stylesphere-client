@@ -12,20 +12,23 @@ type Product = {
   price: number;
   images: string[];
   category?: { name: string };
-  variants?: { size?: string; color?: string }[];
+  variants?: { size?: string; color?: string; stock?: string }[];
 };
 
 export default function ProductCard({ product }: { product: Product }) {
   const router = useRouter();
   const [selectedColor, setSelectedColor] = useState<string>();
-    const [selectedSize, setSelectedSize] = useState<string>();
-    const selectedVariant =
-      selectedColor && selectedSize
-        ? {
-            color: selectedColor,
-            size: selectedSize,
-          }
-        : undefined;
+  const [selectedSize, setSelectedSize] = useState<string>();
+  const [selectedStock, setSelectedStock] = useState<string>();
+  const uniqueColors = [
+    ...new Set(product.variants?.map((v) => v.color).filter(Boolean)),
+    ];
+    const availableSizes = product.variants?.filter(
+      (v) => v.color === selectedColor,
+    );
+  const selectedVariant = product.variants?.find(
+    (v) => v.size === selectedSize && v.color === selectedColor && v.stock === selectedStock,
+  );
   return (
     <div className="border rounded-xl overflow-hidden bg-white hover:shadow-md transition">
       {/* IMAGE WRAPPER (IMPORTANT) */}
@@ -51,14 +54,17 @@ export default function ProductCard({ product }: { product: Product }) {
           <p className="text-xs text-gray-500">Color</p>
 
           <div className="flex gap-2 mt-1">
-            {product.variants?.map((v, i) => (
+            {uniqueColors.map((color) => (
               <button
-                key={i}
-                onClick={() => setSelectedColor(v.color)}
-                className={`w-5 h-5 rounded-full border ${
-                  selectedColor === v.color ? "border-black scale-110" : ""
+                key={color}
+                onClick={() => {
+                  setSelectedColor(color);
+                  setSelectedSize(undefined); // reset size when color changes
+                }}
+                className={`w-5 h-5 rounded-full border-2 ${
+                  selectedColor === color ? "border-black scale-110" : ""
                 }`}
-                style={{ backgroundColor: v.color?.toLowerCase() }}
+                style={{ backgroundColor: color?.toLowerCase() }}
               />
             ))}
           </div>
@@ -67,7 +73,7 @@ export default function ProductCard({ product }: { product: Product }) {
           <p className="text-xs text-gray-500">Size</p>
 
           <div className="flex gap-2 mt-1">
-            {product.variants?.map((v, i) => (
+            {availableSizes?.map((v, i) => (
               <button
                 key={i}
                 onClick={() => setSelectedSize(v.size)}

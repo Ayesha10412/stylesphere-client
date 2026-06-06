@@ -18,6 +18,7 @@ interface CartItem {
   variant?: {
     size?: string;
     color?: string;
+    stock?: string;
   };
 }
 
@@ -45,21 +46,39 @@ export default function CartPage() {
     fetchCart();
   }, []);
 
-  const updateQuantity = async (productId: string, quantity: number) => {
+  const updateQuantity = async (
+    productId: string,
+    quantity: number,
+    variant?: { size?: string; color?: string },
+  ) => {
     if (quantity < 1) return;
 
     try {
-      const item = items.find((i) => i.product._id === productId);
+      const item = items.find(
+        (i) =>
+          i.product._id === productId &&
+          i.variant?.size === variant?.size &&
+          i.variant?.color === variant?.color,
+      );
 
-      await api.patch("/cart/update-cart-item", {
-        productId,
-        quantity,
-        variant: item?.variant, // ✅ FIXED
-      });
+      if (!item) {
+        console.warn("Cart item not found for update");
+        return;
+      }
 
-      fetchCart();
+      await api.patch(
+        "/cart/update-cart-item",
+        {
+          productId,
+          quantity,
+          variant: item.variant, // safe now
+        },
+        { headers: { "Content-Type": "application/json" } },
+      );
+
+      await fetchCart(); // refresh UI after update
     } catch (err) {
-      console.error(err);
+      console.error("Failed to update cart quantity:", err);
     }
   };
 
@@ -175,7 +194,11 @@ export default function CartPage() {
                     variant="outline"
                     className="bg-[#008080]/10 text-[#008080] border-none hover:bg-[#008080]/20"
                     onClick={() =>
-                      updateQuantity(item.product._id, item.quantity + 1)
+                      updateQuantity(
+                        item.product._id,
+                        item.quantity + 1,
+                        item.variant,
+                      )
                     }
                   >
                     <Plus size={16} />
