@@ -4,133 +4,170 @@ import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import api from "@/config/api";
 import { Button } from "@/components/ui/button";
-
-interface Props {
-  id: string;
-}
-
-type Product = {
-  _id: string;
-  title: string;
-  price: number;
-  discountPrice?: number;
-  images: string[];
-};
+import { CustomInput } from "@/components/ui/CustomInput";
+import { handleApiError } from "@/helper/handleApiError";
 
 type FormValues = {
   name: string;
   phone: string;
-  division: string;
-  district: string;
-  address: string;
+
+  shippingAddress: {
+    division: string;
+    district: string;
+    address: string;
+  };
 };
 
-export default function AddOrder({ id }: Props) {
-  const [product, setProduct] = useState<Product | null>(null);
+export default function AddOrder() {
   const [loading, setLoading] = useState(false);
 
-  const { register, handleSubmit } = useForm<FormValues>();
+  const {
+    register,
+    handleSubmit,
+    control,
+    setError,
+    formState: { errors },
+  } = useForm<FormValues>();
+  const [cart, setCart] = useState<any>(null);
 
   useEffect(() => {
-    const fetchProduct = async () => {
-      try {
-        const res = await api.get(`/product/${id}`);
-        setProduct(res?.data?.data);
-      } catch (error) {
-        console.error(error);
-      }
+    const fetchCart = async () => {
+      const res = await api.get("/cart/my-cart");
+      setCart(res.data.data);
     };
 
-    fetchProduct();
-  }, [id]);
+    fetchCart();
+  }, []);
 
   const onSubmit = async (data: FormValues) => {
     try {
       setLoading(true);
-
       const payload = {
-        product: id,
-        quantity: 1,
-        shippingAddress: {
-          name: data.name,
-          phone: data.phone,
-          division: data.division,
-          district: data.district,
-          address: data.address,
-        },
-      };
+        items: cart.items.map((item: any) => ({
+          product: item.product._id,
+          seller: item.product.seller,
+          variant: item.variant,
+          price: item.product.price,
+          quantity: item.quantity,
+          subTotal: item.product.price * item.quantity,
+        })),
 
+        totalAmount: cart.totalPrice,
+
+        platformCommission: cart.totalPrice * 0.1,
+
+        sellerAmount: cart.totalPrice * 0.9,
+
+        paymentStatus: "pending",
+
+        paymentMethod: "sslcommerz",
+
+        shippingAddress: data.shippingAddress,
+      };
       const res = await api.post("/order", payload);
 
-      // SSLCommerz URL from backend
-      const paymentUrl = res?.data?.data?.paymentUrl;
+      const orderId = res.data.data.order._id;
+
+      const paymentRes = await api.post(`/payment/init/${orderId}`);
+
+      const paymentUrl = paymentRes?.data?.data?.paymentUrl;
 
       if (paymentUrl) {
         window.location.href = paymentUrl;
       }
     } catch (error) {
       console.error(error);
+      handleApiError(error, setError);
     } finally {
       setLoading(false);
     }
   };
 
-  if (!product) {
-    return <div className="py-20 text-center">Loading product...</div>;
+  if (!cart) {
+    return <div className="py-20 text-center">Loading cart...</div>;
   }
 
-  const price = product.discountPrice || product.price;
+  const price = cart.items.reduce((total: number, item: any) => {
+    const itemPrice = item.product.discountPrice || item.product.price;
+    return total + itemPrice * item.quantity;
+  }, 0);
   const deliveryCharge = 60;
   const total = price + deliveryCharge;
 
   return (
-    <div className="max-w-7xl mx-auto py-10 px-4">
-      <div className="grid lg:grid-cols-3 gap-8">
+    <div className="p-4 mt-12">
+      <div className="grid lg:grid-cols-3 gap-4">
         {/* Shipping Form */}
-        <div className="lg:col-span-2 bg-white p-6 rounded-xl border shadow-sm">
+        <div className="lg:col-span-2 bg-white p-4 rounded-xl border shadow-sm">
           <h2 className="text-2xl font-semibold mb-6">Shipping Information</h2>
 
-          <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
-            <input
-              {...register("name")}
-              placeholder="Full Name"
-              className="w-full border rounded-lg p-3"
+          <form
+            onSubmit={handleSubmit(onSubmit)}
+            className="space-y-4 grid grid-cols-2 gap-4"
+          >
+            <CustomInput
+              name="name"
+              label="Full Name"
+              placeholder="Enter your name"
+              register={register}
+              control={control}
+              error={errors.name}
             />
 
-            <input
-              {...register("phone")}
-              placeholder="Phone Number"
-              className="w-full border rounded-lg p-3"
+            <CustomInput
+              name="phone"
+              label="Phone Number"
+              placeholder="01XXXXXXXXX"
+              register={register}
+              control={control}
+              error={errors.phone}
+            />
+            <CustomInput
+              name="shippingAddress.division"
+              label="Division"
+              placeholder="Dhaka"
+              register={register}
+              control={control}
+              error={errors.shippingAddress?.division}
             />
 
-            <div className="grid md:grid-cols-2 gap-4">
-              <input
-                {...register("division")}
-                placeholder="Division"
-                className="w-full border rounded-lg p-3"
-              />
+            <CustomInput
+              name="shippingAddress.district"
+              label="District"
+              placeholder="Gazipur"
+              register={register}
+              control={control}
+              error={errors.shippingAddress?.district}
+            />
 
-              <input
-                {...register("district")}
-                placeholder="District"
-                className="w-full border rounded-lg p-3"
+            <div className="col-span-2">
+              <CustomInput
+                name="shippingAddress.address"
+                label="Full Address"
+                type="textarea"
+                register={register}
+                placeholder="House #, Road #, Area, etc."
+                control={control}
+                error={errors.shippingAddress?.address}
               />
             </div>
 
-            <textarea
-              {...register("address")}
-              placeholder="Full Address"
-              rows={4}
-              className="w-full border rounded-lg p-3"
-            />
-
-            <Button
-              type="submit"
-              disabled={loading}
-              className="w-full bg-[#008080] hover:bg-[#006666]"
-            >
-              {loading ? "Processing..." : "Proceed to Payment"}
-            </Button>
+            <div className="col-span-2 flex gap-2 justify-end mt-6">
+              <Button
+                type="button"
+                disabled={loading}
+                className=" bg-red-100 hover:bg-red-200 text-red-600 "
+              >
+                {loading ? "Cancelling..." : "Cancel Order"}
+              </Button>
+              <Button
+                type="submit"
+                disabled={loading}
+                className=" bg-[#008080] hover:bg-[#006666]"
+              >
+                {loading ? "Processing..." : "Proceed to Payment"}
+              </Button>
+            </div>
           </form>
         </div>
 
@@ -139,12 +176,12 @@ export default function AddOrder({ id }: Props) {
           <h2 className="text-xl font-semibold mb-4">Order Summary</h2>
 
           <img
-            src={product.images?.[0]}
-            alt={product.title}
+            src={cart.items[0]?.product.images?.[0]}
+            alt={cart.items[0]?.product.title}
             className="w-full h-52 object-cover rounded-lg mb-4"
           />
 
-          <h3 className="font-medium">{product.title}</h3>
+          <h3 className="font-medium">{cart.items[0]?.product.title}</h3>
 
           <div className="mt-4 space-y-2 text-sm">
             <div className="flex justify-between">

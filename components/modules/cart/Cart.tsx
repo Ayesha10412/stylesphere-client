@@ -27,6 +27,7 @@ export default function CartPage() {
 
   const [items, setItems] = useState<CartItem[]>([]);
   const [totalPrice, setTotalPrice] = useState(0);
+  const [totalItems, setTotalItems] = useState(0);
   const [loading, setLoading] = useState(true);
 
   const fetchCart = async () => {
@@ -35,6 +36,7 @@ export default function CartPage() {
 
       setItems(res.data.data.items || []);
       setTotalPrice(res.data.data.totalPrice || 0);
+      setTotalItems(res.data.data.totalItems || 0);
     } catch (err) {
       console.error(err);
     } finally {
@@ -224,7 +226,7 @@ export default function CartPage() {
 
             <div className="flex justify-between mb-3">
               <span>Items</span>
-              <span>{items.length}</span>
+              <span>{totalItems}</span>
             </div>
 
             <div className="flex justify-between mb-3">
@@ -239,9 +241,9 @@ export default function CartPage() {
 
             <Button
               className="w-full mt-6 bg-[#008080] hover:bg-[#006666]"
-              onClick={() => router.push("/checkout")}
+              onClick={() => router.push("/customer-layout/order")}
             >
-              Proceed to Checkout
+              Confirm Order
             </Button>
           </div>
         </div>

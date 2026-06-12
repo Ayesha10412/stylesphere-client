@@ -6,7 +6,7 @@ const ProductOrderPage = ({ params }: { params: { id: string } }) => {
   return (
     <>
           <PageHeading>Order your product</PageHeading>
-          <AddOrder id={id} />
+          <AddOrder />
     </>
   );
 };
