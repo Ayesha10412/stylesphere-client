@@ -37,7 +37,7 @@ export default function PaymentSuccessPage() {
 
         {/* Action Buttons */}
         <div className="flex flex-col sm:flex-row justify-center gap-4">
-          <Link href="/orders">
+          <Link href="/customer-layout/order/myOrder">
             <Button
               className=" bg-[#008080] hover:bg-[#008080]"
             >

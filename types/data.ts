@@ -77,3 +77,20 @@ export interface Product {
   isApproved?: boolean;
   ratingsCount?: number;
 }
+export type Order = {
+  _id: string;
+  items: {
+    product: {
+      _id: string;
+      title: string;
+      price: number;
+      images: string[];
+    };
+    quantity: number;
+    subTotal: number;
+  }[];
+  totalAmount: number;
+  status: string;
+  createdAt: string;
+};
+
