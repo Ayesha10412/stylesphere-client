@@ -2,20 +2,26 @@
 
 import React, { useEffect, useState } from "react";
 import { ColumnDef } from "@tanstack/react-table";
-import { Eye, Plus, RefreshCcw, Trash } from "lucide-react";
+import { Download, Eye, Plus, RefreshCcw, Trash } from "lucide-react";
 import { useRouter } from "next/navigation";
 
 import api from "@/config/api";
 import { DataTable } from "@/components/ui/DataTable";
 import TableAction, { TableActionType } from "@/components/ui/TableAction";
 import DeleteModal from "@/components/ui/DeleteModal";
+import { formatDateTime } from "@/helper/dateTime";
 
 interface Report {
   _id: string;
-  title: string;
-  reportType: string;
-  createdAt: string;
+  user?: {
+    name: string;
+    email: string
+  };
+  totalAmount: number;
+  paymentStatus: string;
+  paymentMethod: string;
   status: string;
+  createdAt: string;
 }
 
 export default function Report() {
@@ -39,7 +45,7 @@ export default function Report() {
     try {
       const res = await api.get("/report");
 
-      setData(res?.data?.data || []);
+      setData(res?.data?.data?.data || []);
     } catch (error) {
       console.error(error);
     } finally {
@@ -85,10 +91,10 @@ export default function Report() {
     },
 
     {
-      name: "Add Report",
+      name: "Export",
       permission: "all",
       className: "text-white hover:text-white bg-[#008080] hover:bg-[#006666]",
-      icon: <Plus />,
+      icon: <Download />,
       onClick: () => router.push("/admin-layout/report/addReport"),
     },
   ];
@@ -97,80 +103,81 @@ export default function Report() {
   // Table Actions
   // ==========================
   const actionButtons: TableActionType<Report>[] = [
-    {
-      icon: <Eye size={18} />,
-      name: "View",
-      hoverText: "View Report",
-      permission: "all",
-      className: "text-blue-600 bg-blue-100",
-      onClick: (row) => {
-        router.push(`/admin-layout/report/${row.original._id}`);
-      },
-    },
+    // {
+    //   icon: <Eye size={18} />,
+    //   name: "View",
+    //   hoverText: "View Report",
+    //   permission: "all",
+    //   className: "text-blue-600 bg-blue-100",
+    //   onClick: (row) => {
+    //     router.push(`/admin-layout/report/${row.original._id}`);
+    //   },
+    // },
 
-    {
-      icon: <Trash size={18} />,
-      name: "Delete",
-      hoverText: "Delete Report",
-      permission: "all",
-      className: "text-red-600 bg-red-100",
-      onClick: (row) => {
-        setSelectedReport(row.original);
-        setDeleteOpen(true);
-      },
-    },
+    // {
+    //   icon: <Trash size={18} />,
+    //   name: "Delete",
+    //   hoverText: "Delete Report",
+    //   permission: "all",
+    //   className: "text-red-600 bg-red-100",
+    //   onClick: (row) => {
+    //     setSelectedReport(row.original);
+    //     setDeleteOpen(true);
+    //   },
+    // },
   ];
 
   // ==========================
   // Table Columns
   // ==========================
-  const columns: ColumnDef<Report>[] = [
-    {
-      id: "serial",
-      header: "ID",
-      cell: ({ row }) => row.index + 1,
-    },
+const columns: ColumnDef<Report>[] = [
+  {
+    id: "serial",
+    header: "ID",
+    cell: ({ row }) => row.index + 1,
+  },
 
-    {
-      accessorKey: "title",
-      header: "Title",
-    },
+  {
+    accessorKey: "name",
+    header: "User",cell:({row})=>row.original.user?.name ??""
+  },
+  {
+    accessorKey: "email",
+    header: "Email",cell:({row})=>row.original.user?.email ??""
+  },
 
-    {
-      accessorKey: "reportType",
-      header: "Report Type",
-    },
+  {
+    accessorKey: "totalAmount",
+    header: "Amount",
+  },
 
-    {
-      accessorKey: "status",
-      header: "Status",
-      cell: ({ row }) => (
-        <span
-          className={`px-2 py-1 rounded text-xs font-medium ${
-            row.original.status === "Published"
-              ? "bg-green-100 text-green-700"
-              : row.original.status === "Draft"
-                ? "bg-yellow-100 text-yellow-700"
-                : "bg-gray-100 text-gray-700"
-          }`}
-        >
-          {row.original.status}
-        </span>
-      ),
-    },
+  {
+    accessorKey: "paymentMethod",
+    header: "Payment Method",
+  },
 
-    {
-      accessorKey: "createdAt",
-      header: "Created At",
-      cell: ({ row }) => new Date(row.original.createdAt).toLocaleDateString(),
-    },
+  {
+    accessorKey: "paymentStatus",
+    header: "Payment Status",
+  },
 
-    {
-      id: "actions",
-      header: "Actions",
-      cell: ({ row }) => <TableAction row={row} actions={actionButtons} />,
-    },
-  ];
+  {
+    accessorKey: "status",
+    header: "Order Status",
+  },
+
+  {
+    accessorKey: "createdAt",
+    header: "Created At",
+    cell: ({ row }) => formatDateTime(row.original.createdAt ?? ""),
+  },
+
+  // {
+  //   id: "actions",
+  //   header: "Actions",
+  //   cell: ({ row }) => <TableAction row={row} actions={actionButtons} />,
+  // },
+];
 
   return (
     <div>
@@ -181,13 +188,13 @@ export default function Report() {
         topRIghtButtons={topRightButtons}
       />
 
-      <DeleteModal
+      {/* <DeleteModal
         open={deleteOpen}
         onOpenChange={setDeleteOpen}
-        itemName={selectedReport?.title}
+        itemName={selectedReport?._id}
         loading={deleteLoading}
         onConfirm={handleDelete}
-      />
+      /> */}
     </div>
   );
 }
