@@ -12,12 +12,12 @@ import api from "@/config/api";
 import React, { useEffect, useState } from "react";
 import { DataTable } from "@/components/ui/DataTable";
 import { ColumnDef } from "@tanstack/react-table";
-import { Product } from "@/types/data";
+import { Order, Product } from "@/types/data";
 import { useRouter } from "next/navigation";
 import DeleteModal from "@/components/ui/DeleteModal";
 
-export default function Order() {
-  const [data, setData] = React.useState<Product[]>([]);
+export default function Orders() {
+  const [data, setData] = useState<Order[]>([]);
   const [loading, setLoading] = React.useState(false);
   const router = useRouter();
   const [deleteOpen, setDeleteOpen] = useState(false);
@@ -143,48 +143,93 @@ export default function Order() {
     },
   ];
 
-  const columns: ColumnDef<Product>[] = [
-    {
-      id: "serial",
-      header: "Id",
-      cell: ({ row }) => row.index + 1,
-    },
-    {
-      accessorKey: "title",
-      header: "Title",
-    },
-    {
-      accessorKey: "price",
-      header: "Price",
-    },
+const columns: ColumnDef<Order>[] = [
+  {
+    id: "serial",
+    header: "#",
+    cell: ({ row }) => row.index + 1,
+  },
 
-    {
-      accessorKey: "discountPrice",
-      header: "Discount Price",
-      cell: ({ row }) => row?.original?.discountPrice ?? "-",
-    },
+  {
+    accessorKey: "createdAt",
+    header: "Date",
+    cell: ({ row }) => new Date(row.original.createdAt).toLocaleDateString(),
+  },
 
-    {
-      accessorKey: "category",
-      header: "Category",
-      cell: ({ row }) => row?.original?.category?.name ?? "",
-    },
+  {
+    id: "quantity",
+    header: "Items",
+    cell: ({ row }) =>
+      row.original.items.reduce((sum, item) => sum + item.quantity, 0),
+  },
 
-    {
-      accessorKey: "ratingsAverage",
-      header: "Rating",
-    },
+  {
+    accessorKey: "totalAmount",
+    header: "Total",
+    cell: ({ row }) => `৳${row.original.totalAmount}`,
+  },
 
-    {
-      id: "actions",
-      header: "Actions",
-      cell: ({ row }) => <TableAction row={row} actions={actionButtons} />,
-    },
-  ];
+  {
+    accessorKey: "sellerAmount",
+    header: "Seller Amount",
+    cell: ({ row }) => `৳${row.original.sellerAmount}`,
+  },
+
+  {
+    accessorKey: "platformCommission",
+    header: "Commission",
+    cell: ({ row }) => `৳${row.original.platformCommission}`,
+  },
+
+  {
+    accessorKey: "paymentMethod",
+    header: "Payment Method",
+  },
+
+  {
+    accessorKey: "paymentStatus",
+    header: "Payment Status",
+    cell: ({ row }) => (
+      <span
+        className={`px-2 py-1 rounded text-xs ${
+          row.original.paymentStatus === "paid"
+            ? "bg-green-100 text-green-700"
+            : "bg-yellow-100 text-yellow-700"
+        }`}
+      >
+        {row.original.paymentStatus}
+      </span>
+    ),
+  },
+
+  {
+    accessorKey: "status",
+    header: "Order Status",
+    cell: ({ row }) => (
+      <span
+        className={`px-2 py-1 rounded text-xs ${
+          row.original.status === "completed"
+            ? "bg-green-100 text-green-700"
+            : row.original.status === "pending"
+              ? "bg-yellow-100 text-yellow-700"
+              : "bg-gray-100 text-gray-700"
+        }`}
+      >
+        {row.original.status}
+      </span>
+    ),
+  },
+
+  {
+    id: "address",
+    header: "Address",
+    cell: ({ row }) => row.original.shippingAddress?.address,
+  },
+];
 
   return (
     <div>
-      <DataTable<Product>
+      <DataTable<Order>
         data={data}
         // filters={filters}
         columns={columns}
