@@ -3,8 +3,15 @@
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { CheckCircle2 } from "lucide-react";
+import { useCart } from "@/context/CartProvider";
+import { useEffect } from "react";
 
 export default function PaymentSuccessPage() {
+    const { refreshCart } = useCart();
+
+    useEffect(() => {
+      refreshCart();
+    }, []);
   return (
     <div className="mt-8 flex items-center justify-center bg-gradient-to-br from-green-50 via-white to-emerald-50">
       <div className="w-full max-w-xl bg-white rounded-3xl shadow-xl border border-green-100 p-6 space-y-4 text-center">
@@ -45,8 +52,8 @@ export default function PaymentSuccessPage() {
             </Button>
           </Link>
 
-          <Link href="/products">
-            <Button   className="bg-[#008080]/10 text-[#008080] hover:bg-[#008080]/20 border-none">
+          <Link href="/common-layout/product">
+            <Button   className="bg-[#008080]/10 text-[#008080] hover:bg-[#008080]/30 border-none">
               Continue Shopping
             </Button>
           </Link>

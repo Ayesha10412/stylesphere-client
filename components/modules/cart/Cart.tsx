@@ -113,7 +113,7 @@ export default function CartPage() {
       <div className="container mx-auto py-24 text-center">
         <h2 className="text-2xl font-semibold mb-4">Your cart is empty</h2>
 
-        <Button onClick={() => router.push("/products")}>
+        <Button onClick={() => router.push("/common-layout/product")}>
           Continue Shopping
         </Button>
       </div>
@@ -182,9 +182,16 @@ export default function CartPage() {
                     size="icon"
                     variant="outline"
                     className="bg-gray-100 text-gray-500 hover:bg-gray-200 border-none"
-                    onClick={() =>
-                      updateQuantity(item.product._id, item.quantity - 1)
-                    }
+                    onClick={() => {
+                      const newQty = item.quantity - 1;
+
+                      if (newQty < 1) {
+                        removeItem(item.product._id, item.variant);
+                        return;
+                      }
+
+                      updateQuantity(item.product._id, newQty, item.variant);
+                    }}
                   >
                     <Minus size={16} />
                   </Button>
