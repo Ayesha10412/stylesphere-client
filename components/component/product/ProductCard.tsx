@@ -20,6 +20,7 @@ export default function ProductCard({ product }: { product: Product }) {
   const [selectedColor, setSelectedColor] = useState<string>();
   const [selectedSize, setSelectedSize] = useState<string>();
   const [selectedStock, setSelectedStock] = useState<string>();
+  const [error,setError]=useState("")
   const uniqueColors = [
     ...new Set(product.variants?.map((v) => v.color).filter(Boolean)),
     ];
@@ -99,8 +100,10 @@ export default function ProductCard({ product }: { product: Product }) {
           <AddToCartButton
             productId={product._id}
             selectedVariant={selectedVariant}
+            onError={setError}
           />{" "}
         </div>
+        {error && <p className="text-red-500 text-lg mt-2">{error}</p>}
       </div>
     </div>
   );
