@@ -19,7 +19,7 @@ export default function ProductCard({ product }: { product: Product }) {
   const router = useRouter();
   const [selectedColor, setSelectedColor] = useState<string>();
   const [selectedSize, setSelectedSize] = useState<string>();
-  const [selectedStock, setSelectedStock] = useState<string>();
+  // const [selectedStock, setSelectedStock] = useState<string>();
   const [error,setError]=useState("")
   const uniqueColors = [
     ...new Set(product.variants?.map((v) => v.color).filter(Boolean)),
@@ -28,7 +28,7 @@ export default function ProductCard({ product }: { product: Product }) {
       (v) => v.color === selectedColor,
     );
   const selectedVariant = product.variants?.find(
-    (v) => v.size === selectedSize && v.color === selectedColor && v.stock === selectedStock,
+    (v) => v.size === selectedSize && v.color === selectedColor,
   );
   return (
     <div className="border rounded-xl overflow-hidden bg-white hover:shadow-md transition">

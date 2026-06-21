@@ -78,30 +78,33 @@ export interface Product {
   ratingsCount?: number;
 }
  export interface Order {
-  _id: string;
-  user: string;
+   _id: string;
+   user: {
+     id?: string;
+     name?: string;
+   };
 
-  items: {
-    product: string;
-    quantity: number;
-    price: number;
-    subTotal: number;
-  }[];
+   items: {
+     product: string;
+     quantity: number;
+     price: number;
+     subTotal: number;
+   }[];
 
-  totalAmount: number;
-  platformCommission: number;
-  sellerAmount: number;
-  paymentStatus: string;
-  paymentMethod: string;
-  status: string;
+   totalAmount: number;
+   platformCommission: number;
+   sellerAmount: number;
+   paymentStatus: string;
+   paymentMethod: string;
+   status: string;
 
-  shippingAddress: {
-    division: string;
-    district: string;
-    address: string;
-  };
+   shippingAddress: {
+     division: string;
+     district: string;
+     address: string;
+   };
 
-  createdAt: string;
-}
+   createdAt: string;
+ }
 
 

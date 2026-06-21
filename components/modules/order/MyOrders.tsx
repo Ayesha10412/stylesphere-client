@@ -1,11 +1,14 @@
 "use client"
+import { Button } from "@/components/ui/button";
 import api from "@/config/api";
 import { Order } from "@/types/data";
+import { useRouter } from "next/navigation";
 import  { useEffect, useState } from "react";
 
 export default function MyOrders() {
   const [orders,setOrders] = useState<Order[]>([]);
-  const [loading, setLoading] = useState(false);
+    const [loading, setLoading] = useState(false);
+    const router=useRouter()
   const fetchMyOrders = async () => {
     setLoading(true);
     try {
@@ -22,11 +25,13 @@ export default function MyOrders() {
     },[])
   return (
     <div className="p-4">
-      <h1 className="text-2xl text-center text-[#008080] font-bold mb-6">My Orders</h1>
+      <h1 className="text-2xl text-center text-[#008080] font-bold mb-6">
+        My Orders
+      </h1>
 
       {loading && <p>Loading...</p>}
 
-      <div className="space-y-4 grid grid-cols-3 gap-4">
+      <div className="space-y-4 grid md:grid-cols-3 sm:grid-cols-2 grid-cols-1 lg:grid-cols-4 gap-4">
         {orders.map((order) => (
           <div
             key={order._id}
@@ -87,7 +92,8 @@ export default function MyOrders() {
             </div>
           </div>
         ))}
-      </div>
+          </div>
+          <Button onClick={()=>router.push("/common-layout")}>Back to home</Button>
     </div>
   );
 }

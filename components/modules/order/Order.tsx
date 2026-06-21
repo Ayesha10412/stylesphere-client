@@ -15,6 +15,8 @@ import { ColumnDef } from "@tanstack/react-table";
 import { Order, Product } from "@/types/data";
 import { useRouter } from "next/navigation";
 import DeleteModal from "@/components/ui/DeleteModal";
+import { formatDateTime } from "@/helper/dateTime";
+import { getStatusColor } from "@/helper/getStatusColor";
 
 export default function Orders() {
   const [data, setData] = useState<Order[]>([]);
@@ -143,89 +145,88 @@ export default function Orders() {
     },
   ];
 
-const columns: ColumnDef<Order>[] = [
-  {
-    id: "serial",
-    header: "#",
-    cell: ({ row }) => row.index + 1,
-  },
+  const columns: ColumnDef<Order>[] = [
+    {
+      id: "serial",
+      header: "#",
+      cell: ({ row }) => row.index + 1,
+    },
+    {
+      id: "name",
+      header: "User",
+      cell: ({ row }) => row.original?.user?.name ?? "",
+    },
 
-  {
-    accessorKey: "createdAt",
-    header: "Date",
-    cell: ({ row }) => new Date(row.original.createdAt).toLocaleDateString(),
-  },
+    {
+      accessorKey: "createdAt",
+      header: "Date",
+      cell: ({ row }) => formatDateTime(row.original.createdAt),
+    },
 
-  {
-    id: "quantity",
-    header: "Items",
-    cell: ({ row }) =>
-      row.original.items.reduce((sum, item) => sum + item.quantity, 0),
-  },
+    {
+      id: "quantity",
+      header: "Items",
+      cell: ({ row }) =>
+        row.original.items.reduce((sum, item) => sum + item.quantity, 0),
+    },
 
-  {
-    accessorKey: "totalAmount",
-    header: "Total",
-    cell: ({ row }) => `৳${row.original.totalAmount}`,
-  },
+    {
+      accessorKey: "totalAmount",
+      header: "Total",
+      cell: ({ row }) => `৳${row.original.totalAmount}`,
+    },
 
-  {
-    accessorKey: "sellerAmount",
-    header: "Seller Amount",
-    cell: ({ row }) => `৳${row.original.sellerAmount}`,
-  },
+    {
+      accessorKey: "sellerAmount",
+      header: "Seller Amount",
+      cell: ({ row }) => `৳${row.original.sellerAmount}`,
+    },
 
-  {
-    accessorKey: "platformCommission",
-    header: "Commission",
-    cell: ({ row }) => `৳${row.original.platformCommission}`,
-  },
+    {
+      accessorKey: "platformCommission",
+      header: "Commission",
+      cell: ({ row }) => `৳${row.original.platformCommission}`,
+    },
 
-  {
-    accessorKey: "paymentMethod",
-    header: "Payment Method",
-  },
+    {
+      accessorKey: "paymentMethod",
+      header: "Payment Method",
+    },
 
-  {
-    accessorKey: "paymentStatus",
-    header: "Payment Status",
-    cell: ({ row }) => (
-      <span
-        className={`px-2 py-1 rounded text-xs ${
-          row.original.paymentStatus === "paid"
-            ? "bg-green-100 text-green-700"
-            : "bg-yellow-100 text-yellow-700"
-        }`}
-      >
-        {row.original.paymentStatus}
-      </span>
-    ),
-  },
+    {
+      accessorKey: "paymentStatus",
+      header: "Payment Status",
+      cell: ({ row }) => (
+        <span
+          className={`px-2 py-1 rounded text-xs ${getStatusColor(
+            row.original.paymentStatus,
+          )}`}
+        >
+          {row.original.paymentStatus}
+        </span>
+      ),
+    },
 
-  {
-    accessorKey: "status",
-    header: "Order Status",
-    cell: ({ row }) => (
-      <span
-        className={`px-2 py-1 rounded text-xs ${
-          row.original.status === "completed"
-            ? "bg-green-100 text-green-700"
-            : row.original.status === "pending"
-              ? "bg-yellow-100 text-yellow-700"
-              : "bg-gray-100 text-gray-700"
-        }`}
-      >
-        {row.original.status}
-      </span>
-    ),
-  },
+    {
+      accessorKey: "status",
+      header: "Order Status",
+      cell: ({ row }) => (
+        <span
+          className={`px-2 py-1 rounded text-xs ${getStatusColor(
+            row.original.status,
+          )}`}
+        >
+          {row.original.status}
+        </span>
+      ),
+    },
 
-  {
-    id: "address",
-    header: "Address",
-    cell: ({ row }) => row.original.shippingAddress?.address,
-  },
-];
+    {
+      id: "address",
+      header: "Address",
+      cell: ({ row }) => row.original.shippingAddress?.address,
+    },
+  ];
 
   return (
     <div>

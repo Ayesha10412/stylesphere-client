@@ -6,6 +6,8 @@ import api from "@/config/api";
 import { Button } from "@/components/ui/button";
 import { CustomInput } from "@/components/ui/CustomInput";
 import { handleApiError } from "@/helper/handleApiError";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { orderSchema } from "@/lib/schema";
 
 type FormValues = {
   name: string;
@@ -27,7 +29,7 @@ export default function AddOrder() {
     control,
     setError,
     formState: { errors },
-  } = useForm<FormValues>();
+  } = useForm<FormValues>({ resolver: zodResolver(orderSchema) });
   const [cart, setCart] = useState<any>(null);
 
   useEffect(() => {
@@ -42,6 +44,9 @@ export default function AddOrder() {
   const onSubmit = async (data: FormValues) => {
     try {
       setLoading(true);
+        if (!cart?.items?.length) {
+          throw new Error("Cart is empty");
+        }
       const payload = {
         items: cart.items.map((item: any) => ({
           product: item.product._id,
@@ -64,6 +69,7 @@ export default function AddOrder() {
 
         shippingAddress: data.shippingAddress,
       };
+    
       const res = await api.post("/order", payload);
 
       const orderId = res.data.data.order._id;
@@ -111,6 +117,7 @@ export default function AddOrder() {
               placeholder="Enter your name"
               register={register}
               control={control}
+              required
               error={errors.name}
             />
 
@@ -120,6 +127,7 @@ export default function AddOrder() {
               placeholder="01XXXXXXXXX"
               register={register}
               control={control}
+              required
               error={errors.phone}
             />
             <CustomInput
@@ -127,6 +135,7 @@ export default function AddOrder() {
               label="Division"
               placeholder="Dhaka"
               register={register}
+              required
               control={control}
               error={errors.shippingAddress?.division}
             />
@@ -136,6 +145,7 @@ export default function AddOrder() {
               label="District"
               placeholder="Gazipur"
               register={register}
+              required
               control={control}
               error={errors.shippingAddress?.district}
             />
@@ -145,6 +155,7 @@ export default function AddOrder() {
                 name="shippingAddress.address"
                 label="Full Address"
                 type="textarea"
+                required
                 register={register}
                 placeholder="House #, Road #, Area, etc."
                 control={control}

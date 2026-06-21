@@ -1,5 +1,5 @@
 import { z } from "zod";
-
+//register
 export const registerSchema = z
   .object({
     name: z.string().min(2, "Name must be at least 2 characters").max(100),
@@ -21,7 +21,7 @@ export const registerSchema = z
     path: ["confirmPassword"],
   });
 export type RegisterFormData = z.infer<typeof registerSchema>;
-
+//store 
 export const createSellerSchemaValidation = z.object({
   motivation: z.string().min(10, "Motivation must be at least 10 characters"),
 
@@ -50,7 +50,7 @@ export const updateStoreSchema = z.object({
 
 export type CreateStoreFormData = z.infer<typeof createStoreSchema>;
 export type UpdateStoreFormData = z.infer<typeof updateStoreSchema>;
-
+//product schema
 const productVariantSchema = z.object({
   size: z.string().min(1, "Size is required."),
   color: z.string().min(1, "Color is required."),
@@ -74,7 +74,24 @@ export const createProductSchema = z.object({
   variants: z.array(productVariantSchema),
 });
 
-
-
 export type CreateProductFormData = z.infer<typeof createProductSchema>;
 
+//order schema
+
+export const orderSchema = z.object({
+  name: z.string().min(2, "Name must be at least 2 characters"),
+
+  phone: z
+    .string()
+    .regex(/^01[3-9]\d{8}$/, "Enter a valid Bangladeshi phone number"),
+
+  shippingAddress: z.object({
+    division: z.string().min(2, "Division is required"),
+
+    district: z.string().min(2, "District is required"),
+
+    address: z.string().min(5, "Address is required"),
+  }),
+});
+
+export type FormValues = z.infer<typeof orderSchema>;
